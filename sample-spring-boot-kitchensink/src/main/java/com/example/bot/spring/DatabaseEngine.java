@@ -52,9 +52,8 @@ public class DatabaseEngine {
 				log.info("IOException while closing file: {}", ex.toString());
 			}
 		}
-		if (result != null){
+		if (result != null)
 			return result;
-		}
 		throw new Exception("NOT FOUND");
     }
 	

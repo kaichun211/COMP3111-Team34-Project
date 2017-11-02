@@ -267,7 +267,7 @@ public class KitchenSinkController {
                 log.info("Returns echo message {}: {}", replyToken, reply);
                 this.replyText(
                         replyToken,
-                        itscLOGIN + " says " + reply
+                        reply
                 );
                 break;
         }
@@ -320,7 +320,7 @@ public class KitchenSinkController {
 		itscLOGIN = System.getenv("ITSC_LOGIN");
 	}
 
-	private DatabaseEngine database;
+	private SQLDatabaseEngine database;
 	private String itscLOGIN;
 	
 
