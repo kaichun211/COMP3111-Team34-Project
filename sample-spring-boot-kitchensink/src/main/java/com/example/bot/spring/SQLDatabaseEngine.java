@@ -13,6 +13,7 @@ import java.net.URI;
 
 @Slf4j
 public class SQLDatabaseEngine extends DatabaseEngine {
+	//Search ingredients
 	@Override
 	String search(String text) throws Exception {
 		//Write your code here
