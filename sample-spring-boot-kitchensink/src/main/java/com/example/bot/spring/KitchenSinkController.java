@@ -228,18 +228,13 @@ public class KitchenSinkController {
                 break;
             }
             case "weight": {
-            	String reply = null;
+            	
             	//String userId = event.getSource().getUserId();
             	try {
-            		reply = database.search(text, "user_info", userId);
+            		this.replyText(replyToken, database.search(text, "user_info", userId));
             	} catch (Exception e) {
-            		reply = "Sorry, error. userID = " + userId + "text input: " + text;
-            	}
-                log.info("Returns echo message {}: {}", replyToken, reply);
-                this.replyText(
-                        replyToken,
-                        reply
-                );
+            		this.replyText(replyToken, "Sorry, please enter a valid input");
+            	};
                 break;
             }
             case "confirm": {
