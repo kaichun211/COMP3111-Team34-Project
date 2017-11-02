@@ -38,7 +38,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				sodium_avg = 0;
 				fat_avg = 0;
 				result_count = 0;
-				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description LIKE concat(?,'%');");
+				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description LIKE concat('%', ?,'%');");
 				stmt.setString(1, items[i]);
 				ResultSet rs = stmt.executeQuery();
 				while (rs.next()) {
