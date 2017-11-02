@@ -38,6 +38,8 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				ResultSet rs = stmt.executeQuery();
 				weight_avg = 0;
 				energy_avg = 0;
+				sodium_avg = 0;
+				fat_avg = 0;
 				result_count = 0;
 				while (rs.next()) {
 					result_count++;
@@ -55,7 +57,9 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				{
 				weight_avg = weight_avg / result_count;
 				energy_avg = energy_avg / result_count;
-				resultbuilder.append( items[i] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + "\n");
+				sodium_avg = sodium_avg / result_count;
+				fat_avg = fat_avg / result_count;
+				resultbuilder.append( items[i] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n");
 				}
 				
 				rs.close();
@@ -65,7 +69,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		}catch(Exception e){
 			System.out.println(e);
 		}
-		resultbuilder.append("Total Weight = " + weight_total + " (g) \n Total Energy = " + energy_total + " (kcal) \n Total Sodium = " + sodium_total + " (g) \n Total Fat = " + fat_total);
+		resultbuilder.append("\n Total Weight = " + weight_total + " (g) \n Total Energy = " + energy_total + " (kcal) \n Total Sodium = " + sodium_total + " (g) \n Total Fat = " + fat_total + " (g)");
 		result = resultbuilder.toString();
 		return result;
 	}
