@@ -35,6 +35,9 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				stmt = connection.prepareStatement("UPDATE user_info set weight = " + items[1] + "where user_id = '" + userId + "'");
 				rs = stmt.executeQuery();
 				result = "Data updated!";
+				rs.close();
+				stmt.close();
+				connection.close();
 				return result;
 			}
 			else
@@ -42,6 +45,9 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				stmt = connection.prepareStatement("INSERT INFO user_info VALUES ('" + userId + "', " + items[1] + ")");
 				rs = stmt.executeQuery();
 				result = "Data added to our database!";
+				rs.close();
+				stmt.close();
+				connection.close();
 				return result;
 			}
 			
