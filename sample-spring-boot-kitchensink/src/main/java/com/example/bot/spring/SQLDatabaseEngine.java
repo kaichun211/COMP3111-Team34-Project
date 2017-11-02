@@ -29,8 +29,8 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				
 				while (rs.next()) {
 					
-					System.out.println(rs.getString(1));
-					resultbuilder.append(rs.getString(1));
+					System.out.println(rs.getString(2));
+					resultbuilder.append(rs.getString(2));
 				}
 				
 				rs.close();

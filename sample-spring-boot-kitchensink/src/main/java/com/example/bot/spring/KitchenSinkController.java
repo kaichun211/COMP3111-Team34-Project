@@ -267,7 +267,7 @@ public class KitchenSinkController {
                 log.info("Returns echo message {}: {}", replyToken, reply);
                 this.replyText(
                         replyToken,
-                        itscLOGIN + " says " + reply
+                        reply
                 );
                 break;
         }
