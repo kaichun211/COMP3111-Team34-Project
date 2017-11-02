@@ -5,6 +5,9 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.net.URISyntaxException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 
 @Slf4j
@@ -12,26 +15,32 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	@Override
 	String search(String text) throws Exception {
 		//Write your code here
-		String result = null;
+		String[] items;
+		items = text.split(" ");
+		
+		String[] result = null;
 		try {
-			Connection connection = getConnection();
-			PreparedStatement stmt = connection.prepareStatement("SELECT keyword, response FROM keyandresponse where keyword like concat(?,'%')");
-			stmt.setString(1, text);
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				result = rs.getString(2);
-			}
-			rs.close();
-			stmt.close();
-			connection.close();
-		} catch (Exception e) {
 			
+			Connection connection = getConnection();
+			for(int i=0; i < items.length;i++) {
+				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description LIKE concat('%',?,'%');");
+				stmt.setString(1, items[i]);
+				ResultSet rs = stmt.executeQuery();
+				
+				while (rs.next()) {
+					System.out.println(rs.getString(1));
+				}
+				
+				rs.close();
+				stmt.close();
+			}
+			connection.close();
+		}catch(Exception e){
+			System.out.println(e);
 		}
-		if (result != null){
-			return result;
-		}
-		throw new Exception("NOT FOUND");
+		return result;
 	}
+
 	
 	
 	private Connection getConnection() throws URISyntaxException, SQLException {
