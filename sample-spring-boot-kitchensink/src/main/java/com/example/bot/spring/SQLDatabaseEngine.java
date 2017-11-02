@@ -18,12 +18,16 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		//Write your code here
 		String[] items;
 		int result_count = 0;
-		int[] sodium_per_measure;
-		int[] fat;
 		items = text.split(" ");
 		StringBuilder resultbuilder = new StringBuilder();
 		float weight_avg = 0;
 		int energy_avg = 0;
+		int sodium_avg = 0;
+		int fat_avg = 0;
+		float weight_total = 0;
+		int energy_total = 0;
+		int sodium_total = 0;
+		int fat_total = 0;
 		String result = null;
 		try {
 			
@@ -39,13 +43,19 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					result_count++;
 					weight_avg += rs.getFloat(3);
 					energy_avg += rs.getInt(5);
+					sodium_avg += rs.getInt(6);
+					fat_avg += rs.getInt(7);
 					//resultbuilder.append(rs.g(2));
 				}
+				weight_total += weight_avg;
+				energy_total += energy_avg;
+				sodium_total += sodium_avg;
+				fat_total += fat_avg;
 				if (result_count!=0)
 				{
 				weight_avg = weight_avg / result_count;
 				energy_avg = energy_avg / result_count;
-				resultbuilder.append( items[i] + ": Average Weight = " + weight_avg + " (g) Average Energy = " + energy_avg + " (kcal)" );
+				resultbuilder.append( items[i] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + "\n");
 				}
 				
 				rs.close();
@@ -55,6 +65,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		}catch(Exception e){
 			System.out.println(e);
 		}
+		resultbuilder.append("Total Weight = " + weight_total + " (g) \n Total Energy = " + energy_total + " (kcal) \n Total Sodium = " + sodium_total + " (g) \n Total Fat = " + fat_total);
 		result = resultbuilder.toString();
 		return result;
 	}
