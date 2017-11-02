@@ -43,6 +43,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				weight_avg = weight_avg / result_count;
 				energy_avg = energy_avg / result_count;
 				}
+				resultbuilder.append( items[i] + ": Average Weight = " + weight_avg + " (g) Average Energy = " + energy_avg + " (kcal)" );
 				rs.close();
 				stmt.close();
 			}
@@ -50,7 +51,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		}catch(Exception e){
 			System.out.println(e);
 		}
-		result = "Average Weight = " + weight_avg + " (g) Average Energy = " + energy_avg + " (kcal)"; 
+		result = resultbuilder.toString();
 		return result;
 	}
 
