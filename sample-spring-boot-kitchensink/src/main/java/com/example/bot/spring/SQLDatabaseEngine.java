@@ -45,7 +45,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			}
 			else
 			{
-				PreparedStatement stmt3 = connection.prepareStatement("INSERT INFO user_info VALUES (? , ?)");
+				PreparedStatement stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , ?)");
 				stmt3.setString(1, userId);
 				stmt3.setInt(2, weight);
 				stmt3.executeUpdate();
