@@ -32,21 +32,19 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			}
 			if(data_exists)
 			{
-				stmt = connection.prepareStatement("UPDATE user_info set weight = " + items[1] + "where user_id = '" + userId + "'");
-				rs = stmt.executeQuery();
+				PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set weight = " + items[1] + "where user_id = '" + userId + "'");
+				stmt2.executeUpdate();
 				result = "Data updated!";
-				rs.close();
-				stmt.close();
+				stmt2.close();
 				connection.close();
 				return result;
 			}
 			else
 			{
-				stmt = connection.prepareStatement("INSERT INFO user_info VALUES ('" + userId + "', " + items[1] + ")");
-				rs = stmt.executeQuery();
+				PreparedStatement stmt3 = connection.prepareStatement("INSERT INFO user_info VALUES ('" + userId + "', " + items[1] + ")");
+				stmt3.executeUpdate();
 				result = "Data added to our database!";
-				rs.close();
-				stmt.close();
+				stmt3.close();
 				connection.close();
 				return result;
 			}
@@ -69,7 +67,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					sodium_avg = 0;
 					fat_avg = 0;
 					int result_count = 0;
-					PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description LIKE '" + items[i] + "%'");
+					PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description LIKE '%" + items[i] + "%'");
 					//stmt.setString(1, items[i]);
 					ResultSet rs = stmt.executeQuery();
 					while (rs.next()) {
