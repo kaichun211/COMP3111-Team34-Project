@@ -24,28 +24,33 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		if(database=="user_info")
 		{
 			boolean data_exists = false;
+			int weight = Integer.parseInt(items[1]);
 			Connection connection = getConnection();
-			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = '" + userId + "'");
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
+			stmt.setString(1, userId);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				data_exists = true;
 			}
+			rs.close();
 			if(data_exists)
 			{
-				PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set weight = " + items[1] + "where user_id = '" + userId + "'");
+				PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set weight = ? where user_id = ?");
+				stmt2.setInt(1, weight);
+				stmt2.setString(2, userId);
 				stmt2.executeUpdate();
-				result = "Data updated!";
-				stmt2.close();
 				connection.close();
+				result = "Data updated!";
 				return result;
 			}
 			else
 			{
-				PreparedStatement stmt3 = connection.prepareStatement("INSERT INFO user_info VALUES ('" + userId + "', " + items[1] + ")");
+				PreparedStatement stmt3 = connection.prepareStatement("INSERT INFO user_info VALUES (? , ?)");
+				stmt3.setString(1, userId);
+				stmt3.setInt(2, weight);
 				stmt3.executeUpdate();
-				result = "Data added to our database!";
-				stmt3.close();
 				connection.close();
+				result = "Data added to our database!";
 				return result;
 			}
 			
@@ -59,16 +64,16 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			int energy_total = 0;
 			int sodium_total = 0;
 			int fat_total = 0;
+			Connection connection = getConnection();
 			try {	
 					for(int i=0; i < items.length;i++) {
-					Connection connection = getConnection();
 					weight_avg = 0;
 					energy_avg = 0;
 					sodium_avg = 0;
 					fat_avg = 0;
 					int result_count = 0;
-					PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description LIKE '%" + items[i] + "%'");
-					//stmt.setString(1, items[i]);
+					PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description like concat( ?, '%')");
+					stmt.setString(1, items[i]);
 					ResultSet rs = stmt.executeQuery();
 					while (rs.next()) {
 						result_count++;
