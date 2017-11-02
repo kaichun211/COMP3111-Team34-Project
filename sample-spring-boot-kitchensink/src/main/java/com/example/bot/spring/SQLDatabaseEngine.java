@@ -35,12 +35,14 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				stmt = connection.prepareStatement("UPDATE user_info set weight = " + items[1] + "where user_id = '" + userId + "'");
 				rs = stmt.executeQuery();
 				result = "Data updated!";
+				return result;
 			}
 			else
 			{
 				stmt = connection.prepareStatement("INSERT INFO user_info VALUES ('" + userId + "', " + items[1] + ")");
 				rs = stmt.executeQuery();
 				result = "Data added to our database!";
+				return result;
 			}
 			
 		}
@@ -61,8 +63,8 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					sodium_avg = 0;
 					fat_avg = 0;
 					int result_count = 0;
-					PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description LIKE concat(?,'%')");
-					stmt.setString(1, items[i]);
+					PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description LIKE '" + items[i] + "%'");
+					//stmt.setString(1, items[i]);
 					ResultSet rs = stmt.executeQuery();
 					while (rs.next()) {
 						result_count++;
