@@ -234,7 +234,7 @@ public class KitchenSinkController {
             		String result = database.search(text, "user_info", userId);
             		this.replyText(replyToken, result);
             	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input");
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
             }
