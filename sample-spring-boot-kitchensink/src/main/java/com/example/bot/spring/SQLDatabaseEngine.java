@@ -32,6 +32,9 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description LIKE concat(?,'%');");
 				stmt.setString(1, items[i]);
 				ResultSet rs = stmt.executeQuery();
+				weight_avg = 0;
+				energy_avg = 0;
+				result_count = 0;
 				while (rs.next()) {
 					result_count++;
 					weight_avg += rs.getFloat(3);
