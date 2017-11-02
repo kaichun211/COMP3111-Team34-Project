@@ -210,11 +210,13 @@ public class KitchenSinkController {
 	private void handleTextContent(String replyToken, Event event, TextMessageContent content)
             throws Exception {
         String text = content.getText();
-
-        log.info("Got text message from {}: {}", replyToken, text);
-        switch (text) {
+		String[] command;
+		command = text.split(" ");
+		String userId = event.getSource().getUserId();
+		log.info("Got text message from {}: {}", replyToken, text);
+        switch (command[0]) {
             case "profile": {
-                String userId = event.getSource().getUserId();
+                //String userId = event.getSource().getUserId();
                 if (userId != null) {
                     /*lineMessagingClient
                             .getProfile(userId)
@@ -223,6 +225,21 @@ public class KitchenSinkController {
                 } else {
                     this.replyText(replyToken, "Bot can't use profile API without user ID");
                 }
+                break;
+            }
+            case "weight": {
+            	String reply = null;
+            	//String userId = event.getSource().getUserId();
+            	try {           		
+            		reply = database.search(text, "user_info", userId);
+            	} catch (Exception e) {
+            		reply = text;
+            	}
+                log.info("Returns echo message {}: {}", replyToken, reply);
+                this.replyText(
+                        replyToken,
+                        reply
+                );
                 break;
             }
             case "confirm": {
@@ -261,7 +278,7 @@ public class KitchenSinkController {
             default:
             	String reply = null;
             	try {
-            		reply = database.search(text);
+            		reply = database.search(text, "nutrient_table", userId);
             	} catch (Exception e) {
             		reply = text;
             	}
@@ -318,11 +335,9 @@ public class KitchenSinkController {
 
 	public KitchenSinkController() {
 		database = new SQLDatabaseEngine();
-		itscLOGIN = System.getenv("ITSC_LOGIN");
 	}
 
 	private SQLDatabaseEngine database;
-	private String itscLOGIN;
 	
 
 	//The annontation @Value is from the package lombok.Value
