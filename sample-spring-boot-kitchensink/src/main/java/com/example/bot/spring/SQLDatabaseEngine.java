@@ -33,14 +33,14 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			
 			Connection connection = getConnection();
 			for(int i=0; i < items.length;i++) {
-				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description LIKE concat(?,'%');");
-				stmt.setString(1, items[i]);
-				ResultSet rs = stmt.executeQuery();
 				weight_avg = 0;
 				energy_avg = 0;
 				sodium_avg = 0;
 				fat_avg = 0;
 				result_count = 0;
+				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description LIKE concat(?,'%');");
+				stmt.setString(1, items[i]);
+				ResultSet rs = stmt.executeQuery();
 				while (rs.next()) {
 					result_count++;
 					weight_avg += rs.getFloat(3);
@@ -49,17 +49,20 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					fat_avg += rs.getInt(7);
 					//resultbuilder.append(rs.g(2));
 				}
-				weight_total += weight_avg;
-				energy_total += energy_avg;
-				sodium_total += sodium_avg;
-				fat_total += fat_avg;
+
 				if (result_count!=0)
 				{
 				weight_avg = weight_avg / result_count;
 				energy_avg = energy_avg / result_count;
 				sodium_avg = sodium_avg / result_count;
 				fat_avg = fat_avg / result_count;
-				resultbuilder.append( items[i] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n");
+				
+				weight_total += weight_avg;
+				energy_total += energy_avg;
+				sodium_total += sodium_avg;
+				fat_total += fat_avg;
+				
+				resultbuilder.append(items[i] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n");
 				}
 				
 				rs.close();
