@@ -231,7 +231,8 @@ public class KitchenSinkController {
             	
             	//String userId = event.getSource().getUserId();
             	try {
-            		this.replyText(replyToken, database.search(text, "user_info", userId));
+            		String result = database.search(text, "user_info", userId);
+            		this.replyText(replyToken, result);
             	} catch (Exception e) {
             		this.replyText(replyToken, "Sorry, please enter a valid input");
             	};
