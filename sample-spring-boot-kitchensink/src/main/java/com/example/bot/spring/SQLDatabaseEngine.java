@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.List;
 import java.net.URISyntaxException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,8 +17,13 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	String search(String text) throws Exception {
 		//Write your code here
 		String[] items;
+		int result_count = 0;
+		int[] sodium_per_measure;
+		int[] fat;
 		items = text.split(" ");
 		StringBuilder resultbuilder = new StringBuilder();
+		float weight_avg = 0;
+		int energy_avg = 0;
 		String result = null;
 		try {
 			
@@ -26,13 +32,17 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description LIKE concat('%',?,'%');");
 				stmt.setString(1, items[i]);
 				ResultSet rs = stmt.executeQuery();
-				
 				while (rs.next()) {
-					
-					System.out.println(rs.getString(2));
-					resultbuilder.append(rs.getString(2));
+					result_count++;
+					weight_avg += rs.getFloat(3);
+					energy_avg += rs.getInt(5);
+					//resultbuilder.append(rs.g(2));
 				}
-				
+				if (result_count!=0)
+				{
+				weight_avg = weight_avg / result_count;
+				energy_avg = energy_avg / result_count;
+				}
 				rs.close();
 				stmt.close();
 			}
@@ -40,7 +50,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		}catch(Exception e){
 			System.out.println(e);
 		}
-		result = resultbuilder.toString();
+		result = "Average Weight = " + weight_avg + " (g) Average Energy = " + energy_avg + " (kcal)"; 
 		return result;
 	}
 
