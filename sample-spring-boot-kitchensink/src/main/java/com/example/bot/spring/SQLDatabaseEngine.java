@@ -17,8 +17,8 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		//Write your code here
 		String[] items;
 		items = text.split(" ");
-		
-		String[] result = null;
+		StringBuilder resultbuilder = new StringBuilder();
+		String result = null;
 		try {
 			
 			Connection connection = getConnection();
@@ -28,7 +28,9 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				ResultSet rs = stmt.executeQuery();
 				
 				while (rs.next()) {
+					
 					System.out.println(rs.getString(1));
+					resultbuilder.append(rs.getString(1));
 				}
 				
 				rs.close();
@@ -38,6 +40,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		}catch(Exception e){
 			System.out.println(e);
 		}
+		result = resultbuilder.toString();
 		return result;
 	}
 

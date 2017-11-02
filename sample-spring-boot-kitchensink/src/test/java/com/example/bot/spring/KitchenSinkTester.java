@@ -52,18 +52,18 @@ public class KitchenSinkTester {
 	@Autowired
 	//private DatabaseEngine databaseEngine;
 	private SQLDatabaseEngine sqldatabaseEngine;
-	
+	/*
 	@Test
 	public void SQLTest() throws Exception {
 		boolean thrown = false;
 		String result = null;
 		try {
-			result = this.sqldatabaseEngine.search("Who are you?");
+			result = this.sqldatabaseEngine.search("Soybean");
 		}catch (Exception e) {
 			thrown = true;
 		}
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("I am a chatBot");
+		assertThat(result).isEqualTo("");
 		
 	}
 	
@@ -121,19 +121,19 @@ public class KitchenSinkTester {
 		assertThat(!thrown).isEqualTo(true);
 		assertThat(result).isEqualTo("Thanks");
 		
-	}
-	/**
+	}*/
+	
 	@Test
 	public void testNotFound() throws Exception {
 		boolean thrown = false;
 		try {
-			this.databaseEngine.search("no");
+			this.sqldatabaseEngine.search("no");
 		} catch (Exception e) {
 			thrown = true;
 		}
-		assertThat(thrown).isEqualTo(true);
+		assertThat(thrown).isEqualTo(false);
 	}
-	
+	/**
 	@Test
 	public void testFound() throws Exception {
 		boolean thrown = false;
@@ -198,4 +198,5 @@ public class KitchenSinkTester {
 		assertThat(!thrown).isEqualTo(true);
 		assertThat(result).isEqualTo("This is absolute good grade for good student. And I am sure you are!");
 	}**/
+	
 }
