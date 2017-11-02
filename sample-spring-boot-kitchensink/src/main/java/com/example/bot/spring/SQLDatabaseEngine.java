@@ -45,7 +45,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			}
 			else
 			{
-				PreparedStatement stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , ?)");
+				PreparedStatement stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , ?, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
 				stmt3.setString(1, userId);
 				stmt3.setInt(2, weight);
 				stmt3.executeUpdate();
@@ -64,7 +64,6 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			int energy_total = 0;
 			int sodium_total = 0;
 			int fat_total = 0;
-			Connection connection = getConnection();
 			try {	
 					for(int i=0; i < items.length;i++) {
 					weight_avg = 0;
@@ -72,12 +71,13 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					sodium_avg = 0;
 					fat_avg = 0;
 					int result_count = 0;
+					Connection connection = getConnection();
 					PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description like concat( ?, '%')");
 					stmt.setString(1, items[i]);
 					ResultSet rs = stmt.executeQuery();
 					while (rs.next()) {
 						result_count++;
-						weight_avg += rs.getFloat(3);
+						weight_avg += rs.getInt(3);
 						energy_avg += rs.getInt(5);
 						sodium_avg += rs.getInt(6);
 						fat_avg += rs.getInt(7);
