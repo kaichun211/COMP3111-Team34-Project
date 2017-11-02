@@ -227,7 +227,29 @@ public class KitchenSinkController {
                 }
                 break;
             }
+        /*    case "total": {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		String result = database.search(text, "user_info", userId);
+            		this.replyText(replyToken, result);
+            	} catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
+            	};
+                break;
+            }*/
             case "weight": {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		String result = database.search(text, "user_info", userId);
+            		this.replyText(replyToken, result);
+            	} catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
+            	};
+                break;
+            }
+            case "calculate": {
             	
             	//String userId = event.getSource().getUserId();
             	try {
