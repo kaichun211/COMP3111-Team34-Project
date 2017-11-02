@@ -80,10 +80,8 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 						fat_avg += rs.getInt(7);
 						//resultbuilder.append(rs.g(2));
 					}
-					rs.close();
-					stmt.close();
 					
-					if (result_count!=0)
+					if (result_count>0)
 					{
 					weight_avg = weight_avg / result_count;
 					energy_avg = energy_avg / result_count;
@@ -97,6 +95,8 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					
 					resultbuilder.append(items[i] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n \n");
 					}
+					rs.close();
+					stmt.close();
 					connection.close();
 				}
 				

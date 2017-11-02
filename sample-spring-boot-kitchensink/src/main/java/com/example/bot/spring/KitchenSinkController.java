@@ -230,11 +230,7 @@ public class KitchenSinkController {
             case "weight": {
             	String reply = null;
             	//String userId = event.getSource().getUserId();
-            	try {           		
-            		reply = database.search(text, "user_info", userId);
-            	} catch (Exception e) {
-            		reply = text;
-            	}
+            	reply = database.search(text, "user_info", userId);
                 log.info("Returns echo message {}: {}", replyToken, reply);
                 this.replyText(
                         replyToken,
