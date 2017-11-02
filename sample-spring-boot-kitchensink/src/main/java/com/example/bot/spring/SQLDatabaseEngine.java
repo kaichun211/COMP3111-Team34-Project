@@ -66,7 +66,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				sodium_total += sodium_avg;
 				fat_total += fat_avg;
 				
-				resultbuilder.append(items[i] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n");
+				resultbuilder.append(items[i] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n \n");
 				}
 				connection.close();
 			}
