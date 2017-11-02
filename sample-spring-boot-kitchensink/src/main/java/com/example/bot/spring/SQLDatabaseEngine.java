@@ -31,8 +31,9 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		String result = null;
 		try {
 			
-			Connection connection = getConnection();
+			
 			for(int i=0; i < items.length;i++) {
+				Connection connection = getConnection();
 				weight_avg = 0;
 				energy_avg = 0;
 				sodium_avg = 0;
@@ -49,7 +50,9 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					fat_avg += rs.getInt(7);
 					//resultbuilder.append(rs.g(2));
 				}
-
+				rs.close();
+				stmt.close();
+				
 				if (result_count!=0)
 				{
 				weight_avg = weight_avg / result_count;
@@ -64,16 +67,14 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				*/
 				resultbuilder.append(items[i] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n");
 				}
-				
-				rs.close();
-				stmt.close();
+				connection.close();
 			}
-			connection.close();
+			
 		}catch(Exception e){
 			System.out.println(e);
 		}
 		//resultbuilder.append("\n Total Weight = " + weight_total + " (g) \n Total Energy = " + energy_total + " (kcal) \n Total Sodium = " + sodium_total + " (g) \n Total Fat = " + fat_total + " (g)");
-		resultbuilder.append(result_count);
+		//resultbuilder.append(result_count);
 		result = resultbuilder.toString();
 		return result;
 	}
