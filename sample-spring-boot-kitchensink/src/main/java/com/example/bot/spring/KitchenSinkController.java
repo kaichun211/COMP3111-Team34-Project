@@ -299,10 +299,10 @@ public class KitchenSinkController {
 	            	try {
 	            		String[] result_set = database.nutrient_search(text);
 	            		for(int i=0;i<result_set.length;i++){
-	            		this.replyText(replyToken, result_set[i]);
+	            		replyText(replyToken, result_set[i]);
 	            		}
 	            	} catch (Exception e) {
-	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+	            		replyText(replyToken, "Sorry, please enter a valid input.");
 	            	};
 	            break;
             }
