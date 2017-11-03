@@ -67,7 +67,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			String[] dishes;
 			dishes = text.split("\\r?\\n");
 			
-			System.out.println(dishes.toString());
+			System.out.println(dishes.length);
 			
 			try {	
 					for(int i=0; i < dishes.length;i++) {
