@@ -65,9 +65,10 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			
 			String[] result_set = {};
 			String[] dishes;
-			dishes = text.split("\n");
+			dishes = text.split("\\r?\\n");
 			
 			System.out.println(dishes.toString());
+			
 			try {	
 					for(int i=0; i < dishes.length;i++) {
 						String[] ingredients = {};
