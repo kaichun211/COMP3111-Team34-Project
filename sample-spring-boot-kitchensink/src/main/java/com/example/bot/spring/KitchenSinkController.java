@@ -238,6 +238,15 @@ public class KitchenSinkController {
             	};
                 break;
             }*/
+            case "water":{
+            	try {
+            		String result = database.waterInterval(text, userId);
+            		this.replyText(replyToken, result + database.waterNotif(userId));
+            	} catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'water <notification interval in minutes, 0 as OFF>'. ");
+            	};
+                break;
+            }
             case "weight": {
             	
             	//String userId = event.getSource().getUserId();

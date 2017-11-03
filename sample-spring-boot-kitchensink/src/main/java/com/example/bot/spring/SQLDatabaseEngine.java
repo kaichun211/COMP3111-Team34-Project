@@ -54,25 +54,61 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 
 	}
 	
+	String waterInterval(String text, String userId) throws Exception {
+		String result = null;
+		String[] items;
+		items = text.split("\\r?\\n");
+		boolean data_exists = false;
+		int interval = Integer.parseInt(items[1]) * 60000;
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
+		stmt.setString(1, userId);
+		ResultSet rs = stmt.executeQuery();
+		if (rs.next()) {
+			data_exists = true;
+		}
+		rs.close();
+		if(data_exists)
+		{
+			PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set water_int = ? where user_id = ?");
+			stmt2.setInt(1, interval);
+			stmt2.setString(2, userId);
+			stmt2.executeUpdate();
+			connection.close();
+			result = "Data updated!";
+			return result;
+		}
+		else
+		{
+			result = "Account not existed!\n Please create an account using weight function.";
+			return result;
+		}
+
+	}
 	String waterNotif(String userId) throws Exception {
 		String results = "";
 		
 		try {
 			Date curDT = new Date();
 			Connection connection = getConnection();
-			PreparedStatement stmt = connection.prepareStatement("SELECT water_time FROM user_info WHERE user_id = ?");
+			PreparedStatement stmt = connection.prepareStatement("SELECT water_time, water_int FROM user_info WHERE user_id = ?");
 			stmt.setString(1, userId);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				long old_time = rs.getLong("water_time");
-				if (old_time == 0) {
+				if (rs.getLong("water_int") <= 0) {
+					rs.close();
+					stmt.close();
+					connection.close();
+					return results;
+				} else if (old_time == 0) {
 					PreparedStatement stmtSave = connection.prepareStatement("UPDATE user_info SET water_time = ? WHERE user_id = ?");
 					stmtSave.setLong(1, curDT.getTime());
 					stmtSave.setString(2, userId);
 					stmtSave.executeUpdate();
 					stmtSave.close();
 				}
-				else if (curDT.getTime() > (old_time + 60000)) {
+				else if (curDT.getTime() > (old_time + rs.getLong("water_int"))) {
 					results = "\nRemember to drink some water!";
 					PreparedStatement stmtSave = connection.prepareStatement("UPDATE user_info SET water_time = ? WHERE user_id = ?");
 					stmtSave.setLong(1, curDT.getTime());
