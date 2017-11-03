@@ -55,7 +55,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	}
 	
 	String waterNotif(String userId) throws Exception {
-		String results = null;
+		String results = "";
 		
 		try {
 			Date curDT = new Date();
