@@ -127,15 +127,11 @@ public class KitchenSinkTester {
 	public void testNotFound() throws Exception {
 		boolean thrown = false;
 		try {
-<<<<<<< HEAD
-			this.sqldatabaseEngine.search("no", "nutrient_info", "testing_user_id");
-=======
-			this.sqldatabaseEngine.nutrient_search("no");
->>>>>>> test2
+			this.sqldatabaseEngine.weight("no", "testing_user_id");
 		} catch (Exception e) {
 			thrown = true;
 		}
-		assertThat(thrown).isEqualTo(false);
+		assertThat(thrown).isEqualTo(true);
 	}
 	/**
 	@Test
