@@ -67,7 +67,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			String[] dishes;
 			dishes = text.split("\n");
 			
-			System.out.println(dishes);
+			System.out.println(dishes.toString());
 			try {	
 					for(int i=0; i < dishes.length;i++) {
 						String[] ingredients = {};
@@ -109,12 +109,14 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 							fat_total += fat_avg;
 							
 							resultbuilder.append(ingredients[j] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n \n");
+							System.out.println(resultbuilder.toString());
 							}
 							rs.close();
 							stmt.close();
 							connection.close();
 							}
 							resultbuilder.append("\n Total Weight = " + weight_total + " (g) \n Total Energy = " + energy_total + " (kcal) \n Total Sodium = " + sodium_total + " (g) \n Total Fat = " + fat_total + " (g)");
+							System.out.println(resultbuilder.toString());
 							result_set[i] = resultbuilder.toString();	
 				}			
 			}catch(Exception e){
