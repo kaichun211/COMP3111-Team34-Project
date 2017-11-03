@@ -134,7 +134,7 @@ public class CallbackRequestTest {
 //            assertThat(message).isInstanceOf(LocationMessageContent.class);
 //            if (message instanceof LocationMessageContent) {
 //                assertThat(((LocationMessageContent) message).getAddress())
-//                        .isEqualTo("ã€’150-0002 æ�±äº¬éƒ½æ¸‹è°·åŒºæ¸‹è°·ï¼’ä¸�ç›®ï¼’ï¼‘âˆ’ï¼‘");
+//                        .isEqualTo("");
 //            }
 //        });
 //    }

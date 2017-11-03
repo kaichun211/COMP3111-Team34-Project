@@ -247,6 +247,17 @@ public class KitchenSinkController {
             	};
                 break;
             }
+            case "sports": {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		String result = database.sports_amount(userId);
+            		this.replyText(replyToken, result);
+            	} catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+            	};
+                break;
+            }
             case "weight": {
             	
             	//String userId = event.getSource().getUserId();
