@@ -293,18 +293,17 @@ public class KitchenSinkController {
                 break;
             }
             //Read menu searh nutrients in dishes
-            case "nutrient":{
-	            	String[] reply_list = {};
-	            	String reply = null;
+            	case "nutrient": {
+            	
+	            	//String userId = event.getSource().getUserId();
 	            	try {
-	            		reply_list = database.nutrient_search(text);
+	            		String[] result_set = database.nutrient_search(text);
+	            		for(int i=0;i<result_set.length;i++){
+	            		this.replyText(replyToken, result_set[i]);
+	            		}
 	            	} catch (Exception e) {
-	            		reply = "error";
-	            	}
-	            	for(int i = 0; i < reply_list.length; i++) {
-		            log.info("Returns echo message {}: {}", replyToken, reply_list[i]);
-		            this.replyText(replyToken, reply_list[i]);
-	            	}
+	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+	            	};
 	            break;
             }
             	
