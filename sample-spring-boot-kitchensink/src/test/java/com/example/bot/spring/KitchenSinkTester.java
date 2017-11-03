@@ -127,11 +127,7 @@ public class KitchenSinkTester {
 	public void testNotFound() throws Exception {
 		boolean thrown = false;
 		try {
-<<<<<<< HEAD
-			this.sqldatabaseEngine.search("no", "nutrient_info", "testing_user_id");
-=======
-			this.sqldatabaseEngine.nutrient_search("no");
->>>>>>> test2
+			this.sqldatabaseEngine.menu_search("no");
 		} catch (Exception e) {
 			thrown = true;
 		}
