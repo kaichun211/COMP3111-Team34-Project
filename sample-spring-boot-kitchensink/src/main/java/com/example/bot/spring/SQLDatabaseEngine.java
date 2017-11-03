@@ -63,7 +63,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			
 			System.out.println("Test: Inisialise");
 			
-			String[] result_set = {};
+			String[] result_set = new String[11];
 			String[] dishes;
 			dishes = text.split("\\r?\\n");
 			
