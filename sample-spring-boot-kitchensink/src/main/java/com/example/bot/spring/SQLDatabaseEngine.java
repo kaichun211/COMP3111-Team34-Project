@@ -20,6 +20,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		String result = null;
 		String[] items;
 		items = text.split(" ");
+		StringBuilder resultbuilder = new StringBuilder();
 		if(database=="user_info")
 		{
 			boolean data_exists = false;
@@ -54,68 +55,64 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			}
 			
 		}
-			return result;
-	}
-	
-	String menu_search(String text) throws Exception {
-		String result_set;
-		String[] dishes;
-		dishes = text.split("\n");
-		StringBuilder resultbuilder = new StringBuilder();
-		try {	
-				for(int i=0; i < dishes.length;i++) {
-					String[] ingredients = {};
-					ingredients = dishes[i].split(" ");
-					int weight_total = 0;
-					int energy_total = 0;
-					int sodium_total = 0;
-					int fat_total = 0;
-					for(int j=0; j < ingredients.length; j++)
+		if(database=="nutrient_table") {
+			float weight_avg = 0;
+			int energy_avg = 0;
+			int sodium_avg = 0;
+			int fat_avg = 0;
+			float weight_total = 0;
+			int energy_total = 0;
+			int sodium_total = 0;
+			int fat_total = 0;
+			try {	
+					for(int i=0; i < items.length;i++) {
+					weight_avg = 0;
+					energy_avg = 0;
+					sodium_avg = 0;
+					fat_avg = 0;
+					int result_count = 0;
+					Connection connection = getConnection();
+					PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description like concat( ?, '%')");
+					stmt.setString(1, items[i]);
+					ResultSet rs = stmt.executeQuery();
+					while (rs.next()) {
+						result_count++;
+						weight_avg += rs.getInt(3);
+						energy_avg += rs.getInt(5);
+						sodium_avg += rs.getInt(6);
+						fat_avg += rs.getInt(7);
+						//resultbuilder.append(rs.g(2));
+					}
+					
+					if (result_count>0)
 					{
-						int weight_avg = 0;
-						int energy_avg = 0;
-						int sodium_avg = 0;
-						int fat_avg = 0;
-						int result_count = 0;
-						Connection connection = getConnection();
-						PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description like concat( ?, '%')");
-						stmt.setString(1, ingredients[j]);
-						ResultSet rs = stmt.executeQuery();
-						while (rs.next()) {
-							result_count++;
-							weight_avg += rs.getInt(3);
-							energy_avg += rs.getInt(5);
-							sodium_avg += rs.getInt(6);
-							fat_avg += rs.getInt(7);
-							//resultbuilder.append(rs.g(2));
-						}
-						
-						if (result_count>0)
-						{
-						weight_avg = weight_avg / result_count;
-						energy_avg = energy_avg / result_count;
-						sodium_avg = sodium_avg / result_count;
-						fat_avg = fat_avg / result_count;
-						
-						weight_total += weight_avg;
-						energy_total += energy_avg;
-						sodium_total += sodium_avg;
-						fat_total += fat_avg;
-						
-						//resultbuilder.append(ingredients[j] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n \n");
-						}
-						rs.close();
-						stmt.close();
-						connection.close();
-						}
-						resultbuilder.append("Dish " + i + ":\nWeight= " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium =" + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n");
-							
-			}			
-		}catch(Exception e){
-			System.out.println(e);
+					weight_avg = weight_avg / result_count;
+					energy_avg = energy_avg / result_count;
+					sodium_avg = sodium_avg / result_count;
+					fat_avg = fat_avg / result_count;
+					
+					weight_total += weight_avg;
+					energy_total += energy_avg;
+					sodium_total += sodium_avg;
+					fat_total += fat_avg;
+					
+					resultbuilder.append(items[i] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n \n");
+					}
+					rs.close();
+					stmt.close();
+					connection.close();
+				}
+				
+			}catch(Exception e){
+				System.out.println(e);
+			}
+			resultbuilder.append("\n Total Weight = " + weight_total + " (g) \n Total Energy = " + energy_total + " (kcal) \n Total Sodium = " + sodium_total + " (g) \n Total Fat = " + fat_total + " (g)");
+			
+			result = resultbuilder.toString();
+
 		}
-		result_set = resultbuilder.toString();
-		return result_set;
+		
+		return result;
 	}
 
 	
