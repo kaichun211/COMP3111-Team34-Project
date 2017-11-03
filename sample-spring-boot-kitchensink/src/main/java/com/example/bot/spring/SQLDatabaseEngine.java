@@ -17,6 +17,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		@Override
 		String search(String text, String database, String userId) throws Exception {
 			//Write your code here
+			
 			String result = null;
 			String[] items;
 			items = text.split(" ");
@@ -59,9 +60,14 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		}
 		
 		String[] nutrient_search(String text) throws Exception {
+			
+			System.out.println("Test: Inisialise");
+			
 			String[] result_set = {};
 			String[] dishes;
 			dishes = text.split("\n");
+			
+			System.out.println(dishes);
 			try {	
 					for(int i=0; i < dishes.length;i++) {
 						String[] ingredients = {};
