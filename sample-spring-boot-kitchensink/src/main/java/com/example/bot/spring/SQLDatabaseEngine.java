@@ -63,7 +63,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		dishes = text.split("\\r?\\n");
 		StringBuilder resultbuilder = new StringBuilder();
 		try {	
-				for(int i=1; i < dishes.length;i++) {
+				for(int i=0; i < dishes.length;i++) {
 					String[] ingredients = {};
 					ingredients = dishes[i].split(" ");
 					int weight_total = 0;
@@ -108,7 +108,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 						stmt.close();
 						connection.close();
 						}
-						resultbuilder.append(dishes[i] + ":\nWeight= " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium =" + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n\n");
+						resultbuilder.append("Dish " + i + ":\nWeight= " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium =" + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n");
 							
 			}			
 		}catch(Exception e){
