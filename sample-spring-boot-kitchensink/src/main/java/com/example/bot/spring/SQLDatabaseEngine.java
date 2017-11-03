@@ -24,7 +24,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		//Extract dishes
 		String[] dishes_string;
 		Dishes[] dishes = {};
-		dishes_string = text.split("/n");
+		dishes_string = text.split("\n");
 		for (int i = 0; i<dishes_string.length; i++) {
 			dishes[i] = new Dishes(dishes_string[i]);
 		}

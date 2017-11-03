@@ -294,7 +294,7 @@ public class KitchenSinkController {
             }
             //Read menu searh nutrients in dishes
             case "nutrient":{
-	            	String[] reply_list = null;
+	            	String[] reply_list = {};
 	            	String reply = null;
 	            	try {
 	            		reply_list = database.nutrient_search(text);
