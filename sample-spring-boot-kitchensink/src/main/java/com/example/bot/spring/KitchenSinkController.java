@@ -248,18 +248,7 @@ public class KitchenSinkController {
             		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
-            }
-            case "energy": {
-            	
-            	//String userId = event.getSource().getUserId();
-            	try {
-            		String result = database.weight(text, userId);
-            		this.replyText(replyToken, result);
-            	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
-            	};
-                break;
-            }  
+            }           
             case "menu": {
             	
             	//String userId = event.getSource().getUserId();
