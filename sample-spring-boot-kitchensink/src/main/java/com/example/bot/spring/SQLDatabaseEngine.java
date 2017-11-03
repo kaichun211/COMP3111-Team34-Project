@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.util.Date;
 
 @Slf4j
 public class SQLDatabaseEngine extends DatabaseEngine {
@@ -51,6 +52,42 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			return result;
 		}
 
+	}
+	
+	String waterNotif(String userId) throws Exception {
+		String results = null;
+		
+		try {
+			Date curDT = new Date();
+			Connection connection = getConnection();
+			PreparedStatement stmt = connection.prepareStatement("SELECT water_time FROM user_info WHERE user_id = ?");
+			stmt.setString(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				long old_time = rs.getLong("water_time");
+				if (old_time == 0) {
+					PreparedStatement stmtSave = connection.prepareStatement("UPDATE user_info SET water_time = ? WHERE user_id = ?");
+					stmtSave.setLong(1, curDT.getTime());
+					stmtSave.setString(2, userId);
+					stmtSave.executeUpdate();
+					stmtSave.close();
+				}
+				else if (curDT.getTime() > (old_time + 60000)) {
+					results = "\nRemember to drink some water!";
+					PreparedStatement stmtSave = connection.prepareStatement("UPDATE user_info SET water_time = ? WHERE user_id = ?");
+					stmtSave.setLong(1, curDT.getTime());
+					stmtSave.setString(2, userId);
+					stmtSave.executeUpdate();
+					stmtSave.close();
+				}
+			}
+			rs.close();
+			stmt.close();
+			connection.close();
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+		return results;
 	}
 	
 	String menu_search(String text) throws Exception {
