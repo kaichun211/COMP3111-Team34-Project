@@ -292,7 +292,7 @@ public class KitchenSinkController {
                 this.reply(replyToken, templateMessage);
                 break;
             }
-            //Read menu searh nutrients in dishes
+            //Read menu searh nutrients in multiple dishes
             	case "nutrient": {
             	
 	            	//String userId = event.getSource().getUserId();
