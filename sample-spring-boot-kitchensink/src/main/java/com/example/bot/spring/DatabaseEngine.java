@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DatabaseEngine {
-	String search(String text) throws Exception {
+	String search(String text, String database, String userId) throws Exception {
 		String result = null;
 		BufferedReader br = null;
 		InputStreamReader isr = null;
