@@ -248,7 +248,19 @@ public class KitchenSinkController {
             		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
-            }
+            }           
+            case "menu": {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		String result_set = database.menu_search(text);
+            		this.replyText(replyToken, result_set);
+            		}
+            		catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+            	};
+                break;
+            }         
             case "calculate": {
             	
             	//String userId = event.getSource().getUserId();
@@ -278,14 +290,14 @@ public class KitchenSinkController {
                                         new URIAction("Go to line.me",
                                                       "https://line.me"),
                                         new PostbackAction("Say hello1",
-                                                           "hello ã�“ã‚“ã�«ã�¡ã�¯")
+                                                           "hello 瓊嚙賤�����嚙蝓姻�嚙蝓￣�嚙蝓�")
                                 )),
                                 new CarouselColumn(imageUrl, "hoge", "fuga", Arrays.asList(
-                                        new PostbackAction("è¨€ hello2",
-                                                           "hello ã�“ã‚“ã�«ã�¡ã�¯",
-                                                           "hello ã�“ã‚“ã�«ã�¡ã�¯"),
+                                        new PostbackAction("癡穡� hello2",
+                                                           "hello 瓊嚙賤�����嚙蝓姻�嚙蝓￣�嚙蝓�",
+                                                           "hello 瓊嚙賤�����嚙蝓姻�嚙蝓￣�嚙蝓�"),
                                         new MessageAction("Say message",
-                                                          "Rice=ç±³")
+                                                          "Rice=癟簣糧")
                                 ))
                         ));
                 TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
