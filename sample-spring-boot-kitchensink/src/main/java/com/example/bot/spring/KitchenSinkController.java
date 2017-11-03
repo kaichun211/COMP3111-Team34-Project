@@ -215,6 +215,16 @@ public class KitchenSinkController {
 		String userId = event.getSource().getUserId();
 		log.info("Got text message from {}: {}", replyToken, text);
         switch (command[0]) {
+        	case "order":{
+    		try {
+    			String decision=command[1];
+        		String result = database.order(userId,decision);
+        		this.replyText(replyToken, result);
+        	} catch (Exception e) {
+        		this.replyText(replyToken, "Sorry, please enter a valid input. order <int> ");
+        	};
+            break;
+}
             case "profile": {
                 //String userId = event.getSource().getUserId();
                 if (userId != null) {
