@@ -210,18 +210,54 @@ public class KitchenSinkController {
 	private void handleTextContent(String replyToken, Event event, TextMessageContent content)
             throws Exception {
         String text = content.getText();
-
-        log.info("Got text message from {}: {}", replyToken, text);
-        switch (text) {
+		String[] command;
+		command = text.split(" ");
+		String userId = event.getSource().getUserId();
+		log.info("Got text message from {}: {}", replyToken, text);
+        switch (command[0]) {
             case "profile": {
-                String userId = event.getSource().getUserId();
+                //String userId = event.getSource().getUserId();
                 if (userId != null) {
-                    lineMessagingClient
+                    /*lineMessagingClient
                             .getProfile(userId)
-                            .whenComplete(new ProfileGetter (this, replyToken));
+                            .whenComplete(new ProfileGetter (this, replyToken));*/
+                	this.replyText(replyToken, userId);
                 } else {
                     this.replyText(replyToken, "Bot can't use profile API without user ID");
                 }
+                break;
+            }
+        /*    case "total": {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		String result = database.search(text, "user_info", userId);
+            		this.replyText(replyToken, result);
+            	} catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
+            	};
+                break;
+            }*/
+            case "weight": {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		String result = database.search(text, "user_info", userId);
+            		this.replyText(replyToken, result);
+            	} catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
+            	};
+                break;
+            }
+            case "calculate": {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		String result = database.search(text, "user_info", userId);
+            		this.replyText(replyToken, result);
+            	} catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
+            	};
                 break;
             }
             case "confirm": {
@@ -260,7 +296,7 @@ public class KitchenSinkController {
             default:
             	String reply = null;
             	try {
-            		reply = database.search(text);
+            		reply = database.search(text, "nutrient_table", userId);
             	} catch (Exception e) {
             		reply = text;
             	}
@@ -317,11 +353,9 @@ public class KitchenSinkController {
 
 	public KitchenSinkController() {
 		database = new SQLDatabaseEngine();
-		itscLOGIN = System.getenv("ITSC_LOGIN");
 	}
 
 	private SQLDatabaseEngine database;
-	private String itscLOGIN;
 	
 
 	//The annontation @Value is from the package lombok.Value
