@@ -54,7 +54,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					
 					result_count = 0;
 					PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description LIKE concat(?,'%')");
-					stmt.setString(1, dishes[j].items[i].name);
+					stmt.setString(1, dishes[j].items[i]);
 					ResultSet rs = stmt.executeQuery();
 					while (rs.next()) {
 						result_count++;
@@ -72,10 +72,6 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 						
 						resultbuilder.append(dishes[j].items[i] + ": \n Average Weight = " + weight_temp + " (g) \n Average Energy = " + energy_temp + " (kcal) \n Average Sodium = " + sodium_temp + " (g) \n Saturated Fat = " + fat_temp + " (g) \n");
 					}
-					dishes[j].items[i].setWeightAvg(weight_temp);
-					dishes[j].items[i].setEnergyAvg(energy_temp);
-					dishes[j].items[i].setSodiumAvg(sodium_temp);
-					dishes[j].items[i].setFatAvg(fat_temp);
 					
 					weight_total_temp += weight_temp;
 					energy_total_temp += energy_temp;

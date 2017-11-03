@@ -13,7 +13,7 @@ import java.net.URI;
 
 public class Dishes {
 	String dishes_string;
-	Items[] items = {};
+	String[] items = {};
 	float weight_total = 0;
 	int energy_total = 0;
 	int sodium_total = 0;
@@ -21,10 +21,7 @@ public class Dishes {
 	
 	Dishes (String text){
 		this.dishes_string = text;
-		String[] item_names = text.split(" ");
-		for(int i = 0; i < item_names.length; i++) {
-			items[i] = new Items(item_names[i]);
-		}
+		this.items = text.split(" ");
 		this.weight_total = 0;
 		this.energy_total = 0;
 		this.sodium_total = 0;
