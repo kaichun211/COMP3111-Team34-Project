@@ -292,22 +292,16 @@ public class KitchenSinkController {
                 this.reply(replyToken, templateMessage);
                 break;
             }
-            //Read menu searh nutrients in multiple dishes
-            	case "nutrient": {
-            	
-	            	//String userId = event.getSource().getUserId();
-            		
+            //Read menu searh nutrients in dishes
+            case "nutrient":{
+	            	String[] reply = null;
 	            	try {
-	            		String[] result_set = database.nutrient_search(text);
-	            		
-	            		System.out.println(Arrays.toString(result_set));
-	            		
-	            		for(int i=0;i<result_set.length;i++){
-	            		this.replyText(replyToken, result_set[i]);
-	            		}
+	            		reply = database.nutrient_search(text);
 	            	} catch (Exception e) {
-	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
-	            	};
+	            		reply = text;
+	            	}
+	            log.info("Returns echo message {}: {}", replyToken, reply);
+	            this.replyText(replyToken, reply);
 	            break;
             }
             	
