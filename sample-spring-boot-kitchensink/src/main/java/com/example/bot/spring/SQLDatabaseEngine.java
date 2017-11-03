@@ -14,43 +14,47 @@ import java.net.URI;
 @Slf4j
 public class SQLDatabaseEngine extends DatabaseEngine {
 	//Search ingredients
-	//@Override
-	String weight(String text, String userId) throws Exception {
+	@Override
+	String search(String text, String database, String userId) throws Exception {
 		//Write your code here
 		String result = null;
 		String[] items;
-		items = text.split("\\r?\\n");
-		boolean data_exists = false;
-		int weight = Integer.parseInt(items[1]);
-		Connection connection = getConnection();
-		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
-		stmt.setString(1, userId);
-		ResultSet rs = stmt.executeQuery();
-		if (rs.next()) {
-			data_exists = true;
-		}
-		rs.close();
-		if(data_exists)
+		items = text.split(" ");
+		if(database=="user_info")
 		{
-			PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set weight = ? where user_id = ?");
-			stmt2.setInt(1, weight);
-			stmt2.setString(2, userId);
-			stmt2.executeUpdate();
-			connection.close();
-			result = "Data updated!";
-			return result;
+			boolean data_exists = false;
+			int weight = Integer.parseInt(items[1]);
+			Connection connection = getConnection();
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
+			stmt.setString(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				data_exists = true;
+			}
+			rs.close();
+			if(data_exists)
+			{
+				PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set weight = ? where user_id = ?");
+				stmt2.setInt(1, weight);
+				stmt2.setString(2, userId);
+				stmt2.executeUpdate();
+				connection.close();
+				result = "Data updated!";
+				return result;
+			}
+			else
+			{
+				PreparedStatement stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , ?, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+				stmt3.setString(1, userId);
+				stmt3.setInt(2, weight);
+				stmt3.executeUpdate();
+				connection.close();
+				result = "Data added to our database!";
+				return result;
+			}
+			
 		}
-		else
-		{
-			PreparedStatement stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , ?, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
-			stmt3.setString(1, userId);
-			stmt3.setInt(2, weight);
-			stmt3.executeUpdate();
-			connection.close();
-			result = "Data added to our database!";
 			return result;
-		}
-
 	}
 	
 	String menu_search(String text) throws Exception {
@@ -104,7 +108,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 						stmt.close();
 						connection.close();
 						}
-						resultbuilder.append(dishes[i] + ":\nWeight= " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium =" + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n\n ");
+						resultbuilder.append(dishes[i] + ":\nWeight= " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium =" + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n\n");
 							
 			}			
 		}catch(Exception e){

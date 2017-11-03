@@ -211,7 +211,7 @@ public class KitchenSinkController {
             throws Exception {
         String text = content.getText();
 		String[] command;
-		command = text.split("\\r?\\n");
+		command = text.split(" ");
 		String userId = event.getSource().getUserId();
 		log.info("Got text message from {}: {}", replyToken, text);
         switch (command[0]) {
@@ -242,7 +242,7 @@ public class KitchenSinkController {
             	
             	//String userId = event.getSource().getUserId();
             	try {
-            		String result = database.weight(text, userId);
+            		String result = database.search(text, "user_info", userId);
             		this.replyText(replyToken, result);
             	} catch (Exception e) {
             		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
