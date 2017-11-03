@@ -296,13 +296,17 @@ public class KitchenSinkController {
             	case "nutrient": {
             	
 	            	//String userId = event.getSource().getUserId();
+            		
 	            	try {
 	            		String[] result_set = database.nutrient_search(text);
+	            		
+	            		System.out.println(Arrays.toString(result_set));
+	            		
 	            		for(int i=0;i<result_set.length;i++){
-	            		replyText(replyToken, result_set[i]);
+	            		this.replyText(replyToken, result_set[i]);
 	            		}
 	            	} catch (Exception e) {
-	            		replyText(replyToken, "Sorry, please enter a valid input.");
+	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
 	            	};
 	            break;
             }
