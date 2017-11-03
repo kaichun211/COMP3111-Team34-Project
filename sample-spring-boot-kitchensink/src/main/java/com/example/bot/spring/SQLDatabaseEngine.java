@@ -17,11 +17,15 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	//@Override
 	String[] nutrient_search(String text) throws Exception {
 		//Write your code here
+		System.out.println("Test: Initialiseing");
+		
 		String[] result_list = {};
 		int result_count = 0;
 		String result = null;
 		
 		//Extract dishes
+		System.out.println("Test: Creating Dishes");
+		
 		String[] dishes_string;
 		Dishes[] dishes = {};
 		dishes_string = text.split("\n");
@@ -33,6 +37,8 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		int energy_total_meal = 0;
 		int sodium_total_meal = 0;
 		int fat_total_meal = 0;
+		
+		System.out.println("Test: Caculating Ingredients");
 		
 		try {
 			for(int j=0; j < dishes.length; j++) {
