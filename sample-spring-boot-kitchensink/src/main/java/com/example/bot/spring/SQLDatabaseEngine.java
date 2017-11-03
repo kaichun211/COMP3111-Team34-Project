@@ -60,7 +60,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	String menu_search(String text) throws Exception {
 		String result_set;
 		String[] dishes;
-		dishes = text.split("\\r?\\n");
+		dishes = text.split("\n");
 		StringBuilder resultbuilder = new StringBuilder();
 		try {	
 				for(int i=0; i < dishes.length;i++) {
