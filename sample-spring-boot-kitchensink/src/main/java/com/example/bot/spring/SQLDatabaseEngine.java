@@ -43,7 +43,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		}
 		else
 		{
-			PreparedStatement stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , ?, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+			PreparedStatement stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , ?, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
 			stmt3.setString(1, userId);
 			stmt3.setInt(2, weight);
 			stmt3.executeUpdate();
@@ -177,7 +177,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 						stmt.close();
 						connection.close();
 						}
-						resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n\n");
+						resultbuilder.append(dishes[i] + ":\nWeight= " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium =" + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n\n");
 							
 			}			
 		}catch(Exception e){
@@ -187,35 +187,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		return result_set;
 	}
 
-	String sports_amount(String userId) throws Exception {
-		//Write your code here
-		String result = null;
-		float weight = 0;
-		int energy = 0;
-		int light_multiplier = 1;
-		int medium_multiplier = 4;
-		int heavy_multiplier = 8;
-		Connection connection = getConnection();
-		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
-		stmt.setString(1, userId);
-		ResultSet rs = stmt.executeQuery();
-		if (rs.next()) {
-			weight = rs.getInt(2);
-			energy = rs.getInt(3) + rs.getInt(4) + rs.getInt(5) + rs.getInt(6) + rs.getInt(7) + rs.getInt(8) + rs.getInt(9); 			
-		}
-		rs.close();
-		if(weight!=0)
-		{
-			result = "Total energy is : " + energy + " kcal.\nyour weight is : " + weight + "kg.\nTime required to consume:\nLight(e.g. walking) : " + energy/(weight*light_multiplier) + " hr\nMedium(e.g. jogging) : " + energy/(weight*medium_multiplier) + " hr\nHeavy(e.g. running, swimming : " + energy/(weight*heavy_multiplier) + " hr\n"  ;
-			return result;
-		}
-		else
-		{
-			result = "Weight can not be zero!";
-			return result;
-		}
-
-	}
+	
 	
 	private Connection getConnection() throws URISyntaxException, SQLException {
 		Connection connection;
