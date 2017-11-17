@@ -161,7 +161,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					stmtSave.close();
 				}
 				else if (curDT.getTime() > (old_time + rs.getLong("water_int"))) {
-					results = "\nRemember to drink some water!";
+					results = "\n\nRemember to drink some water!";
 					PreparedStatement stmtSave = connection.prepareStatement("UPDATE user_info SET water_time = ? WHERE user_id = ?");
 					stmtSave.setLong(1, curDT.getTime());
 					stmtSave.setString(2, userId);
@@ -495,7 +495,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			connection.close();
 			return result;
 		}else {
-			result = "You are not qualitfy this event";
+			result = "You are not qualified for this event! This event is only for new users.";
 			connection.close();
 			return result;
 		}
@@ -506,9 +506,13 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		String result = null;
 		String[] items;
 		items = text.split("\\r?\\n");
+		if(items[1].length()!=6)
+		{
+			result = "Don't miss the zero(s)! Please try again.";
+			return result;
+		}
 		int user_id = Integer.parseInt(items[1]);
 		
-		System.out.println("User_ID : " + user_id);
 		
 		boolean data_exists = false;
 		boolean code = true;
@@ -516,12 +520,23 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		
 		Connection connection = getConnection();
 		
-		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM coupontable where user_number = ? and user_id not like 'master'");
-		stmt.setInt(1, user_id);
-		ResultSet rs = stmt.executeQuery();
+		PreparedStatement stmt = connection.prepareStatement("SELECT user_number FROM coupontable where user_id = ?");
+		stmt.setString(1, userId);
+		ResultSet check_your_id = stmt.executeQuery();
+		if(check_your_id.next())
+		{
+			if (check_your_id.getInt(1) == user_id)
+			{
+				result = "Hey! You can not refer yourself!";
+				return result;
+			}
+		}
+		
+		PreparedStatement stmt1 = connection.prepareStatement("SELECT * FROM coupontable where user_number = ? and user_id not like 'master'");
+		stmt1.setInt(1, user_id);
+		ResultSet rs = stmt1.executeQuery();
 		if (rs.next()) {
 			data_exists = true;
-			System.out.println("data exist");
 		}
 		PreparedStatement stmt2 = connection.prepareStatement("SELECT code FROM coupontable where user_id = ?");
 		stmt2.setString(1, userId);
@@ -553,15 +568,15 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			PreparedStatement stmt6 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count + 2 where user_id = 'master'");
 			stmt6.executeUpdate();
 		
-			result = "Coupon Get";
+			result = "Coupon Get!";
 			connection.close();
 			return result;
 		}else if(coupon_count >= 5000){
-			result = "Sorry, the event has ended.";
+			result = "Sorry, the event has ended and all the coupons has been given out.";
 			connection.close();
 			return result;
 		}else{
-			result = "You are not qualitfy this event.";
+			result = "You are not qualified for this event! Either you are not a new user or you have already referred your friend.";
 			connection.close();
 			return result;
 		}
@@ -584,7 +599,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			PreparedStatement stmt2 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count - 1 where user_id = ?");
 			stmt2.setString(1, userId);
 			stmt2.executeUpdate();
-			result = "<COUPON IMAGE>\nYou redeemed one coupon\nYou still have " + --coupon_count + " coupon(s) to be redeemed.";
+			result = "You redeemed one coupon\nYou still have " + --coupon_count + " coupon(s) to be redeemed.";
 			connection.close();
 			return result;
 		}else {

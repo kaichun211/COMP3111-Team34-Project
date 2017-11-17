@@ -339,7 +339,7 @@ public class KitchenSinkController {
             case "friend":{
 	            	try {
 	            		String result = database.friend(userId);
-	            		this.replyText(replyToken, result + database.waterNotif(userId));
+	            		this.replyText(replyToken, "Your code is: " + result + database.waterNotif(userId));
 	            	} catch (Exception e) {
 	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
 	            	};
@@ -350,16 +350,24 @@ public class KitchenSinkController {
 	            		String result = database.code(text, userId);
 	            		this.replyText(replyToken, result + database.waterNotif(userId));
 	            	} catch (Exception e) {
-	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+	            		this.replyText(replyToken, "Invalid input! You should enter a valid 6-digit number.");
 	            	};
 	                break;
             }
             case "redeem":{
 	            	try {
 	            		String result = database.redeem(userId);
-	            		this.replyText(replyToken, result + database.waterNotif(userId));
+	            		if(result!="You currently have no coupon")
+	            		{
+	            			this.reply(replyToken,Arrays.asList(new ImageMessage("https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif", "https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif")
+	            				, new TextMessage(result + database.waterNotif(userId))));
+	            		}
+	            		else
+	            		{
+	            			this.replyText(replyToken, result + database.waterNotif(userId));
+	            		}
 	            	} catch (Exception e) {
-	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+	            		this.replyText(replyToken, "Sorry, Error occured, please try again later.");
 	            	};
 	                break;
             }
