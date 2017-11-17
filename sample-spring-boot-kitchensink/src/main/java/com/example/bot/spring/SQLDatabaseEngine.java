@@ -511,6 +511,57 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		}
 	}
 	
+	String code(String text, String userId) throws Exception {
+		
+		String result = null;
+		String[] items;
+		items = text.split("\\r?\\n");
+		int user_id = Integer.parseInt(items[1]);
+		
+		boolean data_exists = false;
+		boolean code = true;
+		
+		Connection connection = getConnection();
+		
+		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM coupontable where user_number = ? and user_id not like 'master'");
+		stmt.setInt(1, user_id);
+		ResultSet rs = stmt.executeQuery();
+		if (rs.next()) {
+			data_exists = true;
+		}
+		PreparedStatement stmt2 = connection.prepareStatement("SELECT code FROM coupontable where user_id = ?");
+		stmt2.setString(1, userId);
+		ResultSet rs2 = stmt.executeQuery();
+		if (rs2.next()) {
+			code = rs2.getBoolean(1);
+		}
+		
+		if(!code && data_exists) {
+			PreparedStatement stmt3 = connection.prepareStatement("UPDATE coupontable set code = t where user_id = ?");
+			stmt3.setString(1, userId);
+			stmt3.executeUpdate();
+			
+			PreparedStatement stmt4 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count + 1 where user_id = ?");
+			stmt4.setString(1, userId);
+			stmt4.executeUpdate();
+			
+			PreparedStatement stmt5 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count + 1 where user_number = ?");
+			stmt5.setInt(1, user_id);
+			stmt5.executeUpdate();
+			
+			PreparedStatement stmt6 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count + 2 where user_id = 'master'");
+			stmt6.executeUpdate();
+		
+			result = "Coupon Get";
+			connection.close();
+			return result;
+		}else {
+			result = "You are not qualitfy this event";
+			connection.close();
+			return result;
+		}
+	}
+	
 	String order(String userID, String decision) throws Exception {
 		
 		

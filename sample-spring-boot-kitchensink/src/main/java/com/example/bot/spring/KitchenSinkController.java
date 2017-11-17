@@ -345,6 +345,15 @@ public class KitchenSinkController {
 	            	};
 	                break;
             }
+            case "code":{
+            	try {
+            		String result = database.code(text, userId);
+            		this.replyText(replyToken, result + database.waterNotif(userId));
+            	} catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
+            	};
+                break;
+        }
 
             default:
             	String reply = null;
