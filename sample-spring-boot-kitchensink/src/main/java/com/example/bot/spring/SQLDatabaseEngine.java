@@ -584,7 +584,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			PreparedStatement stmt2 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count - 1 where user_id = ?");
 			stmt2.setString(1, userId);
 			stmt2.executeUpdate();
-			result = "<COUPON IMAGE>\nYou redeemed one coupon\nYou still have " + --coupon_count + " coupon(s) to be redeemed.";
+			result = "You redeemed one coupon\nYou still have " + --coupon_count + " coupon(s) to be redeemed.";
 			connection.close();
 			return result;
 		}else {

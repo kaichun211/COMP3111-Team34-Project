@@ -357,9 +357,16 @@ public class KitchenSinkController {
             case "redeem":{
 	            	try {
 	            		String result = database.redeem(userId);
-	            		//this.replyText(replyToken, result + database.waterNotif(userId));
+	            		if(result!="You currently have no coupon")
+	            		{
+	            		
 	            		this.reply(replyToken,Arrays.asList(new ImageMessage("https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif", "https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif")
-	            				, new TextMessage(result)));
+	            				, new TextMessage(result), new TextMessage(database.waterNotif(userId))));
+	            		}
+	            		else
+	            		{
+	            			this.replyText(replyToken, result + database.waterNotif(userId));
+	            		}
 	            	} catch (Exception e) {
 	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
 	            	};
