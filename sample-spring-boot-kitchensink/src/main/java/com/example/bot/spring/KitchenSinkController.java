@@ -211,10 +211,20 @@ public class KitchenSinkController {
             throws Exception {
         String text = content.getText();
 		String[] command;
-		command = text.split(" ");
+		command = text.split("\\r?\\n");
 		String userId = event.getSource().getUserId();
 		log.info("Got text message from {}: {}", replyToken, text);
         switch (command[0]) {
+        	case "order":{
+    		try {
+    			String decision=command[1];
+        		String result = database.order(userId,decision);
+        		this.replyText(replyToken, result);
+        	} catch (Exception e) {
+        		this.replyText(replyToken, "Sorry, please enter a valid input. order <int> ");
+        	};
+            break;
+}
             case "profile": {
                 //String userId = event.getSource().getUserId();
                 if (userId != null) {
@@ -238,23 +248,66 @@ public class KitchenSinkController {
             	};
                 break;
             }*/
+            case "water":{
+            	try {
+            		String result = database.waterInterval(text, userId);
+            		this.replyText(replyToken, result + database.waterNotif(userId));
+            	} catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'water <notification interval in minutes, 0 as OFF>'. ");
+            	};
+                break;
+            }
+            case "sports": {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		String result = database.sports_amount(userId);
+            		this.replyText(replyToken, result);
+            	} catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+            	};
+                break;
+            }
             case "weight": {
             	
             	//String userId = event.getSource().getUserId();
             	try {
-            		String result = database.search(text, "user_info", userId);
-            		this.replyText(replyToken, result);
+            		String result = database.weight(text, userId);
+            		this.replyText(replyToken, result + database.waterNotif(userId));
             	} catch (Exception e) {
             		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
             }
+            case "energy": {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		String result = database.energy(text, userId);
+            		this.replyText(replyToken, result);
+            	} catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'energy <energy> <day of week>'. ");
+            	};
+                break;
+            }  
+            case "menu": {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		String result_set = database.menu_search(text);
+            		this.replyText(replyToken, result_set + database.waterNotif(userId));
+            		}
+            		catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+            	};
+                break;
+            }         
             case "calculate": {
             	
             	//String userId = event.getSource().getUserId();
             	try {
             		String result = database.search(text, "user_info", userId);
-            		this.replyText(replyToken, result);
+            		this.replyText(replyToken, result + database.waterNotif(userId));
             	} catch (Exception e) {
             		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
@@ -270,47 +323,7 @@ public class KitchenSinkController {
                 this.reply(replyToken, templateMessage);
                 break;
             }
-            case "carousel": {
-                String imageUrl = createUri("/static/buttons/1040.jpg");
-                CarouselTemplate carouselTemplate = new CarouselTemplate(
-                        Arrays.asList(
-                                new CarouselColumn(imageUrl, "hoge", "fuga", Arrays.asList(
-                                        new URIAction("Go to line.me",
-                                                      "https://line.me"),
-                                        new PostbackAction("Say hello1",
-                                                           "hello ã�“ã‚“ã�«ã�¡ã�¯")
-                                )),
-                                new CarouselColumn(imageUrl, "hoge", "fuga", Arrays.asList(
-                                        new PostbackAction("è¨€ hello2",
-                                                           "hello ã�“ã‚“ã�«ã�¡ã�¯",
-                                                           "hello ã�“ã‚“ã�«ã�¡ã�¯"),
-                                        new MessageAction("Say message",
-                                                          "Rice=ç±³")
-                                ))
-                        ));
-                TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
-                this.reply(replyToken, templateMessage);
-                break;
-            }
-            //Read menu searh nutrients in multiple dishes
-            	case "nutrient": {
-            	
-	            	//String userId = event.getSource().getUserId();
-            		
-	            	try {
-	            		String[] result_set = database.nutrient_search(text);
-	            		
-	            		System.out.println(Arrays.toString(result_set));
-	            		
-	            		for(int i=0;i<result_set.length;i++){
-	            		this.replyText(replyToken, result_set[i]);
-	            		}
-	            	} catch (Exception e) {
-	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
-	            	};
-	            break;
-            }
-            	
+
             default:
             	String reply = null;
             	try {
@@ -318,9 +331,12 @@ public class KitchenSinkController {
             	} catch (Exception e) {
             		reply = text;
             	}
-            log.info("Returns echo message {}: {}", replyToken, reply);
-            this.replyText(replyToken, reply);
-            break;
+                log.info("Returns echo message {}: {}", replyToken, reply);
+                this.replyText(
+                        replyToken,
+                        reply + database.waterNotif(userId)
+                );
+                break;
         }
     }
 
