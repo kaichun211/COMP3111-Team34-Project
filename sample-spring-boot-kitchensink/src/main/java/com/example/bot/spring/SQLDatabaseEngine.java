@@ -542,7 +542,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		
 		if(!code && data_exists) {
 			System.out.println("Updating");
-			PreparedStatement stmt3 = connection.prepareStatement("UPDATE coupontable set code = t where user_id = ?");
+			PreparedStatement stmt3 = connection.prepareStatement("UPDATE coupontable set code = true where user_id = ?");
 			stmt3.setString(1, userId);
 			stmt3.executeUpdate();
 			
