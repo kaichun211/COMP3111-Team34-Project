@@ -227,17 +227,6 @@ public class KitchenSinkController {
                 }
                 break;
             }
-        /*    case "total": {
-            	
-            	//String userId = event.getSource().getUserId();
-            	try {
-            		String result = database.search(text, "user_info", userId);
-            		this.replyText(replyToken, result);
-            	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
-            	};
-                break;
-            }*/
             case "weight": {
             	
             	//String userId = event.getSource().getUserId();
@@ -248,6 +237,7 @@ public class KitchenSinkController {
             		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
+<<<<<<< HEAD
             }           
             case "menu": {
             	
@@ -271,6 +261,8 @@ public class KitchenSinkController {
             		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
+=======
+>>>>>>> parent of d37810c... Test Weight implementation and nutrient fix
             }
             case "confirm": {
                 ConfirmTemplate confirmTemplate = new ConfirmTemplate(
