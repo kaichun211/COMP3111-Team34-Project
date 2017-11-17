@@ -22,13 +22,16 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		// Add data to coupontable
 		PreparedStatement stmt = connection.prepareStatement("SELECT user_number from coupontable where user_id = 'master'");
 		ResultSet rs = stmt.executeQuery();
-		user_count = rs.getInt(1) + 1;
-		PreparedStatement stmt2 = connection.prepareStatement("INSERT INTO coupontable VALUES (? , ?, false, 0)");
+		user_count = rs.getInt(1);
+		user_count++;
+		
+	/*	PreparedStatement stmt2 = connection.prepareStatement("INSERT INTO coupontable VALUES (? , ?, false, 0)");
 		stmt2.setString(1, userId);
 		stmt2.setInt(2, user_count);
-		stmt2.executeUpdate();
+		stmt2.executeUpdate(); */
+		
 		//Update master user_count
-		PreparedStatement stmt3 = connection.prepareStatement("UPDATE coupontable set user_number = ? where user_id = 'master");
+		PreparedStatement stmt3 = connection.prepareStatement("UPDATE coupontable set user_number = ? where user_id = 'master'");
 		stmt3.setInt(1, user_count);
 		stmt3.executeUpdate();
 		

@@ -157,14 +157,15 @@ public class KitchenSinkController {
 
 	@EventMapping
 	public void handleFollowEvent(FollowEvent event) {
+		String reply = null;
 		String replyToken = event.getReplyToken();
 		String userId = event.getSource().getUserId();
 		try {
-		database.InitializeNewUser(userId);
+		reply = database.InitializeNewUser(userId);
 		}catch (Exception e){
     		this.replyText(replyToken, "Sorry, Unknown error occured, Please try to reinstall the bot and try again. ");
     	};
-		this.replyText(replyToken, "Data Initiallized!");
+		this.replyText(replyToken, reply);
 	}
 
 	@EventMapping
