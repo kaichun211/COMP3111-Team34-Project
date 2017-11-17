@@ -522,6 +522,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		
 		boolean data_exists = false;
 		boolean code = true;
+		int coupon_count = 0;
 		
 		Connection connection = getConnection();
 		
@@ -539,8 +540,13 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			code = rs2.getBoolean(1);
 			System.out.println("code false");
 		}
+		PreparedStatement stmt7 = connection.prepareStatement("SELECT coupon_count FROM coupontable where user_id = 'master'");
+		ResultSet rs3 = stmt7.executeQuery();
+		if (rs3.next()) {
+			coupon_count = rs3.getInt(1);
+		}
 		
-		if(!code && data_exists) {
+		if(!code && data_exists && coupon_count < 5000) {
 			System.out.println("Updating");
 			PreparedStatement stmt3 = connection.prepareStatement("UPDATE coupontable set code = true where user_id = ?");
 			stmt3.setString(1, userId);
@@ -550,7 +556,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			stmt4.setString(1, userId);
 			stmt4.executeUpdate();
 			
-			PreparedStatement stmt5 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count + 1 where user_number = ?");
+			PreparedStatement stmt5 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count + 1 where user_number = ? and user_id not like 'master'");
 			stmt5.setInt(1, user_id);
 			stmt5.executeUpdate();
 			
@@ -560,7 +566,11 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			result = "Coupon Get";
 			connection.close();
 			return result;
-		}else {
+		}else if(coupon_count >= 5000){
+			result = "Sorry, the event has ended";
+			connection.close();
+			return result;
+		}else{
 			result = "You are not qualitfy this event";
 			connection.close();
 			return result;
