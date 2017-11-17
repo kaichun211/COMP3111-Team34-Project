@@ -101,19 +101,9 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			stmt2.executeUpdate();
 			connection.close();
 			result = "Data updated! Your weight has been set to " + weight + "kg";
-			return result;
 		}
-		else
-		{
-			PreparedStatement stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , ? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
-			stmt3.setString(1, userId);
-			stmt3.setInt(2, weight);
-			stmt3.executeUpdate();
-			connection.close();
-			result = "Data added to our database!";
 			return result;
-		}
-
+		
 	}
 	
 	String waterInterval(String text, String userId) throws Exception {
@@ -594,7 +584,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			PreparedStatement stmt2 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count - 1 where user_id = ?");
 			stmt2.setString(1, userId);
 			stmt2.executeUpdate();
-			result = "<COUPON IMAGE>\nYou redeemed one coupon\nYou still have " + --coupon_count + " coupon to be redeemed.";
+			result = "<COUPON IMAGE>\nYou redeemed one coupon\nYou still have " + --coupon_count + " coupon(s) to be redeemed.";
 			connection.close();
 			return result;
 		}else {

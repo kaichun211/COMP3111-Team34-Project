@@ -52,151 +52,62 @@ public class KitchenSinkTester {
 	@Autowired
 	//private DatabaseEngine databaseEngine;
 	private SQLDatabaseEngine sqldatabaseEngine;
-	/*
+	
 	@Test
-	public void SQLTest() throws Exception {
+	public void testWeightInputOutofRange() throws Exception {
 		boolean thrown = false;
 		String result = null;
 		try {
-			result = this.sqldatabaseEngine.search("Soybean");
-		}catch (Exception e) {
+			result = this.sqldatabaseEngine.weight("weight\n0", "testID");
+		} catch (Exception e) {
 			thrown = true;
 		}
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("");
+		assertThat(result).isEqualTo("W"
+				+ "eight can not be zero or negative! Please try again with a valid input");
+	}
+	
+	@Test
+	public void testWeightValidInputExistingUser() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.weight("weight" + "\n" + "50", "testID");
+		} catch (Exception e) {
+			thrown = true;
+		}
 		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Data updated! Your weight has been set to 50kg");
 	}
 	
 	@Test
-	public void SQLTest2() throws Exception {
+	public void testWeightInputBoundary() throws Exception {
 		boolean thrown = false;
 		String result = null;
 		try {
-			result = this.sqldatabaseEngine.search("Do you know how to use Line?");
-		}catch (Exception e) {
+			result = this.sqldatabaseEngine.weight("weight" + "\n" + "1", "testID");
+		} catch (Exception e) {
 			thrown = true;
 		}
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Kind of");
 		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Data updated! Your weight has been set to 1kg");
+
 	}
 	
 	@Test
-	public void SQLTest3() throws Exception {
+	public void testWeightInputNotInteger() throws Exception {
 		boolean thrown = false;
 		String result = null;
 		try {
-			result = this.sqldatabaseEngine.search("Who made you?");
-		}catch (Exception e) {
+			result = this.sqldatabaseEngine.weight("weight" + "\n" + "ABC", "testID");
+		} catch (Exception e) {
 			thrown = true;
 		}
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("cnlauab");
 		
+		assertThat(!thrown).isEqualTo(false);
+
 	}
-	
-	@Test
-	public void SQLTest4() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.search("Are you hungry?");
-		}catch (Exception e) {
-			thrown = true;
-		}
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("No");
-		
-	}
-	
-	@Test
-	public void SQLTest5() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.search("You are handsome");
-		}catch (Exception e) {
-			thrown = true;
-		}
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Thanks");
-		
-	}*/
-	
-	@Test
-	public void testNotFound() throws Exception {
-		boolean thrown = false;
-		try {
-			this.sqldatabaseEngine.weight("no", "testing_user_id");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		assertThat(thrown).isEqualTo(true);
-	}
-	/**
-	@Test
-	public void testFound() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.databaseEngine.search("abc");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("def");
-	}
-	
-	@Test
-	public void testFound2() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.databaseEngine.search("Hi");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Hey, how things going?");
-	}
-	
-	@Test
-	public void testFound3() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.databaseEngine.search("I am fine");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Great!");
-	}
-	
-	@Test
-	public void testFound4() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.databaseEngine.search("Who is Prof Kim");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Well, this is your instructor.");
-	}
-	
-	@Test
-	public void testFound5() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.databaseEngine.search("How is the grade of this course?");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("This is absolute good grade for good student. And I am sure you are!");
-	}**/
 	
 }
