@@ -215,6 +215,16 @@ public class KitchenSinkController {
 		String userId = event.getSource().getUserId();
 		log.info("Got text message from {}: {}", replyToken, text);
         switch (command[0]) {
+        	case "order":{
+    		try {
+    			String decision=command[1];
+        		String result = database.order(userId,decision);
+        		this.replyText(replyToken, result);
+        	} catch (Exception e) {
+        		this.replyText(replyToken, "Sorry, please enter a valid input. order <int> ");
+        	};
+            break;
+}
             case "profile": {
                 //String userId = event.getSource().getUserId();
                 if (userId != null) {
@@ -268,7 +278,18 @@ public class KitchenSinkController {
             		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
-            }           
+            }
+            case "energy": {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		String result = database.energy(text, userId);
+            		this.replyText(replyToken, result);
+            	} catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'energy <energy> <day of week>'. ");
+            	};
+                break;
+            }  
             case "menu": {
             	
             	//String userId = event.getSource().getUserId();
