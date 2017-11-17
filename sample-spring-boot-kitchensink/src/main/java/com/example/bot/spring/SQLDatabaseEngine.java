@@ -18,33 +18,47 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	String InitializeNewUser(String userId) throws Exception {
 		String result = null;
 		int user_count = 0;
+		boolean data_exist = false;
 		Connection connection = getConnection();
+		
+		//Create data in user_info
+		PreparedStatement stmt1 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+		stmt1.setString(1, userId);
+		stmt1.executeUpdate();
+
+		
 		// Add data to coupontable
-		PreparedStatement stmt = connection.prepareStatement("SELECT user_number from coupontable where user_id = 'master'");
-		ResultSet rs = stmt.executeQuery();
+		PreparedStatement stmt2 = connection.prepareStatement("SELECT user_number from coupontable where user_id = 'master'");
+		ResultSet rs = stmt2.executeQuery();
 		if (rs.next()) {
 		user_count = rs.getInt(1);
 		}
+
+
+		PreparedStatement stmt3 = connection.prepareStatement("SELECT * from coupontable where user_id = ?");
+		stmt3.setString(1, userId);
+		ResultSet rs2 = stmt3.executeQuery();
+		if (rs2.next()) {
+			data_exist = true;
+		}
+		if(!data_exist)
+		{
 		user_count++;
-		
-		System.out.println(user_count);
-		
-	/*	PreparedStatement stmt2 = connection.prepareStatement("INSERT INTO coupontable VALUES (? , ?, false, 0)");
-		stmt2.setString(1, userId);
-		stmt2.setInt(2, user_count);
-		stmt2.executeUpdate(); */
+		PreparedStatement stmt4 = connection.prepareStatement("INSERT INTO coupontable VALUES (? , ?, false, 0)");
+		stmt4.setString(1, userId);
+		stmt4.setInt(2, user_count);
+		stmt4.executeUpdate();
 		
 		//Update master user_count
-		PreparedStatement stmt3 = connection.prepareStatement("UPDATE coupontable set user_number = ? where user_id = 'master'");
-		stmt3.setInt(1, user_count);
-		stmt3.executeUpdate();
-		
-		//Create data in user_info
-		PreparedStatement stmt4 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
-		stmt4.setString(1, userId);
-		stmt4.executeUpdate();
-		connection.close();
+		PreparedStatement stmt5 = connection.prepareStatement("UPDATE coupontable set user_number = ? where user_id = 'master'");
+		stmt5.setInt(1, user_count);
+		stmt5.executeUpdate();
 		result = "Data initiallized! Welcome~";
+		return result;
+		}
+		
+		connection.close();
+		result = "Data re-created! Unfortunately you are not a new user so you are not qualified for our new user event";
 		return result;
 	}
 	
