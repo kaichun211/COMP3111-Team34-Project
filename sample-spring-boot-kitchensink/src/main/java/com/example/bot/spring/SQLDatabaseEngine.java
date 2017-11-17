@@ -567,14 +567,41 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			connection.close();
 			return result;
 		}else if(coupon_count >= 5000){
-			result = "Sorry, the event has ended";
+			result = "Sorry, the event has ended.";
 			connection.close();
 			return result;
 		}else{
-			result = "You are not qualitfy this event";
+			result = "You are not qualitfy this event.";
 			connection.close();
 			return result;
 		}
+	}
+	
+	String redeem(String userId) throws Exception {
+		//Write your code here
+		String result = null;
+		int coupon_count = 0;
+		boolean data_exists = false;
+		
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("SELECT coupon_count FROM coupontable where user_id = ?");
+		stmt.setString(1, userId);
+		ResultSet rs = stmt.executeQuery();
+		if (rs.next()) {
+			coupon_count = rs.getInt(1);
+		}
+		if(coupon_count > 0) {
+			PreparedStatement stmt2 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count - 1 where user_id = ?");
+			stmt2.setString(1, userId);
+			result = "<COUPON IMAGE>\nYou redeemed one coupon\nYou still have " + coupon_count-- + " coupon to be redeemed.";
+			connection.close();
+			return result;
+		}else {
+			result = "You currently have no coupon";
+			connection.close();
+			return result;
+		}
+		
 	}
 	
 	String order(String userID, String decision) throws Exception {

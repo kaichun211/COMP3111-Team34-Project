@@ -341,19 +341,28 @@ public class KitchenSinkController {
 	            		String result = database.friend(userId);
 	            		this.replyText(replyToken, result + database.waterNotif(userId));
 	            	} catch (Exception e) {
-	            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
+	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
 	            	};
 	                break;
             }
             case "code":{
-            	try {
-            		String result = database.code(text, userId);
-            		this.replyText(replyToken, result + database.waterNotif(userId));
-            	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
-            	};
-                break;
-        }
+	            	try {
+	            		String result = database.code(text, userId);
+	            		this.replyText(replyToken, result + database.waterNotif(userId));
+	            	} catch (Exception e) {
+	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+	            	};
+	                break;
+            }
+            case "redeem":{
+	            	try {
+	            		String result = database.redeem(userId);
+	            		this.replyText(replyToken, result + database.waterNotif(userId));
+	            	} catch (Exception e) {
+	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+	            	};
+	                break;
+            }
 
             default:
             	String reply = null;
