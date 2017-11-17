@@ -506,9 +506,13 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		String result = null;
 		String[] items;
 		items = text.split("\\r?\\n");
+		if(items[1].length()!=6)
+		{
+			result = "Your input is invalid! The code is a 6-digit number";
+			return result;
+		}
 		int user_id = Integer.parseInt(items[1]);
 		
-		System.out.println("User_ID : " + user_id);
 		
 		boolean data_exists = false;
 		boolean code = true;

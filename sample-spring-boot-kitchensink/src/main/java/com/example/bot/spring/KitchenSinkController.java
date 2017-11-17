@@ -359,16 +359,8 @@ public class KitchenSinkController {
 	            		String result = database.redeem(userId);
 	            		if(result!="You currently have no coupon")
 	            		{
-	            			if(database.waterNotif(userId)=="")
-								{		
-									this.reply(replyToken,Arrays.asList(new ImageMessage("https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif", "https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif")
-											, new TextMessage(result + database.waterNotif(userId))));
-								}
-							else
-							{
-								this.reply(replyToken,Arrays.asList(new ImageMessage("https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif", "https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif")
-										, new TextMessage(result), new TextMessage(database.waterNotif(userId))));
-							}
+	            			this.reply(replyToken,Arrays.asList(new ImageMessage("https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif", "https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif")
+	            				, new TextMessage(result + database.waterNotif(userId))));
 	            		}
 	            		else
 	            		{
