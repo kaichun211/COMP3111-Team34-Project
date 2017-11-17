@@ -518,6 +518,8 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		items = text.split("\\r?\\n");
 		int user_id = Integer.parseInt(items[1]);
 		
+		System.out.println("User_ID : " + user_id);
+		
 		boolean data_exists = false;
 		boolean code = true;
 		
@@ -531,7 +533,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		}
 		PreparedStatement stmt2 = connection.prepareStatement("SELECT code FROM coupontable where user_id = ?");
 		stmt2.setString(1, userId);
-		ResultSet rs2 = stmt.executeQuery();
+		ResultSet rs2 = stmt2.executeQuery();
 		if (rs2.next()) {
 			code = rs2.getBoolean(1);
 		}
