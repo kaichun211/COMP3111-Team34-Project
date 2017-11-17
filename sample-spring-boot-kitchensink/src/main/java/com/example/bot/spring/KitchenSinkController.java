@@ -211,7 +211,7 @@ public class KitchenSinkController {
             throws Exception {
         String text = content.getText();
 		String[] command;
-		command = text.split(" ");
+		command = text.split("\\r?\\n");
 		String userId = event.getSource().getUserId();
 		log.info("Got text message from {}: {}", replyToken, text);
         switch (command[0]) {
@@ -227,28 +227,30 @@ public class KitchenSinkController {
                 }
                 break;
             }
-        /*    case "total": {
-            	
-            	//String userId = event.getSource().getUserId();
-            	try {
-            		String result = database.search(text, "user_info", userId);
-            		this.replyText(replyToken, result);
-            	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
-            	};
-                break;
-            }*/
             case "weight": {
             	
             	//String userId = event.getSource().getUserId();
             	try {
-            		String result = database.search(text, "user_info", userId);
+            		String result = database.weight(text, userId);
             		this.replyText(replyToken, result);
             	} catch (Exception e) {
             		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
-            }
+<<<<<<< HEAD
+            }           
+            case "menu": {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		String result_set = database.menu_search(text);
+            		this.replyText(replyToken, result_set);
+            		}
+            		catch (Exception e) {
+            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+            	};
+                break;
+            }         
             case "calculate": {
             	
             	//String userId = event.getSource().getUserId();
@@ -259,6 +261,8 @@ public class KitchenSinkController {
             		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
+=======
+>>>>>>> parent of d37810c... Test Weight implementation and nutrient fix
             }
             case "confirm": {
                 ConfirmTemplate confirmTemplate = new ConfirmTemplate(
@@ -278,39 +282,21 @@ public class KitchenSinkController {
                                         new URIAction("Go to line.me",
                                                       "https://line.me"),
                                         new PostbackAction("Say hello1",
-                                                           "hello ã�“ã‚“ã�«ã�¡ã�¯")
+                                                           "hello 瓊嚙賤�����嚙蝓姻�嚙蝓￣�嚙蝓�")
                                 )),
                                 new CarouselColumn(imageUrl, "hoge", "fuga", Arrays.asList(
-                                        new PostbackAction("è¨€ hello2",
-                                                           "hello ã�“ã‚“ã�«ã�¡ã�¯",
-                                                           "hello ã�“ã‚“ã�«ã�¡ã�¯"),
+                                        new PostbackAction("癡穡� hello2",
+                                                           "hello 瓊嚙賤�����嚙蝓姻�嚙蝓￣�嚙蝓�",
+                                                           "hello 瓊嚙賤�����嚙蝓姻�嚙蝓￣�嚙蝓�"),
                                         new MessageAction("Say message",
-                                                          "Rice=ç±³")
+                                                          "Rice=癟簣糧")
                                 ))
                         ));
                 TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
                 this.reply(replyToken, templateMessage);
                 break;
             }
-            //Read menu searh nutrients in multiple dishes
-            	case "nutrient": {
-            	
-	            	//String userId = event.getSource().getUserId();
-            		
-	            	try {
-	            		String[] result_set = database.nutrient_search(text);
-	            		
-	            		System.out.println(Arrays.toString(result_set));
-	            		
-	            		for(int i=0;i<result_set.length;i++){
-	            		this.replyText(replyToken, result_set[i]);
-	            		}
-	            	} catch (Exception e) {
-	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
-	            	};
-	            break;
-            }
-            	
+
             default:
             	String reply = null;
             	try {
@@ -318,9 +304,12 @@ public class KitchenSinkController {
             	} catch (Exception e) {
             		reply = text;
             	}
-            log.info("Returns echo message {}: {}", replyToken, reply);
-            this.replyText(replyToken, reply);
-            break;
+                log.info("Returns echo message {}: {}", replyToken, reply);
+                this.replyText(
+                        replyToken,
+                        reply
+                );
+                break;
         }
     }
 
