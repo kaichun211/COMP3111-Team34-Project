@@ -484,7 +484,128 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 
 	}
 	
-String order(String userID, String decision) throws Exception {
+	String friend(String userId) throws Exception {
+		//Write your code here
+		String result = null;
+		int user_id = 0;
+		
+		boolean data_exists = false;
+		
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("SELECT user_number from coupontable where user_id = ?");
+		stmt.setString(1, userId);
+		ResultSet rs = stmt.executeQuery();
+		
+		if (rs.next()) {
+			user_id = rs.getInt(1);
+			result = Integer.toString(user_id);
+			for(int i = result.length(); i < 6; i++) {
+				result = "0" + result;
+			}
+			connection.close();
+			return result;
+		}else {
+			result = "You are not qualitfy this event";
+			connection.close();
+			return result;
+		}
+	}
+	
+	String code(String text, String userId) throws Exception {
+		
+		String result = null;
+		String[] items;
+		items = text.split("\\r?\\n");
+		int user_id = Integer.parseInt(items[1]);
+		
+		System.out.println("User_ID : " + user_id);
+		
+		boolean data_exists = false;
+		boolean code = true;
+		int coupon_count = 0;
+		
+		Connection connection = getConnection();
+		
+		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM coupontable where user_number = ? and user_id not like 'master'");
+		stmt.setInt(1, user_id);
+		ResultSet rs = stmt.executeQuery();
+		if (rs.next()) {
+			data_exists = true;
+			System.out.println("data exist");
+		}
+		PreparedStatement stmt2 = connection.prepareStatement("SELECT code FROM coupontable where user_id = ?");
+		stmt2.setString(1, userId);
+		ResultSet rs2 = stmt2.executeQuery();
+		if (rs2.next()) {
+			code = rs2.getBoolean(1);
+			System.out.println("code false");
+		}
+		PreparedStatement stmt7 = connection.prepareStatement("SELECT coupon_count FROM coupontable where user_id = 'master'");
+		ResultSet rs3 = stmt7.executeQuery();
+		if (rs3.next()) {
+			coupon_count = rs3.getInt(1);
+		}
+		
+		if(!code && data_exists && coupon_count < 5000) {
+			System.out.println("Updating");
+			PreparedStatement stmt3 = connection.prepareStatement("UPDATE coupontable set code = true where user_id = ?");
+			stmt3.setString(1, userId);
+			stmt3.executeUpdate();
+			
+			PreparedStatement stmt4 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count + 1 where user_id = ?");
+			stmt4.setString(1, userId);
+			stmt4.executeUpdate();
+			
+			PreparedStatement stmt5 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count + 1 where user_number = ? and user_id not like 'master'");
+			stmt5.setInt(1, user_id);
+			stmt5.executeUpdate();
+			
+			PreparedStatement stmt6 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count + 2 where user_id = 'master'");
+			stmt6.executeUpdate();
+		
+			result = "Coupon Get";
+			connection.close();
+			return result;
+		}else if(coupon_count >= 5000){
+			result = "Sorry, the event has ended.";
+			connection.close();
+			return result;
+		}else{
+			result = "You are not qualitfy this event.";
+			connection.close();
+			return result;
+		}
+	}
+	
+	String redeem(String userId) throws Exception {
+		//Write your code here
+		String result = null;
+		int coupon_count = 0;
+		boolean data_exists = false;
+		
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("SELECT coupon_count FROM coupontable where user_id = ?");
+		stmt.setString(1, userId);
+		ResultSet rs = stmt.executeQuery();
+		if (rs.next()) {
+			coupon_count = rs.getInt(1);
+		}
+		if(coupon_count > 0) {
+			PreparedStatement stmt2 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count - 1 where user_id = ?");
+			stmt2.setString(1, userId);
+			stmt2.executeUpdate();
+			result = "<COUPON IMAGE>\nYou redeemed one coupon\nYou still have " + --coupon_count + " coupon to be redeemed.";
+			connection.close();
+			return result;
+		}else {
+			result = "You currently have no coupon";
+			connection.close();
+			return result;
+		}
+		
+	}
+	
+	String order(String userID, String decision) throws Exception {
 		
 		
 		try {

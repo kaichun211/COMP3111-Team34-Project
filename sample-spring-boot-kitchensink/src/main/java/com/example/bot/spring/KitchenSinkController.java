@@ -336,6 +336,33 @@ public class KitchenSinkController {
                 this.reply(replyToken, templateMessage);
                 break;
             }
+            case "friend":{
+	            	try {
+	            		String result = database.friend(userId);
+	            		this.replyText(replyToken, result + database.waterNotif(userId));
+	            	} catch (Exception e) {
+	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+	            	};
+	                break;
+            }
+            case "code":{
+	            	try {
+	            		String result = database.code(text, userId);
+	            		this.replyText(replyToken, result + database.waterNotif(userId));
+	            	} catch (Exception e) {
+	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+	            	};
+	                break;
+            }
+            case "redeem":{
+	            	try {
+	            		String result = database.redeem(userId);
+	            		this.replyText(replyToken, result + database.waterNotif(userId));
+	            	} catch (Exception e) {
+	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+	            	};
+	                break;
+            }
 
             default:
             	String reply = null;
