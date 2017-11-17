@@ -356,8 +356,14 @@ public class KitchenSinkController {
             }
             case "redeem":{
 	            	try {
+	            		List<Message> messageList = Arrays.asList();
+	            		ImageMessage coupon_jpg = new ImageMessage("https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif", "https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif");
+	            		messageList.add(coupon_jpg);
 	            		String result = database.redeem(userId);
-	            		this.replyText(replyToken, result + database.waterNotif(userId));
+	            		TextMessage text_message = new TextMessage(result);
+	            		messageList.add(text_message);
+	            		//this.replyText(replyToken, result + database.waterNotif(userId));
+	            		this.reply(replyToken, messageList);
 	            	} catch (Exception e) {
 	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
 	            	};
