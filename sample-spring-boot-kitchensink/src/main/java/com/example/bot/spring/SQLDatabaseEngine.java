@@ -495,7 +495,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			connection.close();
 			return result;
 		}else {
-			result = "You are not qualitfy this event";
+			result = "You are not qualified for this event! This event is only for new users";
 			connection.close();
 			return result;
 		}
@@ -565,7 +565,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			connection.close();
 			return result;
 		}else{
-			result = "You are not qualitfy this event.";
+			result = "You are not qualified for this event! Either you are not a new user or you have already referred your friend";
 			connection.close();
 			return result;
 		}
