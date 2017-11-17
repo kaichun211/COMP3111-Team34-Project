@@ -161,7 +161,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					stmtSave.close();
 				}
 				else if (curDT.getTime() > (old_time + rs.getLong("water_int"))) {
-					results = "\nRemember to drink some water!";
+					results = "\n\nRemember to drink some water!";
 					PreparedStatement stmtSave = connection.prepareStatement("UPDATE user_info SET water_time = ? WHERE user_id = ?");
 					stmtSave.setLong(1, curDT.getTime());
 					stmtSave.setString(2, userId);
