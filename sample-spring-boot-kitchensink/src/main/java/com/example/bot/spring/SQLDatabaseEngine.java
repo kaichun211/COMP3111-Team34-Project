@@ -530,15 +530,18 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		ResultSet rs = stmt.executeQuery();
 		if (rs.next()) {
 			data_exists = true;
+			System.out.println("data exist");
 		}
 		PreparedStatement stmt2 = connection.prepareStatement("SELECT code FROM coupontable where user_id = ?");
 		stmt2.setString(1, userId);
 		ResultSet rs2 = stmt2.executeQuery();
 		if (rs2.next()) {
 			code = rs2.getBoolean(1);
+			System.out.println("code false");
 		}
 		
 		if(!code && data_exists) {
+			System.out.println("Updating");
 			PreparedStatement stmt3 = connection.prepareStatement("UPDATE coupontable set code = t where user_id = ?");
 			stmt3.setString(1, userId);
 			stmt3.executeUpdate();
