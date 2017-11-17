@@ -495,7 +495,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			connection.close();
 			return result;
 		}else {
-			result = "You are not qualified for this event! This event is only for new users";
+			result = "You are not qualified for this event! This event is only for new users.";
 			connection.close();
 			return result;
 		}
@@ -508,7 +508,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		items = text.split("\\r?\\n");
 		if(items[1].length()!=6)
 		{
-			result = "Your input is invalid! The code is a 6-digit number";
+			result = "Don't miss the zero(s)! Please try again.";
 			return result;
 		}
 		int user_id = Integer.parseInt(items[1]);
@@ -557,15 +557,15 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			PreparedStatement stmt6 = connection.prepareStatement("UPDATE coupontable set coupon_count = coupon_count + 2 where user_id = 'master'");
 			stmt6.executeUpdate();
 		
-			result = "Coupon Get";
+			result = "Coupon Get!";
 			connection.close();
 			return result;
 		}else if(coupon_count >= 5000){
-			result = "Sorry, the event has ended.";
+			result = "Sorry, the event has ended and all the coupons has been given out.";
 			connection.close();
 			return result;
 		}else{
-			result = "You are not qualified for this event! Either you are not a new user or you have already referred your friend";
+			result = "You are not qualified for this event! Either you are not a new user or you have already referred your friend.";
 			connection.close();
 			return result;
 		}

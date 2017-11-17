@@ -339,7 +339,7 @@ public class KitchenSinkController {
             case "friend":{
 	            	try {
 	            		String result = database.friend(userId);
-	            		this.replyText(replyToken, result + database.waterNotif(userId));
+	            		this.replyText(replyToken, "Your code is: " + result + database.waterNotif(userId));
 	            	} catch (Exception e) {
 	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
 	            	};
@@ -350,7 +350,7 @@ public class KitchenSinkController {
 	            		String result = database.code(text, userId);
 	            		this.replyText(replyToken, result + database.waterNotif(userId));
 	            	} catch (Exception e) {
-	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+	            		this.replyText(replyToken, "Invalid input! You should enter a valid 6-digit number.");
 	            	};
 	                break;
             }
