@@ -484,7 +484,34 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 
 	}
 	
-String order(String userID, String decision) throws Exception {
+	String friend(String userId) throws Exception {
+		//Write your code here
+		String result = null;
+		int user_id = 0;
+		
+		boolean data_exists = false;
+		
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("SELECT user_number from coupontable where user_id = ?");
+		stmt.setString(1, userId);
+		ResultSet rs = stmt.executeQuery();
+		
+		if (rs.next()) {
+			user_id = rs.getInt(1);
+			result = Integer.toString(user_id);
+			for(int i = result.length(); i < 6; i++) {
+				result = "0" + result;
+			}
+			connection.close();
+			return result;
+		}else {
+			result = "You are not qualitfy this event";
+			connection.close();
+			return result;
+		}
+	}
+	
+	String order(String userID, String decision) throws Exception {
 		
 		
 		try {
