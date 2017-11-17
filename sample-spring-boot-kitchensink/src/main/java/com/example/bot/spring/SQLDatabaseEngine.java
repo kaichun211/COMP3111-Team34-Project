@@ -520,12 +520,23 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		
 		Connection connection = getConnection();
 		
-		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM coupontable where user_number = ? and user_id not like 'master'");
-		stmt.setInt(1, user_id);
-		ResultSet rs = stmt.executeQuery();
+		PreparedStatement stmt = connection.prepareStatement("SELECT user_number FROM coupontable where user_id = ?");
+		stmt.setString(1, userId);
+		ResultSet check_your_id = stmt.executeQuery();
+		if(check_your_id.next())
+		{
+			if (check_your_id.getInt(1) == user_id)
+			{
+				result = "Hey! You can not refer yourself!";
+				return result;
+			}
+		}
+		
+		PreparedStatement stmt1 = connection.prepareStatement("SELECT * FROM coupontable where user_number = ? and user_id not like 'master'");
+		stmt1.setInt(1, user_id);
+		ResultSet rs = stmt1.executeQuery();
 		if (rs.next()) {
 			data_exists = true;
-			System.out.println("data exist");
 		}
 		PreparedStatement stmt2 = connection.prepareStatement("SELECT code FROM coupontable where user_id = ?");
 		stmt2.setString(1, userId);
