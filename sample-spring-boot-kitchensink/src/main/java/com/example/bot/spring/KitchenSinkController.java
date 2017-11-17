@@ -160,6 +160,7 @@ public class KitchenSinkController {
 		String reply = null;
 		String replyToken = event.getReplyToken();
 		String userId = event.getSource().getUserId();
+		log.info(userId);
 		try {
 		reply = database.InitializeNewUser(userId);
 		}catch (Exception e){

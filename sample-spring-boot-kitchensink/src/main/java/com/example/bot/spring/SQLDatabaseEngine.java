@@ -22,8 +22,12 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		// Add data to coupontable
 		PreparedStatement stmt = connection.prepareStatement("SELECT user_number from coupontable where user_id = 'master'");
 		ResultSet rs = stmt.executeQuery();
+		if (rs.next()) {
 		user_count = rs.getInt(1);
+		}
 		user_count++;
+		
+		System.out.println(user_count);
 		
 	/*	PreparedStatement stmt2 = connection.prepareStatement("INSERT INTO coupontable VALUES (? , ?, false, 0)");
 		stmt2.setString(1, userId);
