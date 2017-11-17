@@ -24,6 +24,11 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		items = text.split("\\r?\\n");
 		boolean data_exists = false;
 		int weight = Integer.parseInt(items[1]);
+		if(weight<=0)
+		{
+			result = "Weight can not be zero or negative! Please try again with a valid input";
+			return result;
+		}
 		Connection connection = getConnection();
 		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
 		stmt.setString(1, userId);
@@ -39,7 +44,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			stmt2.setString(2, userId);
 			stmt2.executeUpdate();
 			connection.close();
-			result = "Data updated!";
+			result = "Data updated! Your weight has been set to " + weight + "kg";
 			return result;
 		}
 		else
