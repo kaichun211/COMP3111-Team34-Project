@@ -15,8 +15,43 @@ import java.util.Calendar;
 
 @Slf4j
 public class SQLDatabaseEngine extends DatabaseEngine {
-	//Search ingredients
-	//@Override
+	String InitializeNewUser(String userId) throws Exception {
+		String result = null;
+		int user_count = 0;
+		Connection connection = getConnection();
+		// Add data to coupontable
+		PreparedStatement stmt = connection.prepareStatement("SELECT user_number from coupontable where user_id = 'master'");
+		ResultSet rs = stmt.executeQuery();
+		user_count = rs.getInt(1) + 1;
+		PreparedStatement stmt2 = connection.prepareStatement("INSERT INTO coupontable VALUES (? , ?, false, 0)");
+		stmt2.setString(1, userId);
+		stmt2.setInt(2, user_count);
+		stmt2.executeUpdate();
+		//Update master user_count
+		PreparedStatement stmt3 = connection.prepareStatement("UPDATE coupontable set user_number = ? where user_id = 'master");
+		stmt3.setInt(1, user_count);
+		stmt3.executeUpdate();
+		
+		//Create data in user_info
+		PreparedStatement stmt4 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+		stmt4.setString(1, userId);
+		stmt4.executeUpdate();
+		connection.close();
+		result = "Data initiallized! Welcome~";
+		return result;
+	}
+	
+	String RemoveUser(String userId) throws Exception {
+		String result = null;
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("DELETE FROM user_info WHERE user_id= ?");
+		stmt.setString(1, userId);
+		ResultSet rs = stmt.executeQuery();
+		connection.close();	
+		result = "Data Deleted sucessfully!";
+		return result;
+	}
+	
 	String weight(String text, String userId) throws Exception {
 		//Write your code here
 		String result = null;
@@ -49,7 +84,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		}
 		else
 		{
-			PreparedStatement stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , ?, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+			PreparedStatement stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , ? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
 			stmt3.setString(1, userId);
 			stmt3.setInt(2, weight);
 			stmt3.executeUpdate();
@@ -81,12 +116,12 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			stmt2.setString(2, userId);
 			stmt2.executeUpdate();
 			connection.close();
-			result = "Data updated!";
+			result = "Data updated! ";
 			return result;
 		}
 		else
 		{
-			result = "Account not existed!\n Please create an account using weight function.";
+			result = "Account not exist!\n Please create an account using weight function.";
 			return result;
 		}
 
@@ -361,7 +396,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			PreparedStatement stmt3;
 			switch(energy_X) {
 				case "energy_1":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_1 = ? where user_id = ?");
+					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_1 = ? where user_id = ?");
 					stmt3.setString(1, userId);
 					stmt3.setInt(2, energy);
 					stmt3.setString(3, userId);
@@ -369,7 +404,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					break;
 				}
 				case "energy_2":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_2 = ? where user_id = ?");
+					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_2 = ? where user_id = ?");
 					stmt3.setString(1, userId);
 					stmt3.setInt(2, energy);
 					stmt3.setString(3, userId);
@@ -377,7 +412,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					break;
 				}
 				case "energy_3":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_3 = ? where user_id = ?");
+					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_3 = ? where user_id = ?");
 					stmt3.setString(1, userId);
 					stmt3.setInt(2, energy);
 					stmt3.setString(3, userId);
@@ -385,7 +420,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					break;
 				}
 				case "energy_4":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_4 = ? where user_id = ?");
+					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_4 = ? where user_id = ?");
 					stmt3.setString(1, userId);
 					stmt3.setInt(2, energy);
 					stmt3.setString(3, userId);
@@ -393,7 +428,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					break;
 				}
 				case "energy_5":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_5 = ? where user_id = ?");
+					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_5 = ? where user_id = ?");
 					stmt3.setString(1, userId);
 					stmt3.setInt(2, energy);
 					stmt3.setString(3, userId);
@@ -401,7 +436,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					break;
 				}
 				case "energy_6":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_6 = ? where user_id = ?");
+					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_6 = ? where user_id = ?");
 					stmt3.setString(1, userId);
 					stmt3.setInt(2, energy);
 					stmt3.setString(3, userId);
@@ -409,7 +444,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					break;
 				}
 				case "energy_7":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_7 = ? where user_id = ?");
+					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_7 = ? where user_id = ?");
 					stmt3.setString(1, userId);
 					stmt3.setInt(2, energy);
 					stmt3.setString(3, userId);

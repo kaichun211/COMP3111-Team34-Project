@@ -148,12 +148,23 @@ public class KitchenSinkController {
 	@EventMapping
 	public void handleUnfollowEvent(UnfollowEvent event) {
 		log.info("unfollowed this bot: {}", event);
+		String userId = event.getSource().getUserId();
+		try{
+			database.RemoveUser(userId);
+		}catch (Exception e){
+    	};
 	}
 
 	@EventMapping
 	public void handleFollowEvent(FollowEvent event) {
 		String replyToken = event.getReplyToken();
-		this.replyText(replyToken, "Got followed event");
+		String userId = event.getSource().getUserId();
+		try {
+		database.InitializeNewUser(userId);
+		}catch (Exception e){
+    		this.replyText(replyToken, "Sorry, Unknown error occured, Please try to reinstall the bot and try again. ");
+    	};
+		this.replyText(replyToken, "Data Initiallized!");
 	}
 
 	@EventMapping
@@ -302,7 +313,7 @@ public class KitchenSinkController {
             	};
                 break;
             }         
-            case "calculate": {
+ /*           case "calculate": {
             	
             	//String userId = event.getSource().getUserId();
             	try {
@@ -312,7 +323,7 @@ public class KitchenSinkController {
             		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
-            }
+            }*/
             case "confirm": {
                 ConfirmTemplate confirmTemplate = new ConfirmTemplate(
                         "Do it?",
