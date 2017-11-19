@@ -373,10 +373,10 @@ public class KitchenSinkController {
             case "redeem":{
 	            	try {
 	            		String result = database.redeem(userId);
-	            		appendText(messageList, result);
 	            		if (result!="You currently have no coupon") {
 	            			messageList.add(new ImageMessage("https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif", "https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif"));
 	            		}
+	            		appendText(messageList, result);
 	            	} catch (Exception e) {
 	            		appendText(messageList, "Sorry, Error occured, please try again later.");
 	            	};
