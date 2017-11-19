@@ -89,7 +89,7 @@ import java.net.URI;
 public class KitchenSinkController {
 	
 
-	String state = "default";
+
 	@Autowired
 	private LineMessagingClient lineMessagingClient;
 
@@ -224,7 +224,7 @@ public class KitchenSinkController {
             throws Exception {
         String text = content.getText();
 		String[] command;
-		
+		String state = "default";
 		command = text.split("\\r?\\n");
 		String userId = event.getSource().getUserId();
 		log.info("Got text message from {}: {}", replyToken, text);
@@ -389,8 +389,6 @@ public class KitchenSinkController {
                         );
                      TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", confirmTemplate);
                      this.reply(replyToken, templateMessage);
-            		}else {
-            			
             		}
             		break;
             }
