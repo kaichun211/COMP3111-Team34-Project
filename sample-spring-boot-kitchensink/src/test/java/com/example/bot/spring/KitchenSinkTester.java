@@ -52,7 +52,7 @@ public class KitchenSinkTester {
 	@Autowired
 	//private DatabaseEngine databaseEngine;
 	private SQLDatabaseEngine sqldatabaseEngine;
-	/*
+	
 	@Test
 	public void testWeightInputOutofRange() throws Exception {
 		boolean thrown = false;
@@ -94,7 +94,7 @@ public class KitchenSinkTester {
 		assertThat(!thrown).isEqualTo(true);
 		assertThat(result).isEqualTo("Data updated! Your weight has been set to 1kg");
 
-	}*/
+	}
 	
 	@Test
 	public void testWeightInputNotInteger() throws Exception {

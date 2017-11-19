@@ -75,16 +75,11 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	
 	String weight(String text, String userId) throws Exception {
 		//Write your code here
-		int weight = 0;
 		String result = null;
 		String[] items;
 		items = text.split("\\r?\\n");
 		boolean data_exists = false;
-		if(items[0] == "weight") {
-			weight = Integer.parseInt(items[1]);
-		}else {
-			weight = Integer.parseInt(items[0]);
-		}
+		int weight = Integer.parseInt(items[1]);
 		if(weight<=0)
 		{
 			result = "Weight can not be zero or negative! Please try again with a valid input";
