@@ -343,15 +343,15 @@ public class KitchenSinkController {
             	};
                 break;
             }*/
-            /*
+            
             case "state": {
-            		String reply = state;
+            		String reply = database.getInfoState(userId);
                 this.replyText(
                     replyToken,
                     reply + database.waterNotif(userId)
                 );
                 break;
-            } */
+            } 
             
             //Input user info
             case "info":{
