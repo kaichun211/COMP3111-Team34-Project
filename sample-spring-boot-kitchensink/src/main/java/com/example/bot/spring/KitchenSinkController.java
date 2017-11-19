@@ -373,13 +373,7 @@ public class KitchenSinkController {
             }
 
             default:
-            	String reply = null;
-            	try {
-            		reply = database.search(text, "nutrient_table", userId);
-            	} catch (Exception e) {
-            		reply = text;
-            	}
-                log.info("Returns echo message {}: {}", replyToken, reply);
+            	String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
                 this.replyText(
                         replyToken,
                         reply + database.waterNotif(userId)
