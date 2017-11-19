@@ -257,12 +257,12 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		rs.close();
 		if(weight!=0)
 		{
-			result = "Total energy is : " + energy + " kcal.\nyour weight is : " + weight + "kg.\n\nTime required to consume:\nLight(e.g. walking) : " + energy/(weight*light_multiplier) + " hr\nMedium(e.g. jogging) : " + energy/(weight*medium_multiplier) + " hr\nHeavy(e.g. running, swimming) : " + energy/(weight*heavy_multiplier) + " hr\n"  ;
+			result = "Total energy intake(for the last 7 days) is : " + energy + " kcal.\nyour weight is : " + weight + "kg.\n\nTime required to consume:\nLight(e.g. walking) : " + energy/(weight*light_multiplier) + " hr\nMedium(e.g. jogging) : " + energy/(weight*medium_multiplier) + " hr\nHeavy(e.g. running, swimming) : " + energy/(weight*heavy_multiplier) + " hr\n"  ;
 			return result;
 		}
 		else
 		{
-			result = "Weight can not be zero!";
+			result = "Weight can not be zero! Please input your weight first";
 			return result;
 		}
 
@@ -274,7 +274,6 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		String result = null;
 		String[] items = new String[4];
 		int weekday_time = 0;
-		String energy_X; 
 		items = text.split("\\r?\\n");
 		boolean data_exists = false;
 		int energy = Integer.parseInt(items[1]);
@@ -284,37 +283,30 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		switch(items[2].toLowerCase()) {
 			case "sun":{
 				weekday_time = 1;
-				energy_X = "energy_1";
 				break;
 			}
 			case "mon":{
 				weekday_time = 2;
-				energy_X = "energy_2";
 				break;
 			}
 			case "tue":{
 				weekday_time = 3;
-				energy_X = "energy_3";
 				break;
 			}
 			case "wed":{
 				weekday_time = 4;
-				energy_X = "energy_4";
 				break;
 			}
 			case "thu":{
 				weekday_time = 5;
-				energy_X = "energy_5";
 				break;
 			}
 			case "fri":{
 				weekday_time = 6;
-				energy_X = "energy_6";
 				break;
 			}
 			case "sat":{
 				weekday_time = 7;
-				energy_X = "energy_7";
 				break;
 			}
 			default:{
@@ -322,9 +314,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				//Date d = c.getTime();
 				//c.setTime(d);
 				weekday_time = c.get(Calendar.DAY_OF_WEEK);
-				energy_X = "energy_" + weekday_time;
 				System.out.println("Test: " + weekday_time);
-				System.out.println("Test: " + energy_X);
 			}
 		}
 		System.out.println(weekday_time);
@@ -343,130 +333,25 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		rs.close();
 		if(data_exists)
 		{
+			String sql = "UPDATE user_info set energy_" + weekday_time + " = ? where user_id = ?";
 			PreparedStatement stmt2;
-			switch(energy_X) {
-				case "energy_1":{
-					stmt2 = connection.prepareStatement("UPDATE user_info set energy_1 = ? where user_id = ?");
-					stmt2.setInt(1, energy);
-					stmt2.setString(2, userId);
-					stmt2.executeUpdate();
-					break;
-				}
-				case "energy_2":{
-					stmt2 = connection.prepareStatement("UPDATE user_info set energy_2 = ? where user_id = ?");
-					stmt2.setInt(1, energy);
-					stmt2.setString(2, userId);
-					stmt2.executeUpdate();
-					break;
-				}
-				case "energy_3":{
-					stmt2 = connection.prepareStatement("UPDATE user_info set energy_3 = ? where user_id = ?");
-					stmt2.setInt(1, energy);
-					stmt2.setString(2, userId);
-					stmt2.executeUpdate();
-					break;
-				}
-				case "energy_4":{
-					stmt2 = connection.prepareStatement("UPDATE user_info set energy_4 = ? where user_id = ?");
-					stmt2.setInt(1, energy);
-					stmt2.setString(2, userId);
-					stmt2.executeUpdate();
-					break;
-				}
-				case "energy_5":{
-					stmt2 = connection.prepareStatement("UPDATE user_info set energy_5 = ? where user_id = ?");
-					stmt2.setInt(1, energy);
-					stmt2.setString(2, userId);
-					stmt2.executeUpdate();
-					break;
-				}
-				case "energy_6":{
-					stmt2 = connection.prepareStatement("UPDATE user_info set energy_6 = ? where user_id = ?");
-					stmt2.setInt(1, energy);
-					stmt2.setString(2, userId);
-					stmt2.executeUpdate();
-					break;
-				}
-				case "energy_7":{
-					stmt2 = connection.prepareStatement("UPDATE user_info set energy_7 = ? where user_id = ?");
-					stmt2.setInt(1, energy);
-					stmt2.setString(2, userId);
-					stmt2.executeUpdate();
-					break;
-				}
-				default:{
-					break;
-				}
-			}
+			stmt2 = connection.prepareStatement(sql);
+			stmt2.setInt(1, energy);
+			stmt2.setString(2, userId);
+			stmt2.executeUpdate();
 			connection.close();
 			result = "Data updated!";
 			return result;
 		}
 		else
 		{
+			String sql = "INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_" + weekday_time + " = ? where user_id = ?";
 			PreparedStatement stmt3;
-			switch(energy_X) {
-				case "energy_1":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_1 = ? where user_id = ?");
-					stmt3.setString(1, userId);
-					stmt3.setInt(2, energy);
-					stmt3.setString(3, userId);
-					stmt3.executeUpdate();
-					break;
-				}
-				case "energy_2":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_2 = ? where user_id = ?");
-					stmt3.setString(1, userId);
-					stmt3.setInt(2, energy);
-					stmt3.setString(3, userId);
-					stmt3.executeUpdate();
-					break;
-				}
-				case "energy_3":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_3 = ? where user_id = ?");
-					stmt3.setString(1, userId);
-					stmt3.setInt(2, energy);
-					stmt3.setString(3, userId);
-					stmt3.executeUpdate();
-					break;
-				}
-				case "energy_4":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_4 = ? where user_id = ?");
-					stmt3.setString(1, userId);
-					stmt3.setInt(2, energy);
-					stmt3.setString(3, userId);
-					stmt3.executeUpdate();
-					break;
-				}
-				case "energy_5":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_5 = ? where user_id = ?");
-					stmt3.setString(1, userId);
-					stmt3.setInt(2, energy);
-					stmt3.setString(3, userId);
-					stmt3.executeUpdate();
-					break;
-				}
-				case "energy_6":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_6 = ? where user_id = ?");
-					stmt3.setString(1, userId);
-					stmt3.setInt(2, energy);
-					stmt3.setString(3, userId);
-					stmt3.executeUpdate();
-					break;
-				}
-				case "energy_7":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_7 = ? where user_id = ?");
-					stmt3.setString(1, userId);
-					stmt3.setInt(2, energy);
-					stmt3.setString(3, userId);
-					stmt3.executeUpdate();
-					break;
-				}
-				default:{
-					break;
-				}
-			}
-			
+			stmt3 = connection.prepareStatement(sql);
+			stmt3.setString(1, userId);
+			stmt3.setInt(2, energy);
+			stmt3.setString(3, userId);
+			stmt3.executeUpdate();
 			connection.close();
 			result = "Data added to our database!";
 			return result;
@@ -624,12 +509,6 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		find_state1.close();
 		find_state.close();
 		
-		
-		
-		
-		
-		
-		
 		switch (state) { //change state
 		case 0:
 		{
@@ -736,17 +615,11 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			{if (decision.toLowerCase().equals("exit")) state=1;
 			break;}
 			
-
-
 		default:{
 			if (decision.toLowerCase().equals("exit")) state=1;
 			break;
 		}
 		}
-		
-		
-
-		
 		
 		//update state to user_info
 		String change_state_statement="UPDATE users_info SET state="+Integer.toString(state)+" where username='test';";

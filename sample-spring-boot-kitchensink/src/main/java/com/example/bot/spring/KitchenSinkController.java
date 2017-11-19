@@ -342,7 +342,7 @@ public class KitchenSinkController {
             		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
-            }
+            }*/
             case "confirm": {
                 ConfirmTemplate confirmTemplate = new ConfirmTemplate(
                         "Do it?",
@@ -352,7 +352,7 @@ public class KitchenSinkController {
                 TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", confirmTemplate);
                 this.reply(replyToken, templateMessage);
                 break;
-            }*/
+            }
             case "friend":{
 	            	try {
 	            		String result = database.friend(userId);
