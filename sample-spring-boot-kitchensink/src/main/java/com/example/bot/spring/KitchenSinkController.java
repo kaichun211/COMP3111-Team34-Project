@@ -227,7 +227,24 @@ public class KitchenSinkController {
 		command = text.split("\\r?\\n");
 		String userId = event.getSource().getUserId();
 		log.info("Got text message from {}: {}", replyToken, text);
-        switch (command[0]) {
+        switch (command[0].toLowerCase()) {
+        	case "help":{
+    		try {
+        		String result1 = "Welcome to this bot! Here are our supported commands, all of them are case-insensitive.\n\n" + 
+        				"1. Weight Function\nYou can save your weight in kg, which is required to calculate Sports time to burn those calories!\nTo use the function, type 'weight<go to next line>50' if your weight is 50." +
+        				"\n\n2. Sports Function\nYou can calculate how much do you need to workout to burn those calories!\nTo use the function, simply type in 'sports'." +
+        				"\n\n3. Water Function\nYou can enable this function and our bot will remind you to drink water once in a while!\nTo use this function, type 'water<go to next line>60' if you want us to remind you every 60 minutes.";
+        		
+        		String result3 = "We are also having a promotional event now for new users!\n\nYou can check your unique 6-digit id using 'friend', and tells your friend about this code when you recommend them to use this bot." +
+        				"\n\nOnce they joined, they can use 'code<go to next line>XXXXXX' where XXXXXX is your ID.Both of you will get a coupon when this were done!" +
+        				"\n\nYou can redeem a coupon and check how many coupons do you still have using 'redeem'. Enjoy~" +
+        				"\n\n*We only have 6000 coupons to giveaway in total, so please act quick!";
+        		this.reply(replyToken, Arrays.asList(new TextMessage(result1), new TextMessage(result3)));
+        	} catch (Exception e) {
+        		this.replyText(replyToken, "Sorry, please try again.");
+        	};
+            break;
+}  
         	case "order":{
     		try {
     			String decision=command[1];
@@ -266,7 +283,7 @@ public class KitchenSinkController {
             		String result = database.waterInterval(text, userId);
             		this.replyText(replyToken, result + database.waterNotif(userId));
             	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'water <notification interval in minutes, 0 as OFF>'. ");
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'water <minutes in integer, 0 as OFF>'. ");
             	};
                 break;
             }
@@ -299,7 +316,7 @@ public class KitchenSinkController {
             		String result = database.energy(text, userId);
             		this.replyText(replyToken, result);
             	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'energy <energy> <day of week>'. ");
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'energy <energy in integer> <day of week(e.g. Mon/Tue)>'. ");
             	};
                 break;
             }  
@@ -325,7 +342,7 @@ public class KitchenSinkController {
             		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
-            }*/
+            }
             case "confirm": {
                 ConfirmTemplate confirmTemplate = new ConfirmTemplate(
                         "Do it?",
@@ -335,11 +352,11 @@ public class KitchenSinkController {
                 TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", confirmTemplate);
                 this.reply(replyToken, templateMessage);
                 break;
-            }
+            }*/
             case "friend":{
 	            	try {
 	            		String result = database.friend(userId);
-	            		this.replyText(replyToken, result + database.waterNotif(userId));
+	            		this.replyText(replyToken, "Your code is: " + result + database.waterNotif(userId));
 	            	} catch (Exception e) {
 	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
 	            	};
@@ -350,28 +367,30 @@ public class KitchenSinkController {
 	            		String result = database.code(text, userId);
 	            		this.replyText(replyToken, result + database.waterNotif(userId));
 	            	} catch (Exception e) {
-	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+	            		this.replyText(replyToken, "Invalid input! You should enter a valid 6-digit number.");
 	            	};
 	                break;
             }
             case "redeem":{
 	            	try {
 	            		String result = database.redeem(userId);
-	            		this.replyText(replyToken, result + database.waterNotif(userId));
+	            		if(result!="You currently have no coupon")
+	            		{
+	            			this.reply(replyToken,Arrays.asList(new ImageMessage("https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif", "https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif")
+	            				, new TextMessage(result + database.waterNotif(userId))));
+	            		}
+	            		else
+	            		{
+	            			this.replyText(replyToken, result + database.waterNotif(userId));
+	            		}
 	            	} catch (Exception e) {
-	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+	            		this.replyText(replyToken, "Sorry, Error occured, please try again later.");
 	            	};
 	                break;
             }
 
             default:
-            	String reply = null;
-            	try {
-            		reply = database.search(text, "nutrient_table", userId);
-            	} catch (Exception e) {
-            		reply = text;
-            	}
-                log.info("Returns echo message {}: {}", replyToken, reply);
+            	String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
                 this.replyText(
                         replyToken,
                         reply + database.waterNotif(userId)
