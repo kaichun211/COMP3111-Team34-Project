@@ -360,6 +360,126 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		result_set = resultbuilder.toString();
 		return result_set;
 	}
+	
+	String eat(String text, String userId) throws Exception {
+		String result_set;
+		String[] dishes;
+		dishes = text.split("\\r?\\n");
+		StringBuilder resultbuilder = new StringBuilder();
+		try {	
+			for(int i=1; i < dishes.length;i++) {
+				String[] ingredients = {};
+				ingredients = dishes[i].split(" ");
+				int weight_total = 0;
+				int energy_total = 0;
+				int sodium_total = 0;
+				int fat_total = 0;
+				for(int j=0; j < ingredients.length; j++)
+				{
+					int weight_avg = 0;
+					int energy_avg = 0;
+					int sodium_avg = 0;
+					int fat_avg = 0;
+					int result_count = 0;
+					Connection connection = getConnection();
+					PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description like concat( ?, '%')");
+					stmt.setString(1, ingredients[j]);
+					ResultSet rs = stmt.executeQuery();
+					while (rs.next()) {
+						result_count++;
+						weight_avg += rs.getInt(3);
+						energy_avg += rs.getInt(5);
+						sodium_avg += rs.getInt(6);
+						fat_avg += rs.getInt(7);
+						//resultbuilder.append(rs.g(2));
+					}
+					
+					if (result_count>0)
+					{
+					weight_avg = weight_avg / result_count;
+					energy_avg = energy_avg / result_count;
+					sodium_avg = sodium_avg / result_count;
+					fat_avg = fat_avg / result_count;
+					
+					weight_total += weight_avg;
+					energy_total += energy_avg;
+					sodium_total += sodium_avg;
+					fat_total += fat_avg;
+					
+					//resultbuilder.append(ingredients[j] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n \n");
+					}
+					resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n\n");
+					rs.close();
+					
+					boolean data_exists = false;
+					PreparedStatement stmt2 = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
+					stmt.setString(1, userId);
+					rs = stmt2.executeQuery();
+					if (rs.next()) {
+						data_exists = true;
+					}
+					rs.close();
+					if(data_exists)
+					{
+						Calendar c = Calendar.getInstance();
+						int day_of_year = c.get(Calendar.DAY_OF_YEAR);
+						
+						PreparedStatement stmt3 = connection.prepareStatement("SELECT today FROM user_info WHERE user_id = ?");
+						stmt.setString(1, userId);
+						rs = stmt3.executeQuery();
+						int temp = rs.getInt(1);
+						
+						if(day_of_year == temp) {
+							int day_of_week = c.get(Calendar.DAY_OF_WEEK);
+							PreparedStatement stmt4 = connection.prepareStatement("UPDATE user_info set energy_" + day_of_week + " = energy_" + day_of_week + " + ? where user_id = ?");
+							stmt4.setInt(1, energy_total);
+							stmt4.setString(2, userId);
+							stmt4.executeUpdate();
+							
+							PreparedStatement stmt5 = connection.prepareStatement("UPDATE user_info set sodium = sodium + ? where user_id = ?");
+							stmt5.setInt(1, sodium_total);
+							stmt5.setString(2, userId);
+							stmt5.executeUpdate();
+							
+							PreparedStatement stmt6 = connection.prepareStatement("UPDATE user_info set fatty_acid = fatty_acid + ? where user_id = ?");
+							stmt6.setInt(1, fat_total);
+							stmt6.setString(2, userId);
+							stmt6.executeUpdate();
+						}else {
+							int day_of_week = c.get(Calendar.DAY_OF_WEEK);
+							PreparedStatement stmt4 = connection.prepareStatement("UPDATE user_info set energy_" + day_of_week + " = ? where user_id = ?");
+							stmt4.setInt(1, energy_total);
+							stmt4.setString(2, userId);
+							stmt4.executeUpdate();
+							
+							PreparedStatement stmt5 = connection.prepareStatement("UPDATE user_info set sodium = ? where user_id = ?");
+							stmt5.setInt(1, sodium_total);
+							stmt5.setString(2, userId);
+							stmt5.executeUpdate();
+							
+							PreparedStatement stmt6 = connection.prepareStatement("UPDATE user_info set fatty_acid = ? where user_id = ?");
+							stmt6.setInt(1, fat_total);
+							stmt6.setString(2, userId);
+							stmt6.executeUpdate();
+							
+							PreparedStatement stmt7 = connection.prepareStatement("UPDATE user_info set today = ? where user_id = ?");
+							stmt7.setInt(1, day_of_year);
+							stmt7.setString(2, userId);
+							stmt7.executeUpdate();
+						}
+					}
+						
+						connection.close();
+						resultbuilder.append("\nData is recorded!");
+					}
+			}			
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		result_set = resultbuilder.toString();
+		return result_set;
+	}
+	
 	String sports_amount(String userId) throws Exception {
 		//Write your code here
 		String result = null;
