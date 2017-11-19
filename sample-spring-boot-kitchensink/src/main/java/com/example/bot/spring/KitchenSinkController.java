@@ -366,7 +366,7 @@ public class KitchenSinkController {
                 this.reply(replyToken, templateMessage);
                 break;
             }
-            case "Input Weight":{
+            case "input weight":{
             		if(state == "info") {
             			state = "weight";
             		}else {
@@ -379,7 +379,7 @@ public class KitchenSinkController {
             		}
             		break;
             }
-            case "Input Sex":{
+            case "input sex":{
             		if(state == "info") {
             			state = "sex";
             			ConfirmTemplate confirmTemplate = new ConfirmTemplate(
