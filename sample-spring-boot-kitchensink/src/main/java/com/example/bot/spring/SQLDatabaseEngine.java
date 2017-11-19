@@ -492,7 +492,9 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			System.out.println(e);
 		}
 		System.out.println("Call warning()");
-		resultbuilder.append(warning(userId));
+		String warning_message = warning(userId);
+		resultbuilder.append(warning_message);
+		System.out.println(warning_message);
 		result_set = resultbuilder.toString();
 		return result_set;
 	}
@@ -522,42 +524,46 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		PreparedStatement stmt = connection.prepareStatement("SELECT energy_1, energy_2, energy_3, energy_4, energy_5, energy_6, energy_7, sodium, fatty_acid, sex, age, weight, height FROM user_info WHERE user_id = ?");
 		stmt.setString(1, userId);
 		ResultSet rs = stmt.executeQuery();
-		energy_1 = rs.getInt(1);
-		energy_2 = rs.getInt(2);
-		energy_3 = rs.getInt(3);
-		energy_4 = rs.getInt(4);
-		energy_5 = rs.getInt(5);
-		energy_6 = rs.getInt(6);
-		energy_7 = rs.getInt(7);
-		sodium = rs.getInt(8);
-		fat = rs.getInt(9);
-		sex = rs.getString(10);
-		age = rs.getInt(11);
-		weight = rs.getInt(12);
-		height = rs.getInt(13);
-		total_energy = energy_1 + energy_2 + energy_3 + energy_4 + energy_5 + energy_6 + energy_7;
-		System.out.println(total_energy);
-		
-		
-		if(sex.equals("F")) {
-			energy_requirement = ((655 + (9.6 * weight) + (1.8 * height) - (4.7 * age)) * 10.85);
-			System.out.println(energy_requirement);
-		}else if(sex.equals("M")) {
-			energy_requirement = ((66 + (13.7 * weight) + (5 * height) - (6.8 * age)) * 10.85);
-			System.out.println(energy_requirement);
-		}else {
-			return "\nUser info is invalid";
+		if(rs.next()) {
+			energy_1 = rs.getInt(1);
+			energy_2 = rs.getInt(2);
+			energy_3 = rs.getInt(3);
+			energy_4 = rs.getInt(4);
+			energy_5 = rs.getInt(5);
+			energy_6 = rs.getInt(6);
+			energy_7 = rs.getInt(7);
+			sodium = rs.getInt(8);
+			fat = rs.getInt(9);
+			sex = rs.getString(10);
+			age = rs.getInt(11);
+			weight = rs.getInt(12);
+			height = rs.getInt(13);
+			total_energy = energy_1 + energy_2 + energy_3 + energy_4 + energy_5 + energy_6 + energy_7;
+			System.out.println(total_energy);
+			
+			
+			if(sex.equals("F")) {
+				energy_requirement = ((655 + (9.6 * weight) + (1.8 * height) - (4.7 * age)) * 10.85);
+				System.out.println(energy_requirement);
+			}else if(sex.equals("M")) {
+				energy_requirement = ((66 + (13.7 * weight) + (5 * height) - (6.8 * age)) * 10.85);
+				System.out.println(energy_requirement);
+			}else {
+				return "\nUser info is invalid";
+			}
+			
+			if(total_energy >= energy_requirement) {
+				resultbuilder.append("\nWeekly energy intake has EXCEED LIMIT");
+			}
+			if(fat >= 44) {
+				resultbuilder.append("\nDaily fat intake has EXCEED LIMIT");
+			}
+			if(sodium >= 10) {
+				resultbuilder.append("\nDaily sodium intake has EXCEED LIMIT");
+			}
 		}
 		
-		if(total_energy >= energy_requirement) {
-			resultbuilder.append("\nWeekly energy intake has EXCEED LIMIT");
-		}
-		if(fat >= 44) {
-			resultbuilder.append("\nDaily fat intake has EXCEED LIMIT");
-		}
-		if(sodium >= 10) {
-			resultbuilder.append("\nDaily sodium intake has EXCEED LIMIT");
-		}
+		
 		result = resultbuilder.toString();
 		return result;
 	}
