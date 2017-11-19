@@ -498,7 +498,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	}
 	
 	String warning(String userId) throws Exception{
-		String result = "";
+		String result;
 		StringBuilder resultbuilder = new StringBuilder();
 		double energy_requirement = 0;
 		
@@ -536,11 +536,15 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		weight = rs.getInt(12);
 		height = rs.getInt(13);
 		total_energy = energy_1 + energy_2 + energy_3 + energy_4 + energy_5 + energy_6 + energy_7;
+		System.out.println(total_energy);
+		
 		
 		if(sex.equals("F")) {
 			energy_requirement = ((655 + (9.6 * weight) + (1.8 * height) - (4.7 * age)) * 10.85);
+			System.out.println(energy_requirement);
 		}else if(sex.equals("M")) {
 			energy_requirement = ((66 + (13.7 * weight) + (5 * height) - (6.8 * age)) * 10.85);
+			System.out.println(energy_requirement);
 		}else {
 			return "\nUser info is invalid";
 		}
@@ -551,7 +555,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		if(fat >= 44) {
 			resultbuilder.append("\nDaily fat intake has EXCEED LIMIT");
 		}
-		if(sodium >= 3) {
+		if(sodium >= 10) {
 			resultbuilder.append("\nDaily sodium intake has EXCEED LIMIT");
 		}
 		result = resultbuilder.toString();
