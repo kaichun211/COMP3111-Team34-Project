@@ -411,6 +411,8 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					}
 					resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n\n");
 					rs.close();
+					result_set = resultbuilder.toString();
+					return result_set;
 				}
 			}
 			boolean data_exists = false;
