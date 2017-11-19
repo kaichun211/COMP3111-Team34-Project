@@ -448,21 +448,21 @@ public class KitchenSinkController {
 	                    reply + database.waterNotif(userId)
 	                );
             		}else if(state == "weight"){
-            			state = "default";
             			try {
                     		String result = database.weight(text, userId);
                     		this.replyText(replyToken, result + database.waterNotif(userId));
                     	} catch (Exception e) {
                     		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
                     	};
-            		}else if(state == "sex"){
                     	state = "default";
+            		}else if(state == "sex"){
             			try {
                     		String result = database.sex(text, userId);
                     		this.replyText(replyToken, result + database.waterNotif(userId));
                     	} catch (Exception e) {
                     		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
                     	};
+                    	state = "default";
             		}else { 
             			String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
     	                this.replyText(
