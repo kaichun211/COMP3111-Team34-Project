@@ -437,6 +437,10 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					temp_day = rs3.getInt(1);
 				}
 				
+				System.out.println(energy_total);
+				System.out.println(sodium_total);
+				System.out.println(fat_total);
+				
 				if(day_of_year == temp_day) {
 					int day_of_week = c.get(Calendar.DAY_OF_WEEK);
 					System.out.println("Same day");
