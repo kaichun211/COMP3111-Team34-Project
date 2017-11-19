@@ -238,7 +238,7 @@ public class KitchenSinkController {
         		String result3 = "We are also having a promotional event now for new users!\n\nYou can check your unique 6-digit id using 'friend', and tells your friend about this code when you recommend them to use this bot." +
         				"\n\nOnce they joined, they can use 'code<go to next line>XXXXXX' where XXXXXX is your ID.Both of you will get a coupon when this were done!" +
         				"\n\nYou can redeem a coupon and check how many coupons do you still have using 'redeem'. Enjoy~" +
-        				"\n\n*We only have 6000 coupons to giveaway in total, so please act quick!";
+        				"\n\n*We only have 5000 coupons to giveaway in total, so please act quick!";
         		this.reply(replyToken, Arrays.asList(new TextMessage(result1), new TextMessage(result3)));
         	} catch (Exception e) {
         		this.replyText(replyToken, "Sorry, please try again.");
