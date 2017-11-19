@@ -333,7 +333,17 @@ public class KitchenSinkController {
             		appendText(messageList, "Sorry, please enter a valid input.");
             	};
                 break;
-            }         
+            }  
+            case "eat": {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		appendText(messageList, database.eat(text, userId));
+            	} catch (Exception e) {
+            		appendText(messageList, "Sorry, please enter a valid input.");
+            	};
+                break;
+            }
  /*           case "calculate": {
             	
             	//String userId = event.getSource().getUserId();
