@@ -367,13 +367,14 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		dishes = text.split("\\r?\\n");
 		StringBuilder resultbuilder = new StringBuilder();
 		try {	
+			int weight_total = 0;
+			int energy_total = 0;
+			int sodium_total = 0;
+			int fat_total = 0;
 			for(int i=1; i < dishes.length;i++) {
 				String[] ingredients = {};
 				ingredients = dishes[i].split(" ");
-				int weight_total = 0;
-				int energy_total = 0;
-				int sodium_total = 0;
-				int fat_total = 0;
+				
 				for(int j=0; j < ingredients.length; j++)
 				{
 					int weight_avg = 0;
@@ -396,88 +397,150 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					
 					if (result_count>0)
 					{
-					weight_avg = weight_avg / result_count;
-					energy_avg = energy_avg / result_count;
-					sodium_avg = sodium_avg / result_count;
-					fat_avg = fat_avg / result_count;
-					
-					weight_total += weight_avg;
-					energy_total += energy_avg;
-					sodium_total += sodium_avg;
-					fat_total += fat_avg;
-					
-					//resultbuilder.append(ingredients[j] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n \n");
+						weight_avg = weight_avg / result_count;
+						energy_avg = energy_avg / result_count;
+						sodium_avg = sodium_avg / result_count;
+						fat_avg = fat_avg / result_count;
+						
+						weight_total += weight_avg;
+						energy_total += energy_avg;
+						sodium_total += sodium_avg;
+						fat_total += fat_avg;
+						
+						//resultbuilder.append(ingredients[j] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n \n");
 					}
 					resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n\n");
 					rs.close();
+				}
+			}
+			boolean data_exists = false;
+			Connection connection = getConnection();
+			PreparedStatement stmt2 = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
+			stmt2.setString(1, userId);
+			ResultSet rs2 = stmt2.executeQuery();
+			if (rs2.next()) {
+				data_exists = true;
+			}
+			rs2.close();
+			if(data_exists){
+				Calendar c = Calendar.getInstance();
+				int day_of_year = c.get(Calendar.DAY_OF_YEAR);
+				
+				PreparedStatement stmt3 = connection.prepareStatement("SELECT today FROM user_info WHERE user_id = ?");
+				stmt3.setString(1, userId);
+				ResultSet rs3 = stmt3.executeQuery();
+				int temp = rs3.getInt(1);
+				
+				if(day_of_year == temp) {
+					int day_of_week = c.get(Calendar.DAY_OF_WEEK);
+					PreparedStatement stmt4 = connection.prepareStatement("UPDATE user_info set energy_" + day_of_week + " = energy_" + day_of_week + " + ? where user_id = ?");
+					stmt4.setInt(1, energy_total);
+					stmt4.setString(2, userId);
+					stmt4.executeUpdate();
 					
-					boolean data_exists = false;
-					PreparedStatement stmt2 = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
-					stmt.setString(1, userId);
-					rs = stmt2.executeQuery();
-					if (rs.next()) {
-						data_exists = true;
-					}
-					rs.close();
-					if(data_exists)
-					{
-						Calendar c = Calendar.getInstance();
-						int day_of_year = c.get(Calendar.DAY_OF_YEAR);
-						
-						PreparedStatement stmt3 = connection.prepareStatement("SELECT today FROM user_info WHERE user_id = ?");
-						stmt.setString(1, userId);
-						rs = stmt3.executeQuery();
-						int temp = rs.getInt(1);
-						
-						if(day_of_year == temp) {
-							int day_of_week = c.get(Calendar.DAY_OF_WEEK);
-							PreparedStatement stmt4 = connection.prepareStatement("UPDATE user_info set energy_" + day_of_week + " = energy_" + day_of_week + " + ? where user_id = ?");
-							stmt4.setInt(1, energy_total);
-							stmt4.setString(2, userId);
-							stmt4.executeUpdate();
-							
-							PreparedStatement stmt5 = connection.prepareStatement("UPDATE user_info set sodium = sodium + ? where user_id = ?");
-							stmt5.setInt(1, sodium_total);
-							stmt5.setString(2, userId);
-							stmt5.executeUpdate();
-							
-							PreparedStatement stmt6 = connection.prepareStatement("UPDATE user_info set fatty_acid = fatty_acid + ? where user_id = ?");
-							stmt6.setInt(1, fat_total);
-							stmt6.setString(2, userId);
-							stmt6.executeUpdate();
-						}else {
-							int day_of_week = c.get(Calendar.DAY_OF_WEEK);
-							PreparedStatement stmt4 = connection.prepareStatement("UPDATE user_info set energy_" + day_of_week + " = ? where user_id = ?");
-							stmt4.setInt(1, energy_total);
-							stmt4.setString(2, userId);
-							stmt4.executeUpdate();
-							
-							PreparedStatement stmt5 = connection.prepareStatement("UPDATE user_info set sodium = ? where user_id = ?");
-							stmt5.setInt(1, sodium_total);
-							stmt5.setString(2, userId);
-							stmt5.executeUpdate();
-							
-							PreparedStatement stmt6 = connection.prepareStatement("UPDATE user_info set fatty_acid = ? where user_id = ?");
-							stmt6.setInt(1, fat_total);
-							stmt6.setString(2, userId);
-							stmt6.executeUpdate();
-							
-							PreparedStatement stmt7 = connection.prepareStatement("UPDATE user_info set today = ? where user_id = ?");
-							stmt7.setInt(1, day_of_year);
-							stmt7.setString(2, userId);
-							stmt7.executeUpdate();
-						}
-					}
-						
-						connection.close();
-						resultbuilder.append("\nData is recorded!");
-					}
-			}			
+					PreparedStatement stmt5 = connection.prepareStatement("UPDATE user_info set sodium = sodium + ? where user_id = ?");
+					stmt5.setInt(1, sodium_total);
+					stmt5.setString(2, userId);
+					stmt5.executeUpdate();
+					
+					PreparedStatement stmt6 = connection.prepareStatement("UPDATE user_info set fatty_acid = fatty_acid + ? where user_id = ?");
+					stmt6.setInt(1, fat_total);
+					stmt6.setString(2, userId);
+					stmt6.executeUpdate();
+				}else {
+					int day_of_week = c.get(Calendar.DAY_OF_WEEK);
+					PreparedStatement stmt4 = connection.prepareStatement("UPDATE user_info set energy_" + day_of_week + " = ? where user_id = ?");
+					stmt4.setInt(1, energy_total);
+					stmt4.setString(2, userId);
+					stmt4.executeUpdate();
+					
+					PreparedStatement stmt5 = connection.prepareStatement("UPDATE user_info set sodium = ? where user_id = ?");
+					stmt5.setInt(1, sodium_total);
+					stmt5.setString(2, userId);
+					stmt5.executeUpdate();
+					
+					PreparedStatement stmt6 = connection.prepareStatement("UPDATE user_info set fatty_acid = ? where user_id = ?");
+					stmt6.setInt(1, fat_total);
+					stmt6.setString(2, userId);
+					stmt6.executeUpdate();
+					
+					PreparedStatement stmt7 = connection.prepareStatement("UPDATE user_info set today = ? where user_id = ?");
+					stmt7.setInt(1, day_of_year);
+					stmt7.setString(2, userId);
+					stmt7.executeUpdate();
+				}
+			
+				
+				connection.close();
+				resultbuilder.append("\nData is recorded!");
+			}
 		}catch(Exception e){
 			System.out.println(e);
 		}
+		resultbuilder.append(warning(userId));
 		result_set = resultbuilder.toString();
 		return result_set;
+	}
+	
+	String warning(String userId) throws Exception{
+		String result = "";
+		StringBuilder resultbuilder = new StringBuilder();
+		double energy_requirement = 0;
+		
+		int sodium = 0;
+		int fat = 0;
+		int total_energy = 0;
+		int energy_1 = 0;
+		int energy_2 = 0;
+		int energy_3 = 0;
+		int energy_4 = 0;
+		int energy_5 = 0;
+		int energy_6 = 0;
+		int energy_7 = 0;
+		
+		String sex;
+		int age = 0;
+		int weight = 0;
+		int height = 0;
+		
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("SELECT energy_1, energy_2, energy_3, energy_4, energy_5, energy_6, energy_7, sodium, fatty_acid, sex, age, weight, height FROM user_info WHERE user_id = ?");
+		stmt.setString(1, userId);
+		ResultSet rs = stmt.executeQuery();
+		energy_1 = rs.getInt(1);
+		energy_2 = rs.getInt(2);
+		energy_3 = rs.getInt(3);
+		energy_4 = rs.getInt(4);
+		energy_5 = rs.getInt(5);
+		energy_6 = rs.getInt(6);
+		energy_7 = rs.getInt(7);
+		sodium = rs.getInt(8);
+		fat = rs.getInt(9);
+		sex = rs.getString(10);
+		age = rs.getInt(11);
+		weight = rs.getInt(12);
+		height = rs.getInt(13);
+		total_energy = energy_1 + energy_2 + energy_3 + energy_4 + energy_5 + energy_6 + energy_7;
+		
+		if(sex.equals("F")) {
+			energy_requirement = ((655 + (9.6 * weight) + (1.8 * height) - (4.7 * age)) * 10.85);
+		}else if(sex.equals("M")) {
+			energy_requirement = ((66 + (13.7 * weight) + (5 * height) - (6.8 * age)) * 10.85);
+		}else {
+			return "\nUser info is invalid";
+		}
+		
+		if(total_energy >= energy_requirement) {
+			resultbuilder.append("\nWeekly energy intake has EXCEED LIMIT");
+		}
+		if(fat >= 44) {
+			resultbuilder.append("\nDaily fat intake has EXCEED LIMIT");
+		}
+		if(sodium >= 3) {
+			resultbuilder.append("\nDaily sodium intake has EXCEED LIMIT");
+		}
+		result = resultbuilder.toString();
+		return result;
 	}
 	
 	String sports_amount(String userId) throws Exception {
