@@ -281,7 +281,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		System.out.println("Test:Set energy");
 		System.out.println(items[2]);
 		
-		switch(items[2]) {
+		switch(items[2].toLowerCase()) {
 			case "sun":{
 				weekday_time = 1;
 				energy_X = "energy_1";

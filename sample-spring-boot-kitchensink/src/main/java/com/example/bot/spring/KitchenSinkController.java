@@ -228,6 +228,18 @@ public class KitchenSinkController {
 		String userId = event.getSource().getUserId();
 		log.info("Got text message from {}: {}", replyToken, text);
         switch (command[0].toLowerCase()) {
+        	case "help":{
+    		try {
+        		String result = "Welcome to our dieting bot!\nHere is our supported commands, all of them are case-insensitive.\n" + 
+        				"1. Weight Function\nYou can save your weight in kg, which is required to calculate Sports time to burn those calories!\nTo use the function, type 'weight<go to next line>50' if your weight is 50." +
+        				"2. Sports Function\nYou can calculate how much do you need to workout to burn those calories!\nTo use the function, simply type in 'sports'." +
+        				"3. Water Function\nYou can enable this function and our bot will remind you to drink water once in a while!\nTo use this function, type 'water<go to next line>60' if you want us to remind you every 60 minutes.";
+        		this.replyText(replyToken, result);
+        	} catch (Exception e) {
+        		this.replyText(replyToken, "Sorry, please try again.");
+        	};
+            break;
+}  
         	case "order":{
     		try {
     			String decision=command[1];
@@ -325,7 +337,7 @@ public class KitchenSinkController {
             		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
-            }*/
+            }
             case "confirm": {
                 ConfirmTemplate confirmTemplate = new ConfirmTemplate(
                         "Do it?",
@@ -335,7 +347,7 @@ public class KitchenSinkController {
                 TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", confirmTemplate);
                 this.reply(replyToken, templateMessage);
                 break;
-            }
+            }*/
             case "friend":{
 	            	try {
 	            		String result = database.friend(userId);
