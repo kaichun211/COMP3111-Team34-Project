@@ -367,14 +367,17 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		dishes = text.split("\\r?\\n");
 		StringBuilder resultbuilder = new StringBuilder();
 		try {	
-			int weight_total = 0;
-			int energy_total = 0;
-			int sodium_total = 0;
-			int fat_total = 0;
+			int eat_weight_total = 0;
+			int eat_energy_total = 0;
+			int eat_sodium_total = 0;
+			int eat_fat_total = 0;
 			for(int i=1; i < dishes.length;i++) {
 				String[] ingredients = {};
 				ingredients = dishes[i].split(" ");
-				
+				int weight_total = 0;
+				int energy_total = 0;
+				int sodium_total = 0;
+				int fat_total = 0;
 				for(int j=0; j < ingredients.length; j++)
 				{
 					int weight_avg = 0;
@@ -407,12 +410,18 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 						sodium_total += sodium_avg;
 						fat_total += fat_avg;
 						
+						eat_weight_total += weight_avg;
+						eat_energy_total += energy_avg;
+						eat_sodium_total += sodium_avg;
+						eat_fat_total += fat_avg;
+						
 						//resultbuilder.append(ingredients[j] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n \n");
 					}
-					resultbuilder.append(dishes[i] + ":\nWeight = " + weight_avg + " (g)\nEnergy = " + energy_avg + " (kcal)\nSodium = " + sodium_avg + " (g)\nFatty Acids = " + fat_avg + " (g)\n\n");
-					rs.close();
+					resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_avg + " (g)\nFatty Acids = " + fat_avg + " (g)\n\n");
 					result_set = resultbuilder.toString();
+					rs.close();
 				}
+				
 			}
 			boolean data_exists = false;
 			Connection connection = getConnection();
@@ -437,26 +446,26 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					temp_day = rs3.getInt(1);
 				}
 				
-				System.out.println(energy_total);
-				System.out.println(sodium_total);
-				System.out.println(fat_total);
+				System.out.println(eat_energy_total);
+				System.out.println(eat_sodium_total);
+				System.out.println(eat_fat_total);
 				
 				if(day_of_year == temp_day) {
 					int day_of_week = c.get(Calendar.DAY_OF_WEEK);
 					System.out.println("Same day");
 					System.out.println(day_of_week);
 					PreparedStatement stmt4 = connection.prepareStatement("UPDATE user_info set energy_" + day_of_week + " = energy_" + day_of_week + " + ? where user_id = ?");
-					stmt4.setInt(1, energy_total);
+					stmt4.setInt(1, eat_energy_total);
 					stmt4.setString(2, userId);
 					stmt4.executeUpdate();
 					
 					PreparedStatement stmt5 = connection.prepareStatement("UPDATE user_info set sodium = sodium + ? where user_id = ?");
-					stmt5.setInt(1, sodium_total);
+					stmt5.setInt(1, eat_sodium_total);
 					stmt5.setString(2, userId);
 					stmt5.executeUpdate();
 					
 					PreparedStatement stmt6 = connection.prepareStatement("UPDATE user_info set fatty_acid = fatty_acid + ? where user_id = ?");
-					stmt6.setInt(1, fat_total);
+					stmt6.setInt(1, eat_fat_total);
 					stmt6.setString(2, userId);
 					stmt6.executeUpdate();
 				}else {
@@ -464,17 +473,17 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					System.out.println("New day");
 					System.out.println(day_of_week);
 					PreparedStatement stmt4 = connection.prepareStatement("UPDATE user_info set energy_" + day_of_week + " = ? where user_id = ?");
-					stmt4.setInt(1, energy_total);
+					stmt4.setInt(1, eat_energy_total);
 					stmt4.setString(2, userId);
 					stmt4.executeUpdate();
 					
 					PreparedStatement stmt5 = connection.prepareStatement("UPDATE user_info set sodium = ? where user_id = ?");
-					stmt5.setInt(1, sodium_total);
+					stmt5.setInt(1, eat_sodium_total);
 					stmt5.setString(2, userId);
 					stmt5.executeUpdate();
 					
 					PreparedStatement stmt6 = connection.prepareStatement("UPDATE user_info set fatty_acid = ? where user_id = ?");
-					stmt6.setInt(1, fat_total);
+					stmt6.setInt(1, eat_fat_total);
 					stmt6.setString(2, userId);
 					stmt6.executeUpdate();
 					
