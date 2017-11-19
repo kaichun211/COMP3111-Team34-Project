@@ -453,7 +453,7 @@ public class KitchenSinkController {
         			database.setInfoState("default", userId);
         			try {
                 		String result = database.height(text, userId);
-                		appendText(messageList, result + database.waterNotif(userId));
+                		appendText(messageList, result);
                 	} catch (Exception e) {
                 		appendText(messageList, "Sorry, please enter a valid input. Input should be in format 'height <your height in cm rounded to the nearest integer>'. ");
                 	};
@@ -461,7 +461,7 @@ public class KitchenSinkController {
         			database.setInfoState("default", userId);
         			try {
                 		String result = database.age(text, userId);
-                		appendText(messageList, result + database.waterNotif(userId));
+                		appendText(messageList, result);
                 	} catch (Exception e) {
                 		appendText(messageList, "Sorry, please enter a valid input. Input should be in format 'age <your age rounded to the nearest integer>'. ");
                 	};
@@ -469,7 +469,7 @@ public class KitchenSinkController {
         			database.setInfoState("default", userId);
         			try {
                 		String result = database.weight(text, userId);
-                		appendText(messageList, result + database.waterNotif(userId));
+                		appendText(messageList, result);
                 	} catch (Exception e) {
                 		appendText(messageList, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
                 	};
@@ -477,7 +477,7 @@ public class KitchenSinkController {
         			database.setInfoState("default", userId);
         			try {
                 		String result = database.sex(text, userId);
-                		appendText(messageList, result + database.waterNotif(userId));
+                		appendText(messageList, result);
                 	} catch (Exception e) {
                 		appendText(messageList, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
                 	};
