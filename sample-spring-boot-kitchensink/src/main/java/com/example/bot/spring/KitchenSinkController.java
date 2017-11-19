@@ -355,6 +355,7 @@ public class KitchenSinkController {
                 break;
             }
             
+            //Input user info
             case "info":{
             		state = "info";
 	            ButtonsTemplate buttonsTemplate = new ButtonsTemplate(null,null,
@@ -364,6 +365,32 @@ public class KitchenSinkController {
                 TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", buttonsTemplate);
                 this.reply(replyToken, templateMessage);
                 break;
+            }
+            case "Input Weight":{
+            		if(state == "info") {
+            			state = "weight";
+            		}else {
+            			state = "default";
+            			String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
+    	                this.replyText(
+    	                    replyToken,
+    	                    reply + database.waterNotif(userId)
+    	                );
+            		}
+            		break;
+            }
+            case "Input Sex":{
+            		if(state == "info") {
+            			state = "sex";
+            			ConfirmTemplate confirmTemplate = new ConfirmTemplate(
+            					"What is your sex?",
+                             new MessageAction("Male", "M"),
+                             new MessageAction("Female", "F")
+                        );
+                     TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", confirmTemplate);
+                     this.reply(replyToken, templateMessage);
+            		}
+            		break;
             }
             case "friend":{
 	            	try {
@@ -398,15 +425,38 @@ public class KitchenSinkController {
 	            	} catch (Exception e) {
 	            		this.replyText(replyToken, "Sorry, Error occured, please try again later.");
 	            	};
-	                break;
+	            break;
             }
 
             default:
-            	String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
-                this.replyText(
-                        replyToken,
-                        reply + database.waterNotif(userId)
-                );
+            		if(state == "default") {
+		            	String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
+	                this.replyText(
+	                    replyToken,
+	                    reply + database.waterNotif(userId)
+	                );
+            		}else if(state == "weight"){
+            			try {
+                    		String result = database.weight(text, userId);
+                    		this.replyText(replyToken, result + database.waterNotif(userId));
+                    	} catch (Exception e) {
+                    		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
+                    	};
+                    	state = "default";
+            		}else if(state == "sex"){
+            			String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
+    	                this.replyText(
+    	                    replyToken,
+    	                    reply + database.waterNotif(userId)
+    	                );
+                    	state = "default";
+            		}else { 
+            			String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
+    	                this.replyText(
+    	                    replyToken,
+    	                    reply + database.waterNotif(userId)
+    	                );
+            		}
                 break;
         }
     }
