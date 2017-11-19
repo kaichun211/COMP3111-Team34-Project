@@ -239,7 +239,7 @@ public class KitchenSinkController {
         	case "help":{
     		try {
         		String result1 = "Welcome to this bot! Here are our supported commands, all of them are case-insensitive.\n\n" + 
-        				"1. Weight Function\nYou can save your weight in kg, which is required to calculate Sports time to burn those calories!\nTo use the function, type 'weight<go to next line>50' if your weight is 50." +
+        				"1. Info Function\nYou can set info such as Gender, Age, Weight and Height.\nTo use this function, simply type 'info'." +
         				"\n\n2. Sports Function\nYou can calculate how much do you need to workout to burn those calories!\nTo use the function, simply type in 'sports'." +
         				"\n\n3. Water Function\nYou can enable this function and our bot will remind you to drink water once in a while!\nTo use this function, type 'water<go to next line>60' if you want us to remind you every 60 minutes.";
         		
