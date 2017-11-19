@@ -230,12 +230,12 @@ public class KitchenSinkController {
         switch (command[0].toLowerCase()) {
         	case "help":{
     		try {
-        		String result1 = "Welcome to our dieting bot! Here are our supported commands, all of them are case-insensitive.\n\n" + 
+        		String result1 = "Welcome to this bot! Here are our supported commands, all of them are case-insensitive.\n\n" + 
         				"1. Weight Function\nYou can save your weight in kg, which is required to calculate Sports time to burn those calories!\nTo use the function, type 'weight<go to next line>50' if your weight is 50." +
         				"\n\n2. Sports Function\nYou can calculate how much do you need to workout to burn those calories!\nTo use the function, simply type in 'sports'." +
         				"\n\n3. Water Function\nYou can enable this function and our bot will remind you to drink water once in a while!\nTo use this function, type 'water<go to next line>60' if you want us to remind you every 60 minutes.";
         		
-        		String result3 = "We are also having a promotional event now for new users!\n\n You can check your unique 6-digit id using 'friend', and tells your friend about this code when you recommend them to use this bot." +
+        		String result3 = "We are also having a promotional event now for new users!\n\nYou can check your unique 6-digit id using 'friend', and tells your friend about this code when you recommend them to use this bot." +
         				"\n\nOnce they joined, they can use 'code<go to next line>XXXXXX' where XXXXXX is your ID.Both of you will get a coupon when this were done!" +
         				"\n\nYou can redeem a coupon and check how many coupons do you still have using 'redeem'. Enjoy~" +
         				"\n\n*We only have 6000 coupons to giveaway in total, so please act quick!";
@@ -283,7 +283,7 @@ public class KitchenSinkController {
             		String result = database.waterInterval(text, userId);
             		this.replyText(replyToken, result + database.waterNotif(userId));
             	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'water <notification interval in minutes, 0 as OFF>'. ");
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'water <minutes in integer, 0 as OFF>'. ");
             	};
                 break;
             }
@@ -316,7 +316,7 @@ public class KitchenSinkController {
             		String result = database.energy(text, userId);
             		this.replyText(replyToken, result);
             	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'energy <energy> <day of week>'. ");
+            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'energy <energy in integer> <day of week(e.g. Mon/Tue)>'. ");
             	};
                 break;
             }  
