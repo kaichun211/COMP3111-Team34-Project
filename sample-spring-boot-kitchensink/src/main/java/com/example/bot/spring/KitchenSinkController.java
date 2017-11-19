@@ -366,7 +366,7 @@ public class KitchenSinkController {
             }
             case "input age":{
              	String temp_state = database.getInfoState(userId);
-	        		if(temp_state.equals("info")) {
+	        		if(temp_state == "info") {
 	        			database.setInfoState("age", userId);
 	        			String reply = "Now input your age as integer";
 		                this.replyText(
@@ -385,7 +385,7 @@ public class KitchenSinkController {
 	        }
             case "input height":{
             		String temp_state = database.getInfoState(userId);
-	        		if(temp_state.equals("info")) {
+	        		if(temp_state == "info") {
 	        			database.setInfoState("height", userId);
 	        			String reply = "Now input your height as integer";
 		                this.replyText(
@@ -404,7 +404,7 @@ public class KitchenSinkController {
 	        }
             case "input weight":{
             		String temp_state = database.getInfoState(userId);
-            		if(temp_state.equals("info")) {
+            		if(temp_state == "info") {
             			database.setInfoState("weight", userId);
             			String reply = "Now input your weight as integer";
     	                this.replyText(
@@ -423,7 +423,7 @@ public class KitchenSinkController {
             }
             case "input sex":{
             		String temp_state = database.getInfoState(userId);
-            		if(temp_state.equals("info")) {
+            		if(temp_state == "info") {
             			database.setInfoState("sex", userId);
             			ConfirmTemplate confirmTemplate = new ConfirmTemplate(
             					"What is your sex?",
@@ -480,13 +480,13 @@ public class KitchenSinkController {
 
             default:
             		String temp_state = database.getInfoState(userId);
-            		if(temp_state.equals("default")) {
+            		if(temp_state == "default") {
 		            	String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
 	                this.replyText(
 	                    replyToken,
 	                    reply + database.waterNotif(userId)
 	                );
-            		}else if(temp_state.equals("height")){
+            		}else if(temp_state == "height"){
             			database.setInfoState("default", userId);
             			try {
                     		String result = database.height(text, userId);
@@ -494,7 +494,7 @@ public class KitchenSinkController {
                     	} catch (Exception e) {
                     		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'height <your height in cm rounded to the nearest integer>'. ");
                     	};
-            		}else if(temp_state.equals("age")){
+            		}else if(temp_state == "age"){
             			database.setInfoState("default", userId);
             			try {
                     		String result = database.age(text, userId);
@@ -502,7 +502,7 @@ public class KitchenSinkController {
                     	} catch (Exception e) {
                     		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'age <your age rounded to the nearest integer>'. ");
                     	};
-            		}else if(temp_state.equals("weight")){
+            		}else if(temp_state == "weight"){
             			database.setInfoState("default", userId);
             			try {
                     		String result = database.weight(text, userId);
@@ -510,7 +510,7 @@ public class KitchenSinkController {
                     	} catch (Exception e) {
                     		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
                     	};
-            		}else if(temp_state.equals("sex")){
+            		}else if(temp_state == "sex"){
             			database.setInfoState("default", userId);
             			try {
                     		String result = database.sex(text, userId);
