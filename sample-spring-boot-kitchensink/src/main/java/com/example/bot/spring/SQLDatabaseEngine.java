@@ -19,11 +19,17 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		String result = null;
 		int user_count = 0;
 		boolean data_exist = false;
+		int today = 0;
+		Calendar c = Calendar.getInstance();
+		//Date d = c.getTime();
+		//c.setTime(d);
+		today = c.get(Calendar.DAY_OF_YEAR);
 		Connection connection = getConnection();
 		
 		//Create data in user_info
-		PreparedStatement stmt1 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+		PreparedStatement stmt1 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'nothing', 'nothing', '0', 0, 0, 'default', ?)");
 		stmt1.setString(1, userId);
+		stmt1.setInt(2,today);
 		stmt1.executeUpdate();
 
 		
@@ -113,7 +119,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		weight = Integer.parseInt(items[0]);
 		if(weight<=0)
 		{
-			result = "Weight can not be zero or negative! Please try again with a valid input";
+			result = "Weight can not be zero or negative! Please use the info function again and enter a valid input";
 			return result;
 		}
 		Connection connection = getConnection();
@@ -147,7 +153,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		height = Integer.parseInt(items[0]);
 		if(height<=0)
 		{
-			result = "Height can not be zero or negative! Please try again with a valid input";
+			result = "Height can not be zero or negative! Please use the info function again and enter a valid input";
 			return result;
 		}
 		Connection connection = getConnection();
@@ -181,7 +187,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		age = Integer.parseInt(items[0]);
 		if(age<=0)
 		{
-			result = "Age can not be zero or negative! Please try again with a valid input";
+			result = "Age can not be zero or negative! Please use the info function again and enter a valid input";
 			return result;
 		}
 		Connection connection = getConnection();
@@ -208,24 +214,32 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	String sex(String text, String userId) throws Exception {
 		String result = null;
 		boolean data_exists = false;
-		Connection connection = getConnection();
-		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
-		stmt.setString(1, userId);
-		ResultSet rs = stmt.executeQuery();
-		if (rs.next()) {
-			data_exists = true;
-		}
-		rs.close();
-		if(data_exists)
+		if(text.equals("M") || text.equals("F"))
 		{
-			PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set sex = ? where user_id = ?");
-			stmt2.setString(1, text);
-			stmt2.setString(2, userId);
-			stmt2.executeUpdate();
-			connection.close();
-			result = "Data updated! Your sex has been set to " + text;
+			Connection connection = getConnection();
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
+			stmt.setString(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				data_exists = true;
+			}
+			rs.close();
+			if(data_exists)
+			{
+				PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set sex = ? where user_id = ?");
+				stmt2.setString(1, text);
+				stmt2.setString(2, userId);
+				stmt2.executeUpdate();
+				connection.close();
+				result = "Data updated! Your sex has been set to " + text;
+			}
+				return result;
 		}
+		else {
+			result = "Your Sex is invalid! Please try again using the info function.";
 			return result;
+					
+		}
 	}
 	
 	String waterInterval(String text, String userId) throws Exception {
@@ -351,7 +365,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 						stmt.close();
 						connection.close();
 						}
-						resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n\n");
+						resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)");
 							
 			}			
 		}catch(Exception e){
@@ -377,14 +391,14 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			energy = rs.getInt(3) + rs.getInt(4) + rs.getInt(5) + rs.getInt(6) + rs.getInt(7) + rs.getInt(8) + rs.getInt(9); 			
 		}
 		rs.close();
-		if(weight!=0)
+		if(weight>0)
 		{
 			result = "Total energy intake(for the last 7 days) is : " + energy + " kcal.\nyour weight is : " + weight + "kg.\n\nTime required to consume:\nLight(e.g. walking) : " + energy/(weight*light_multiplier) + " hr\nMedium(e.g. jogging) : " + energy/(weight*medium_multiplier) + " hr\nHeavy(e.g. running, swimming) : " + energy/(weight*heavy_multiplier) + " hr\n"  ;
 			return result;
 		}
 		else
 		{
-			result = "Weight can not be zero! Please input your weight first";
+			result = "Your Weight is invalid! Please set your weight first";
 			return result;
 		}
 
