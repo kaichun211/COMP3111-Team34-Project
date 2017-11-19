@@ -417,10 +417,11 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 						
 						//resultbuilder.append(ingredients[j] + ": \n Average Weight = " + weight_avg + " (g) \n Average Energy = " + energy_avg + " (kcal) \n Average Sodium = " + sodium_avg + " (g) \n Saturated Fat = " + fat_avg + " (g) \n \n");
 					}
-					resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_avg + " (g)\nFatty Acids = " + fat_avg + " (g)\n\n");
-					result_set = resultbuilder.toString();
+					
 					rs.close();
 				}
+				resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n\n");
+				result_set = resultbuilder.toString();
 				
 			}
 			boolean data_exists = false;
