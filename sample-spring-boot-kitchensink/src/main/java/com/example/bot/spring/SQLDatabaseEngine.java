@@ -80,12 +80,11 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		String[] items;
 		items = text.split("\\r?\\n");
 		boolean data_exists = false;
-		/*if(items[0] == "weight") {
+		if(items[0] == "weight") {
 			weight = Integer.parseInt(items[1]);
 		}else {
 			weight = Integer.parseInt(items[0]);
-		}*/
-		weight = Integer.parseInt(items[1]);
+		}
 		if(weight<=0)
 		{
 			result = "Weight can not be zero or negative! Please try again with a valid input";
