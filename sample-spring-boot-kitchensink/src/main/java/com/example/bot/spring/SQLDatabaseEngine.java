@@ -112,29 +112,6 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		
 	}
 	
-	String sex(String text, String userId) throws Exception {
-		String result = null;
-		boolean data_exists = false;
-		Connection connection = getConnection();
-		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
-		stmt.setString(1, userId);
-		ResultSet rs = stmt.executeQuery();
-		if (rs.next()) {
-			data_exists = true;
-		}
-		rs.close();
-		if(data_exists)
-		{
-			PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set sex = ? where user_id = ?");
-			stmt2.setString(1, text);
-			stmt2.setString(2, userId);
-			stmt2.executeUpdate();
-			connection.close();
-			result = "Data updated! Your sex has been set to " + text;
-		}
-			return result;
-	}
-	
 	String waterInterval(String text, String userId) throws Exception {
 		String result = null;
 		String[] items;
