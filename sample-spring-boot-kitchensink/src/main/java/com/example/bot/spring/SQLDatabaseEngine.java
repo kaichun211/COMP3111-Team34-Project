@@ -22,7 +22,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		Connection connection = getConnection();
 		
 		//Create data in user_info
-		PreparedStatement stmt1 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+		PreparedStatement stmt1 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'nothing', 'nothing')");
 		stmt1.setString(1, userId);
 		stmt1.executeUpdate();
 
@@ -67,9 +67,34 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		Connection connection = getConnection();
 		PreparedStatement stmt = connection.prepareStatement("DELETE FROM user_info WHERE user_id= ?");
 		stmt.setString(1, userId);
-		ResultSet rs = stmt.executeQuery();
+		stmt.executeUpdate();
 		connection.close();	
 		result = "Data Deleted sucessfully!";
+		return result;
+	}
+	
+	String InitiallizeTestData(String sqlstatement) throws Exception {
+		String result = null;
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement(sqlstatement);
+		stmt.executeUpdate();
+		connection.close();	
+		result = "Data Edited sucessfully!";
+		return result;
+	}
+	
+	String GetCouponCount(String sqlstatement) throws Exception {
+		String result = null;
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement(sqlstatement);
+		ResultSet rs = stmt.executeQuery();
+		if (rs.next())
+		{
+			result = Integer.toString(rs.getInt(1));
+			return result;
+		}
+		connection.close();	
+		result = "Data not found";
 		return result;
 	}
 	
@@ -112,6 +137,12 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		items = text.split("\\r?\\n");
 		boolean data_exists = false;
 		int interval = Integer.parseInt(items[1]) * 60000;
+		if(interval<0)
+		{
+			result = "Interval can't be negative!";
+			return result;
+		}
+		
 		Connection connection = getConnection();
 		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
 		stmt.setString(1, userId);
@@ -161,7 +192,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					stmtSave.close();
 				}
 				else if (curDT.getTime() > (old_time + rs.getLong("water_int"))) {
-					results = "\n\nRemember to drink some water!";
+					results = "Remember to drink some water!";
 					PreparedStatement stmtSave = connection.prepareStatement("UPDATE user_info SET water_time = ? WHERE user_id = ?");
 					stmtSave.setLong(1, curDT.getTime());
 					stmtSave.setString(2, userId);
@@ -255,20 +286,66 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			energy = rs.getInt(3) + rs.getInt(4) + rs.getInt(5) + rs.getInt(6) + rs.getInt(7) + rs.getInt(8) + rs.getInt(9); 			
 		}
 		rs.close();
-		if(weight!=0)
+		if(weight>0)
 		{
 			result = "Total energy is : " + energy + " kcal.\nyour weight is : " + weight + "kg.\n\nTime required to consume:\nLight(e.g. walking) : " + energy/(weight*light_multiplier) + " hr\nMedium(e.g. jogging) : " + energy/(weight*medium_multiplier) + " hr\nHeavy(e.g. running, swimming) : " + energy/(weight*heavy_multiplier) + " hr\n"  ;
 			return result;
 		}
 		else
 		{
-			result = "Weight can not be zero!";
+			result = "Your Weight is invalid! Please set it first using weight function";
 			return result;
 		}
 
 	}
 	
+	/*String eat(String text, String userId) throws Exception {
+		String result = null;
+		String[] items = new String[2];
+		int weekday_time = 0;
+		items = text.split("\\r?\\n");
+		ingredients = items[1].split(" ");
+		for(int j=0; j < ingredients.length; j++)
+		{
+			int weight_avg = 0;
+			int energy_avg = 0;
+			int sodium_avg = 0;
+			int fat_avg = 0;
+			int result_count = 0;
+			Connection connection = getConnection();
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM nutrient_table WHERE description like concat( ?, '%')");
+			stmt.setString(1, ingredients[j]);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				result_count++;
+				weight_avg += rs.getInt(3);
+				energy_avg += rs.getInt(5);
+				sodium_avg += rs.getInt(6);
+				fat_avg += rs.getInt(7);
+				//resultbuilder.append(rs.g(2));
+			}
+			
+			if (result_count>0)
+			{
+			weight_avg = weight_avg / result_count;
+			energy_avg = energy_avg / result_count;
+			sodium_avg = sodium_avg / result_count;
+			fat_avg = fat_avg / result_count;
+			
+			weight_total += weight_avg;
+			energy_total += energy_avg;
+			sodium_total += sodium_avg;
+			fat_total += fat_avg;
+			return result;
+			}
+			else
+			{
+				result = "Your dishes does not contains any recognized ingredients!";
+				return result;
+			}
+	}
 	
+	*/
 	String energy(String text, String userId) throws Exception {
 		//Write your code here
 		String result = null;
@@ -508,7 +585,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		items = text.split("\\r?\\n");
 		if(items[1].length()!=6)
 		{
-			result = "Don't miss the zero(s)! Please try again.";
+			result = "Invalid input! Please try again using the correct format.";
 			return result;
 		}
 		int user_id = Integer.parseInt(items[1]);

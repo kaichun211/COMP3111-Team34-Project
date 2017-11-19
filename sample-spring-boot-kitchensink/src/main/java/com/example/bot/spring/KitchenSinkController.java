@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -219,6 +220,12 @@ public class KitchenSinkController {
 	private void handleSticker(String replyToken, StickerMessageContent content) {
 		reply(replyToken, new StickerMessage(content.getPackageId(), content.getStickerId()));
 	}
+	
+	private void appendText(List<Message> lst, String str) throws Exception {
+		if (str.length() > 0) {
+			lst.add(new TextMessage(str));
+		}
+	}
 
 	private void handleTextContent(String replyToken, Event event, TextMessageContent content)
             throws Exception {
@@ -227,6 +234,7 @@ public class KitchenSinkController {
 		command = text.split("\\r?\\n");
 		String userId = event.getSource().getUserId();
 		log.info("Got text message from {}: {}", replyToken, text);
+		List<Message> messageList = new ArrayList<Message>();
         switch (command[0].toLowerCase()) {
         	case "help":{
     		try {
@@ -238,20 +246,21 @@ public class KitchenSinkController {
         		String result3 = "We are also having a promotional event now for new users!\n\nYou can check your unique 6-digit id using 'friend', and tells your friend about this code when you recommend them to use this bot." +
         				"\n\nOnce they joined, they can use 'code<go to next line>XXXXXX' where XXXXXX is your ID.Both of you will get a coupon when this were done!" +
         				"\n\nYou can redeem a coupon and check how many coupons do you still have using 'redeem'. Enjoy~" +
-        				"\n\n*We only have 6000 coupons to giveaway in total, so please act quick!";
-        		this.reply(replyToken, Arrays.asList(new TextMessage(result1), new TextMessage(result3)));
+        				"\n\n*We only have 5000 coupons to giveaway in total, so please act quick!";
+        		
+        		appendText(messageList, result1);
+        		appendText(messageList, result3);
         	} catch (Exception e) {
-        		this.replyText(replyToken, "Sorry, please try again.");
+        		appendText(messageList, "Sorry, please try again.");
         	};
             break;
 }  
         	case "order":{
     		try {
-    			String decision=command[1];
-        		String result = database.order(userId,decision);
-        		this.replyText(replyToken, result);
+    			String decision = command[1];
+    			appendText(messageList, database.order(userId, decision));
         	} catch (Exception e) {
-        		this.replyText(replyToken, "Sorry, please enter a valid input. order <int> ");
+        		appendText(messageList, database.order(userId, "Sorry, please enter a valid input. order <int> "));
         	};
             break;
 }
@@ -261,9 +270,9 @@ public class KitchenSinkController {
                     /*lineMessagingClient
                             .getProfile(userId)
                             .whenComplete(new ProfileGetter (this, replyToken));*/
-                	this.replyText(replyToken, userId);
+                	appendText(messageList, userId);
                 } else {
-                    this.replyText(replyToken, "Bot can't use profile API without user ID");
+                	appendText(messageList, "Bot can't use profile API without user ID");
                 }
                 break;
             }
@@ -271,19 +280,17 @@ public class KitchenSinkController {
             	
             	//String userId = event.getSource().getUserId();
             	try {
-            		String result = database.search(text, "user_info", userId);
-            		this.replyText(replyToken, result);
+            		appendText(messageList, database.search(text, "user_info", userId));
             	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
+            		appendText(messageList, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
             }*/
             case "water":{
             	try {
-            		String result = database.waterInterval(text, userId);
-            		this.replyText(replyToken, result + database.waterNotif(userId));
+            		appendText(messageList, database.waterInterval(text, userId));
             	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'water <minutes in integer, 0 as OFF>'. ");
+            		appendText(messageList, "Sorry, please enter a valid input. Input should be in format 'water <minutes in integer, 0 as OFF>'. ");
             	};
                 break;
             }
@@ -291,10 +298,9 @@ public class KitchenSinkController {
             	
             	//String userId = event.getSource().getUserId();
             	try {
-            		String result = database.sports_amount(userId);
-            		this.replyText(replyToken, result);
+            		appendText(messageList, database.sports_amount(userId));
             	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+            		appendText(messageList, "Sorry, please enter a valid input.");
             	};
                 break;
             }
@@ -302,10 +308,9 @@ public class KitchenSinkController {
             	
             	//String userId = event.getSource().getUserId();
             	try {
-            		String result = database.weight(text, userId);
-            		this.replyText(replyToken, result + database.waterNotif(userId));
+            		appendText(messageList, database.weight(text, userId));
             	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
+            		appendText(messageList, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
             }
@@ -313,10 +318,9 @@ public class KitchenSinkController {
             	
             	//String userId = event.getSource().getUserId();
             	try {
-            		String result = database.energy(text, userId);
-            		this.replyText(replyToken, result);
+            		appendText(messageList, database.energy(text, userId));
             	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'energy <energy in integer> <day of week(e.g. Mon/Tue)>'. ");
+            		appendText(messageList, "Sorry, please enter a valid input. Input should be in format 'energy <energy in integer> <day of week(e.g. Mon/Tue)>'. ");
             	};
                 break;
             }  
@@ -324,11 +328,9 @@ public class KitchenSinkController {
             	
             	//String userId = event.getSource().getUserId();
             	try {
-            		String result_set = database.menu_search(text);
-            		this.replyText(replyToken, result_set + database.waterNotif(userId));
-            		}
-            		catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+            		appendText(messageList, database.menu_search(text));
+            	} catch (Exception e) {
+            		appendText(messageList, "Sorry, please enter a valid input.");
             	};
                 break;
             }         
@@ -336,10 +338,9 @@ public class KitchenSinkController {
             	
             	//String userId = event.getSource().getUserId();
             	try {
-            		String result = database.search(text, "user_info", userId);
-            		this.replyText(replyToken, result + database.waterNotif(userId));
+            		appendText(messageList, database.search(text, "user_info", userId));
             	} catch (Exception e) {
-            		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
+            		appendText(messageList, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
             	};
                 break;
             }
@@ -355,48 +356,43 @@ public class KitchenSinkController {
             }*/
             case "friend":{
 	            	try {
-	            		String result = database.friend(userId);
-	            		this.replyText(replyToken, "Your code is: " + result + database.waterNotif(userId));
+	            		appendText(messageList, "Your code is: " + database.friend(userId));
 	            	} catch (Exception e) {
-	            		this.replyText(replyToken, "Sorry, please enter a valid input.");
+	            		appendText(messageList, "Sorry, please enter a valid input.");
 	            	};
 	                break;
             }
             case "code":{
 	            	try {
-	            		String result = database.code(text, userId);
-	            		this.replyText(replyToken, result + database.waterNotif(userId));
+	            		appendText(messageList, database.code(text, userId));
 	            	} catch (Exception e) {
-	            		this.replyText(replyToken, "Invalid input! You should enter a valid 6-digit number.");
+	            		appendText(messageList, "Invalid input! You should enter a valid 6-digit number.");
 	            	};
 	                break;
             }
             case "redeem":{
 	            	try {
 	            		String result = database.redeem(userId);
-	            		if(result!="You currently have no coupon")
-	            		{
-	            			this.reply(replyToken,Arrays.asList(new ImageMessage("https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif", "https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif")
-	            				, new TextMessage(result + database.waterNotif(userId))));
+	            		if (result!="You currently have no coupon") {
+	            			messageList.add(new ImageMessage("https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif", "https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif"));
 	            		}
-	            		else
-	            		{
-	            			this.replyText(replyToken, result + database.waterNotif(userId));
-	            		}
+	            		appendText(messageList, result);
 	            	} catch (Exception e) {
-	            		this.replyText(replyToken, "Sorry, Error occured, please try again later.");
+	            		appendText(messageList, "Sorry, Error occured, please try again later.");
 	            	};
 	                break;
             }
 
             default:
-            	String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
-                this.replyText(
-                        replyToken,
-                        reply + database.waterNotif(userId)
-                );
+            	appendText(messageList, "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.");
                 break;
         }
+        
+        // Append Notification
+        appendText(messageList, database.waterNotif(userId));
+        
+        // Final
+        this.reply(replyToken, messageList);
     }
 
 	static String createUri(String path) {
