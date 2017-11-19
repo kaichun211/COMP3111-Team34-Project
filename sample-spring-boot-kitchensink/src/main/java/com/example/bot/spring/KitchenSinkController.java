@@ -361,8 +361,7 @@ public class KitchenSinkController {
                         "Which user info you want to input?",
                         Arrays.asList(new MessageAction("Sex", "Input Sex"), new MessageAction("Age", "Input Age"), new MessageAction("Weight", "Input Weight"), new MessageAction("Height", "Input Height"))
                 );
-                TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", buttonsTemplate);
-                this.reply(replyToken, templateMessage);
+                messageList.add(new TemplateMessage("Confirm alt text", buttonsTemplate));
                 break;
             }
             case "input age":{
@@ -410,8 +409,7 @@ public class KitchenSinkController {
                              new MessageAction("Male", "M"),
                              new MessageAction("Female", "F")
                         );
-                     TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", confirmTemplate);
-                     this.reply(replyToken, templateMessage);
+            			messageList.add(new TemplateMessage("Confirm alt text", confirmTemplate));
             		}else {
             			database.setInfoState("default", userId);
             			appendText(messageList, "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.");
