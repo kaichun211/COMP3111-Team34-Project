@@ -360,7 +360,7 @@ public class KitchenSinkController {
             		state = "info";
 	            ButtonsTemplate buttonsTemplate = new ButtonsTemplate(null,null,
                         "Which user info you want to input?",
-                        Arrays.asList(new MessageAction("Sex", "Input Sex"), new MessageAction("Age", "Input Age"), new MessageAction("Weight", "Input Weight"), new MessageAction("Height", "Input Height"))
+                        Arrays.asList(new MessageAction("Sex", "Input Sex"), new MessageAction("Age", "Input Age"), new MessageAction("Weight", "weight\n1234"), new MessageAction("Height", "Input Height"))
                 );
                 TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", buttonsTemplate);
                 this.reply(replyToken, templateMessage);
