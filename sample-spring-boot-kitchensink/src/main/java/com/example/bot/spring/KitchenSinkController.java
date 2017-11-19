@@ -344,16 +344,14 @@ public class KitchenSinkController {
             	};
                 break;
             }*/
-            case "confirm": {
-                ConfirmTemplate confirmTemplate = new ConfirmTemplate(
-                        "Do it?",
-                        new MessageAction("123", "Yes!"),
-                        new MessageAction("456", "No!")
+            case "state": {
+            		String reply = state;
+                this.replyText(
+                    replyToken,
+                    reply + database.waterNotif(userId)
                 );
-                TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", confirmTemplate);
-                this.reply(replyToken, templateMessage);
                 break;
-            }
+            } 
             
             //Input user info
             case "info":{
