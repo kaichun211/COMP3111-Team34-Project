@@ -222,7 +222,7 @@ public class KitchenSinkController {
 	}
 	
 	private void appendText(List<Message> lst, String str) throws Exception {
-		if (str.length() >= 0) {
+		if (str.length() > 0) {
 			lst.add(new TextMessage(str));
 		}
 	}
