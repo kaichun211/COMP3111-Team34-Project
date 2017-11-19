@@ -224,7 +224,6 @@ public class KitchenSinkController {
             throws Exception {
         String text = content.getText();
 		String[] command;
-		String state = "default";
 		command = text.split("\\r?\\n");
 		String userId = event.getSource().getUserId();
 		log.info("Got text message from {}: {}", replyToken, text);
@@ -347,21 +346,10 @@ public class KitchenSinkController {
             case "confirm": {
                 ConfirmTemplate confirmTemplate = new ConfirmTemplate(
                         "Do it?",
-                        new MessageAction("123", "Yes!"),
-                        new MessageAction("456", "No!")
+                        new MessageAction("Yes", "Yes!"),
+                        new MessageAction("No", "No!")
                 );
                 TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", confirmTemplate);
-                this.reply(replyToken, templateMessage);
-                break;
-            }
-            
-            case "info":{
-            		state = "info";
-	            ButtonsTemplate buttonsTemplate = new ButtonsTemplate(null,null,
-                        "Which user info you want to input?",
-                        Arrays.asList(new MessageAction("Sex", "Input Sex"), new MessageAction("Age", "Input Age"), new MessageAction("Weight", "Input Weight"), new MessageAction("Height", "Input Height"))
-                );
-                TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", buttonsTemplate);
                 this.reply(replyToken, templateMessage);
                 break;
             }
