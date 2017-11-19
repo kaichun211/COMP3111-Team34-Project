@@ -227,7 +227,7 @@ public class KitchenSinkController {
 		command = text.split("\\r?\\n");
 		String userId = event.getSource().getUserId();
 		log.info("Got text message from {}: {}", replyToken, text);
-        switch (command[0]) {
+        switch (command[0].toLowerCase()) {
         	case "order":{
     		try {
     			String decision=command[1];
