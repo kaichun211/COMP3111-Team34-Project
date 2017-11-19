@@ -74,7 +74,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	}
 	
 	String getInfoState(String userId) throws Exception { 
-		String state = "default";
+		String state;
 		Connection connection = getConnection();
 		PreparedStatement stmt = connection.prepareStatement("SELECT info_state FROM user_info WHERE user_id = ?");
 		stmt.setString(1, userId);
@@ -85,7 +85,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			return state;
 		}else {
 			connection.close();
-			return state;
+			return null;
 		}
 	}
 	void setInfoState(String text, String userId) throws Exception{
