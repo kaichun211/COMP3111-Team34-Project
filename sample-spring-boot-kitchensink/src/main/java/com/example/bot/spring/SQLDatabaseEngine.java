@@ -412,7 +412,6 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n\n");
 					rs.close();
 					result_set = resultbuilder.toString();
-					return result_set;
 				}
 			}
 			boolean data_exists = false;
@@ -425,8 +424,10 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			}
 			rs2.close();
 			if(data_exists){
+				System.out.println("Recording Data");
 				Calendar c = Calendar.getInstance();
 				int day_of_year = c.get(Calendar.DAY_OF_YEAR);
+				System.out.println(day_of_year);
 				
 				PreparedStatement stmt3 = connection.prepareStatement("SELECT today FROM user_info WHERE user_id = ?");
 				stmt3.setString(1, userId);
@@ -435,6 +436,8 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				
 				if(day_of_year == temp) {
 					int day_of_week = c.get(Calendar.DAY_OF_WEEK);
+					System.out.println("Same day");
+					System.out.println(day_of_week);
 					PreparedStatement stmt4 = connection.prepareStatement("UPDATE user_info set energy_" + day_of_week + " = energy_" + day_of_week + " + ? where user_id = ?");
 					stmt4.setInt(1, energy_total);
 					stmt4.setString(2, userId);
@@ -451,6 +454,8 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					stmt6.executeUpdate();
 				}else {
 					int day_of_week = c.get(Calendar.DAY_OF_WEEK);
+					System.out.println("New day");
+					System.out.println(day_of_week);
 					PreparedStatement stmt4 = connection.prepareStatement("UPDATE user_info set energy_" + day_of_week + " = ? where user_id = ?");
 					stmt4.setInt(1, energy_total);
 					stmt4.setString(2, userId);
@@ -479,6 +484,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		}catch(Exception e){
 			System.out.println(e);
 		}
+		System.out.println("Call warning()");
 		resultbuilder.append(warning(userId));
 		result_set = resultbuilder.toString();
 		return result_set;
