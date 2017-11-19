@@ -479,7 +479,7 @@ public class KitchenSinkController {
                 		String result = database.sex(text, userId);
                 		appendText(messageList, result);
                 	} catch (Exception e) {
-                		appendText(messageList, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
+                		appendText(messageList, "Sorry, please enter a valid input.");
                 	};
         		}else { 
         			appendText(messageList, "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.");
