@@ -89,6 +89,7 @@ import java.net.URI;
 public class KitchenSinkController {
 	
 
+	String state = "default";
 	@Autowired
 	private LineMessagingClient lineMessagingClient;
 
@@ -343,7 +344,6 @@ public class KitchenSinkController {
             	};
                 break;
             }*/
-            /*
             case "state": {
             		String reply = state;
                 this.replyText(
@@ -351,11 +351,11 @@ public class KitchenSinkController {
                     reply + database.waterNotif(userId)
                 );
                 break;
-            } */
+            } 
             
             //Input user info
             case "info":{
-            		database.setInfoState("info", userId);
+            		state = "info";
 	            ButtonsTemplate buttonsTemplate = new ButtonsTemplate(null,null,
                         "Which user info you want to input?",
                         Arrays.asList(new MessageAction("Sex", "Input Sex"), new MessageAction("Age", "Input Age"), new MessageAction("Weight", "Input Weight"), new MessageAction("Height", "Input Height"))
@@ -364,52 +364,16 @@ public class KitchenSinkController {
                 this.reply(replyToken, templateMessage);
                 break;
             }
-            case "input age":{
-	        		if(database.getInfoState(userId) == "info") {
-	        			database.setInfoState("age", userId);
-	        			String reply = "Now input your age as integer";
-		                this.replyText(
-		                    replyToken,
-		                    reply + database.waterNotif(userId)
-		                );
-	        		}else {
-	        			database.setInfoState("default", userId);
-	        			String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
-		                this.replyText(
-		                    replyToken,
-		                    reply + database.waterNotif(userId)
-		                );
-	        		}
-	        		break;
-	        }
-            case "input height":{
-	        		if(database.getInfoState(userId) == "info") {
-	        			database.setInfoState("height", userId);
-	        			String reply = "Now input your height as integer";
-		                this.replyText(
-		                    replyToken,
-		                    reply + database.waterNotif(userId)
-		                );
-	        		}else {
-	        			database.setInfoState("default", userId);
-	        			String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
-		                this.replyText(
-		                    replyToken,
-		                    reply + database.waterNotif(userId)
-		                );
-	        		}
-	        		break;
-	        }
             case "input weight":{
-            		if(database.getInfoState(userId) == "info") {
-            			database.setInfoState("weight", userId);
+            		if(state == "info") {
+            			state = "weight";
             			String reply = "Now input your weight as integer";
     	                this.replyText(
     	                    replyToken,
     	                    reply + database.waterNotif(userId)
     	                );
             		}else {
-            			database.setInfoState("default", userId);
+            			state = "default";
             			String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
     	                this.replyText(
     	                    replyToken,
@@ -419,8 +383,8 @@ public class KitchenSinkController {
             		break;
             }
             case "input sex":{
-            		if(database.getInfoState(userId) == "info") {
-            			database.setInfoState("sex", userId);
+            		if(state == "info") {
+            			state = "sex";
             			ConfirmTemplate confirmTemplate = new ConfirmTemplate(
             					"What is your sex?",
                              new MessageAction("Male", "M"),
@@ -429,7 +393,7 @@ public class KitchenSinkController {
                      TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", confirmTemplate);
                      this.reply(replyToken, templateMessage);
             		}else {
-            			database.setInfoState("default", userId);
+            			state = "default";
             			String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
     	                this.replyText(
     	                    replyToken,
@@ -475,38 +439,22 @@ public class KitchenSinkController {
             }
 
             default:
-            		if(database.getInfoState(userId) == "default") {
+            		if(state == "default") {
 		            	String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
 	                this.replyText(
 	                    replyToken,
 	                    reply + database.waterNotif(userId)
 	                );
-            		}else if(database.getInfoState(userId) == "height"){
-            			database.setInfoState("default", userId);
-            			try {
-                    		String result = database.height(text, userId);
-                    		this.replyText(replyToken, result + database.waterNotif(userId));
-                    	} catch (Exception e) {
-                    		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'height <your height in cm rounded to the nearest integer>'. ");
-                    	};
-            		}else if(database.getInfoState(userId) == "age"){
-            			database.setInfoState("default", userId);
-            			try {
-                    		String result = database.age(text, userId);
-                    		this.replyText(replyToken, result + database.waterNotif(userId));
-                    	} catch (Exception e) {
-                    		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'age <your age rounded to the nearest integer>'. ");
-                    	};
-            		}else if(database.getInfoState(userId) == "weight"){
-            			database.setInfoState("default", userId);
+            		}else if(state == "weight"){
+            			state = "default";
             			try {
                     		String result = database.weight(text, userId);
                     		this.replyText(replyToken, result + database.waterNotif(userId));
                     	} catch (Exception e) {
                     		this.replyText(replyToken, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
                     	};
-            		}else if(database.getInfoState(userId) == "sex"){
-            			database.setInfoState("default", userId);
+            		}else if(state == "sex"){
+                    	state = "default";
             			try {
                     		String result = database.sex(text, userId);
                     		this.replyText(replyToken, result + database.waterNotif(userId));
