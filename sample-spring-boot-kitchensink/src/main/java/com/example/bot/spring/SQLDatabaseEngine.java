@@ -428,13 +428,16 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				Calendar c = Calendar.getInstance();
 				int day_of_year = c.get(Calendar.DAY_OF_YEAR);
 				System.out.println(day_of_year);
+				int temp_day = 0;
 				
 				PreparedStatement stmt3 = connection.prepareStatement("SELECT today FROM user_info WHERE user_id = ?");
 				stmt3.setString(1, userId);
 				ResultSet rs3 = stmt3.executeQuery();
-				int temp = rs3.getInt(1);
+				if (rs3.next()) {
+					temp_day = rs3.getInt(1);
+				}
 				
-				if(day_of_year == temp) {
+				if(day_of_year == temp_day) {
 					int day_of_week = c.get(Calendar.DAY_OF_WEEK);
 					System.out.println("Same day");
 					System.out.println(day_of_week);
