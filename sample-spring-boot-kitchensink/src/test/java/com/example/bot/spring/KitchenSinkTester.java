@@ -482,7 +482,7 @@ public class KitchenSinkTester {
 //-------------------Info
 	//-----------Sex
 	@Test
-	public void testInfoSexClickButton() throws Exception {
+	public void testSexClickButton() throws Exception {
 		boolean thrown = false;
 		String result = null;
 		try {
@@ -496,7 +496,7 @@ public class KitchenSinkTester {
 	}  
 	
 	@Test
-	public void testInfoSexTypeGender() throws Exception {
+	public void testSexTypeGender() throws Exception {
 		boolean thrown = false;
 		String result = null;
 		try {
@@ -510,7 +510,7 @@ public class KitchenSinkTester {
 	} 
 	
 	@Test
-	public void testInfoSexTypeInvalidInput() throws Exception {
+	public void testSexTypeInvalidInput() throws Exception {
 		boolean thrown = false;
 		String result = null;
 		try {

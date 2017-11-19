@@ -214,29 +214,32 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	String sex(String text, String userId) throws Exception {
 		String result = null;
 		boolean data_exists = false;
-		if(text!="M" && text!="F")
+		if(text.equals("M") || text.equals("F"))
 		{
+			Connection connection = getConnection();
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
+			stmt.setString(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				data_exists = true;
+			}
+			rs.close();
+			if(data_exists)
+			{
+				PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set sex = ? where user_id = ?");
+				stmt2.setString(1, text);
+				stmt2.setString(2, userId);
+				stmt2.executeUpdate();
+				connection.close();
+				result = "Data updated! Your sex has been set to " + text;
+			}
+				return result;
+		}
+		else {
 			result = "Your Sex is invalid! Please try again using the info function.";
 			return result;
+					
 		}
-		Connection connection = getConnection();
-		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
-		stmt.setString(1, userId);
-		ResultSet rs = stmt.executeQuery();
-		if (rs.next()) {
-			data_exists = true;
-		}
-		rs.close();
-		if(data_exists)
-		{
-			PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set sex = ? where user_id = ?");
-			stmt2.setString(1, text);
-			stmt2.setString(2, userId);
-			stmt2.executeUpdate();
-			connection.close();
-			result = "Data updated! Your sex has been set to " + text;
-		}
-			return result;
 	}
 	
 	String waterInterval(String text, String userId) throws Exception {
@@ -362,7 +365,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 						stmt.close();
 						connection.close();
 						}
-						resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n\n");
+						resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)");
 							
 			}			
 		}catch(Exception e){
