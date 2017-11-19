@@ -85,7 +85,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		}else {
 			weight = Integer.parseInt(items[0]);
 		}*/
-		weight = Integer.parseInt(items[0]);
+		weight = Integer.parseInt(items[1]);
 		if(weight<=0)
 		{
 			result = "Weight can not be zero or negative! Please try again with a valid input";

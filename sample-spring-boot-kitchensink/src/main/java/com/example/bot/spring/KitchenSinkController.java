@@ -360,7 +360,7 @@ public class KitchenSinkController {
             		state = "info";
 	            ButtonsTemplate buttonsTemplate = new ButtonsTemplate(null,null,
                         "Which user info you want to input?",
-                        Arrays.asList(new MessageAction("Sex", "Input Sex"), new MessageAction("Age", "Input Age"), new MessageAction("Weight", "Input Weight"), new MessageAction("Height", "Input Height"))
+                        Arrays.asList(new MessageAction("Sex", "Input Sex"), new MessageAction("Age", "Input Age"), new MessageAction("Weight", "weight\n1234"), new MessageAction("Height", "Input Height"))
                 );
                 TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", buttonsTemplate);
                 this.reply(replyToken, templateMessage);
@@ -369,11 +369,6 @@ public class KitchenSinkController {
             case "input weight":{
             		if(state == "info") {
             			state = "weight";
-            			String reply = "Now input your weight as integer";
-    	                this.replyText(
-    	                    replyToken,
-    	                    reply + database.waterNotif(userId)
-    	                );
             		}else {
             			state = "default";
             			String reply = "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.";
