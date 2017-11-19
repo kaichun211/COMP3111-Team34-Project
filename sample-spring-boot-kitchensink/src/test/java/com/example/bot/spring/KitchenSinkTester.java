@@ -53,8 +53,10 @@ public class KitchenSinkTester {
 	//private DatabaseEngine databaseEngine;
 	private SQLDatabaseEngine sqldatabaseEngine;
 	
+/*	
+	//-------------Weight--------------------------
 	@Test
-	public void testWeightInputOutofRange() throws Exception {
+	public void testWeightInputZero() throws Exception {
 		boolean thrown = false;
 		String result = null;
 		try {
@@ -109,5 +111,433 @@ public class KitchenSinkTester {
 		assertThat(!thrown).isEqualTo(false);
 
 	}
+
+	//Water------------------------------
+	@Test
+	public void testWaterInvalidInput() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.waterInterval("water", "testID");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(false);
+	}
+	
+	@Test
+	public void testWaterValidInputBoundary() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.waterInterval("water" + "\n" + "1", "testID");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Data updated! ");
+		TimeUnit.SECONDS.sleep(60);
+		try {
+			result = this.sqldatabaseEngine.friend("testID");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result.contains("Remember"));
+	} 
+	
+	@Test
+	public void testWaterInvalidInputNegative() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.waterInterval("water" + "\n" + "-10", "testID");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Interval can't be negative!");
+	}
+	//@Test
+	//public void testWaterValidInputBoundary() throws Exception {
+	//	boolean thrown = false;
+	//	String result = null;
+	//	try {
+	//		result = this.sqldatabaseEngine.waterInterval("water" + "\n" + "50", "test2");
+	//	} catch (Exception e) {
+	//		thrown = true;
+	//	}
+	//	
+	//	assertThat(!thrown).isEqualTo(true);
+	//	assertThat(result).isEqualTo("Data updated! ");
+	//
+	//}
+	//--------------Menu
+	@Test
+	public void testMenuValidInput1() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.menu_search("menu\nBean\nRice");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Bean:\nWeight = 185 (g)\nEnergy = 254 (kcal)\nSodium = 301 (g)\nFatty Acids = 0 (g)\n\n"+"Rice:\nWeight = 155 (g)\nEnergy = 358 (kcal)\nSodium = 205 (g)\nFatty Acids = 0 (g)\n\n");
+	}
+	
+	
+	@Test
+	public void testMenuValidInput2() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.menu_search("menu\nBean Rice");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Bean Rice:\nWeight = 340 (g)\nEnergy = 612 (kcal)\nSodium = 506 (g)\nFatty Acids = 0 (g)\n\n");
+	}
+//-------------Friend
+	@Test
+	public void testFriendUserExists() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.friend("U250bca48655aa67f697c1b99b5d2828b");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("000003");
+	}
+	
+	@Test
+	public void testFriendUserNotExist() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.friend("notexistuser");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("You are not qualified for this event! This event is only for new users.");
+	}
+	
+//-------------Code	
+	
+	
+	@Test
+	public void testCodeInvalidLengthInput() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.code("code"+"\n"+"ABCDE","U250bca48655aa67f697c1b99b5d2828b");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Invalid input! Please try again using the correct format.");
+	}
+	
+	
+	@Test
+	public void testCodeInputOwnCode() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.code("code"+"\n"+"000003","U250bca48655aa67f697c1b99b5d2828b");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Hey! You can not refer yourself!");
+	}
+	
+	@Test
+	public void testCodeReferredAlready() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.code("code"+"\n"+"000001","U250bca48655aa67f697c1b99b5d2828b");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("You are not qualified for this event! Either you are not a new user or you have already referred your friend.");
+	}
+	
+	@Test
+	public void testCodeReferSuccess() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		this.sqldatabaseEngine.InitiallizeTestData("update coupontable set code = false where user_id = 'testID'");
+		try {
+			result = this.sqldatabaseEngine.code("code"+"\n"+"000001","testID");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Coupon Get!");
+	}
+	
+	@Test
+	public void testCodePromotionEnds() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		String current_coupon_count = this.sqldatabaseEngine.GetCouponCount("select coupon_count from coupontable where user_id = 'master'");
+		
+		//set user can use code function and total coupon count = 5000
+		this.sqldatabaseEngine.InitiallizeTestData("update coupontable set code = false where user_id = 'testID'");
+		this.sqldatabaseEngine.InitiallizeTestData("update coupontable set coupon_count = 5000 where user_id = 'master'");
+		try {
+			result = this.sqldatabaseEngine.code("code"+"\n"+"000001","testID");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		this.sqldatabaseEngine.InitiallizeTestData("update coupontable set coupon_count = " + current_coupon_count + " where user_id = 'master'");
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Sorry, the event has ended and all the coupons has been given out.");
+	}
+	
+//----------------------Redeem	
+	@Test
+	public void testRedeemNoRedeem() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.redeem("no_coupon_user");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("You currently have no coupon");
+	}
+	
+	@Test
+	public void testRedeemCanRedeem() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		this.sqldatabaseEngine.InitiallizeTestData("update coupontable set coupon_count = 10 where user_id = 'testID'");
+		
+		try {
+			result = this.sqldatabaseEngine.redeem("testID");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result.contains("You redeemed one coupon")).isEqualTo(true);
+	}
+	
+	*/
+//--------------------Energy	
+	@Test
+	public void testEnergyInvalidInput1() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.energy("energy"+"\n"+"a"+"\n"+"1","testID");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(false);
+	} 
+
+	@Test
+	public void testEnergyValidInputExistingUser() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.energy("energy"+"\n"+"100"+"\n"+"1","testID");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Data updated!");
+	}
+	
+
+	@Test
+	public void testOrderCorrectOutput1() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.order("testID","exit");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Meal menu"
+				+ "\n1.Breakfast \n2.Lunch \n3.Dinner \n4. Dessert\n");
+	}
+	
+	@Test
+	public void testOrderCorrectOutput2() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.order("testID","exit");
+			result = this.sqldatabaseEngine.order("testID","1");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("What type of food do you like to choose?\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care");
+	}
+	
+	@Test
+	public void testOrderCorrectOutput3() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.order("testID","exit");
+			result = this.sqldatabaseEngine.order("testID","2");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("What type of food do you like to choose?\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care");
+	}
+	
+	@Test
+	public void testOrderCorrectOutput4() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.order("testID","exit");
+			result = this.sqldatabaseEngine.order("testID","3");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("What type of food do you like to choose?\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care");
+	}
+	
+	@Test
+	public void testOrderCorrectOutput5() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.order("testID","exit");
+			result = this.sqldatabaseEngine.order("testID","4");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Are you vegetarian?\n1.yes\n2.no");
+	}
+	
+	@Test
+	public void testOrderCorrectOutputWithInvalidDecision1() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.order("testID","exit");
+			result = this.sqldatabaseEngine.order("testID","s");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Meal menu"
+				+ "\n1.Breakfast \n2.Lunch \n3.Dinner \n4. Dessert\n");
+	}
+
+	@Test
+	public void testOrderCorrectOutputWithInvalidDecision2() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.order("testID","exit");
+			result = this.sqldatabaseEngine.order("testID","1");
+			result = this.sqldatabaseEngine.order("testID","a");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("What type of food do you like to choose?\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care");
+	}
+
+	@Test
+	public void testOrderCorrectOutputWithInvalidDecision3() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.order("testID","exit");
+			result = this.sqldatabaseEngine.order("testID","4");
+			result = this.sqldatabaseEngine.order("testID","3");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Are you vegetarian?\n1.yes\n2.no");
+	}
+	
+/*	@Test
+	public void testEnergyInvalidInput2() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.energy("energy"+"\n"+"1"+"a","testID");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(false);
+	} */	
+		
+	@Test
+	public void testSportsWeightNonZero() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.sports_amount("testID");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result.contains("Total energy is")).isEqualTo(true);
+	}  
+	
+	@Test
+	public void testSportsWeightInvalidWeight() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.sports_amount("NegativeWeightUser");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Your Weight is invalid! Please set it first using weight function");
+	}  
+	
+
 	
 }
