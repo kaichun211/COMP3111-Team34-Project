@@ -509,7 +509,7 @@ public class KitchenSinkTester {
 		
 		assertThat(!thrown).isEqualTo(false);
 	} */	
-		
+	/*	
 	@Test
 	public void testSportsWeightNonZero() throws Exception {
 		boolean thrown = false;
@@ -536,7 +536,7 @@ public class KitchenSinkTester {
 		
 		assertThat(!thrown).isEqualTo(true);
 		assertThat(result).isEqualTo("Your Weight is invalid! Please set it first using weight function");
-	}  
+	}  */
 	
 
 	

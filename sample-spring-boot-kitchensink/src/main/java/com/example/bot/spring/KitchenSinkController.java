@@ -354,6 +354,68 @@ public class KitchenSinkController {
                 this.reply(replyToken, templateMessage);
                 break;
             }*/
+          //Input user info
+            case "info":{
+            		database.setInfoState("info", userId);
+	            ButtonsTemplate buttonsTemplate = new ButtonsTemplate(null,null,
+                        "Which user info you want to input?",
+                        Arrays.asList(new MessageAction("Sex", "Input Sex"), new MessageAction("Age", "Input Age"), new MessageAction("Weight", "Input Weight"), new MessageAction("Height", "Input Height"))
+                );
+                messageList.add(new TemplateMessage("Confirm alt text", buttonsTemplate));
+                break;
+            }
+            case "input age":{
+             	String temp_state = database.getInfoState(userId);
+	        		if(temp_state.equals("info")) {
+	        			database.setInfoState("age", userId);
+	        			String reply = "Now input your age as integer";
+	        			appendText(messageList, reply + database.waterNotif(userId) );
+	        		}else {
+	        			database.setInfoState("default", userId);
+	        			appendText(messageList, "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.");
+	        		}
+	        		break;
+	        }
+            case "input height":{
+            		String temp_state = database.getInfoState(userId);
+	        		if(temp_state.equals("info")) {
+	        			database.setInfoState("height", userId);
+	        			String reply = "Now input your height as integer";
+	        			appendText(messageList, reply + database.waterNotif(userId) );
+	        		}else {
+	        			database.setInfoState("default", userId);
+	        			appendText(messageList, "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.");
+	        		}
+	        		break;
+	        }
+            case "input weight":{
+            		String temp_state = database.getInfoState(userId);
+            		if(temp_state.equals("info")) {
+            			database.setInfoState("weight", userId);
+            			String reply = "Now input your weight as integer";
+            			appendText(messageList, reply + database.waterNotif(userId) );
+            		}else {
+            			database.setInfoState("default", userId);
+            			appendText(messageList, "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.");
+            		}
+            		break;
+            }
+            case "input sex":{
+            		String temp_state = database.getInfoState(userId);
+            		if(temp_state.equals("info")) {
+            			database.setInfoState("sex", userId);
+            			ConfirmTemplate confirmTemplate = new ConfirmTemplate(
+            					"What is your sex?",
+                             new MessageAction("Male", "M"),
+                             new MessageAction("Female", "F")
+                        );
+            			messageList.add(new TemplateMessage("Confirm alt text", confirmTemplate));
+            		}else {
+            			database.setInfoState("default", userId);
+            			appendText(messageList, "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.");
+            		}
+            		break;
+            }
             case "friend":{
 	            	try {
 	            		appendText(messageList, "Your code is: " + database.friend(userId));
@@ -384,8 +446,45 @@ public class KitchenSinkController {
             }
 
             default:
-            	appendText(messageList, "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.");
-                break;
+            	String temp_state = database.getInfoState(userId);
+        		if(temp_state.equals("default")) {
+        			appendText(messageList, "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.");
+        		}else if(temp_state.equals("height")){
+        			database.setInfoState("default", userId);
+        			try {
+                		String result = database.height(text, userId);
+                		appendText(messageList, result + database.waterNotif(userId));
+                	} catch (Exception e) {
+                		appendText(messageList, "Sorry, please enter a valid input. Input should be in format 'height <your height in cm rounded to the nearest integer>'. ");
+                	};
+        		}else if(temp_state.equals("age")){
+        			database.setInfoState("default", userId);
+        			try {
+                		String result = database.age(text, userId);
+                		appendText(messageList, result + database.waterNotif(userId));
+                	} catch (Exception e) {
+                		appendText(messageList, "Sorry, please enter a valid input. Input should be in format 'age <your age rounded to the nearest integer>'. ");
+                	};
+        		}else if(temp_state.equals("weight")){
+        			database.setInfoState("default", userId);
+        			try {
+                		String result = database.weight(text, userId);
+                		appendText(messageList, result + database.waterNotif(userId));
+                	} catch (Exception e) {
+                		appendText(messageList, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
+                	};
+        		}else if(temp_state.equals("sex")){
+        			database.setInfoState("default", userId);
+        			try {
+                		String result = database.sex(text, userId);
+                		appendText(messageList, result + database.waterNotif(userId));
+                	} catch (Exception e) {
+                		appendText(messageList, "Sorry, please enter a valid input. Input should be in format 'weight <your weight in kg rounded to the nearest integer>'. ");
+                	};
+        		}else { 
+        			appendText(messageList, "Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.");
+        		}
+            break;
         }
         
         // Append Notification
