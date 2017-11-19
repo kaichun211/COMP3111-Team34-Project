@@ -73,6 +73,31 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		return result;
 	}
 	
+	String getInfoState(String userId) throws Exception { 
+		String state;
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("SELECT info_state FROM user_info WHERE user_id = ?");
+		stmt.setString(1, userId);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			state = rs.getString(1);
+			connection.close();
+			return state;
+		}else {
+			connection.close();
+			return null;
+		}
+	}
+	void setInfoState(String text, String userId) throws Exception{
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("UPDATE user_info set info_state = ? where user_id = ?");
+		stmt.setString(1, text);
+		stmt.setString(2, userId);
+		stmt.executeUpdate();
+		connection.close();
+		return;
+	}
+	
 	String weight(String text, String userId) throws Exception {
 		//Write your code here
 		int weight = 0;
@@ -107,6 +132,74 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			stmt2.executeUpdate();
 			connection.close();
 			result = "Data updated! Your weight has been set to " + weight + "kg";
+		}
+			return result;
+		
+	}
+	
+	String height(String text, String userId) throws Exception {
+		//Write your code here
+		int height = 0;
+		String result = null;
+		String[] items;
+		items = text.split("\\r?\\n");
+		boolean data_exists = false;
+		height = Integer.parseInt(items[0]);
+		if(height<=0)
+		{
+			result = "Height can not be zero or negative! Please try again with a valid input";
+			return result;
+		}
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
+		stmt.setString(1, userId);
+		ResultSet rs = stmt.executeQuery();
+		if (rs.next()) {
+			data_exists = true;
+		}
+		rs.close();
+		if(data_exists)
+		{
+			PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set height = ? where user_id = ?");
+			stmt2.setInt(1, height);
+			stmt2.setString(2, userId);
+			stmt2.executeUpdate();
+			connection.close();
+			result = "Data updated! Your height has been set to " + height + "cm";
+		}
+			return result;
+		
+	}
+	
+	String age(String text, String userId) throws Exception {
+		//Write your code here
+		int age = 0;
+		String result = null;
+		String[] items;
+		items = text.split("\\r?\\n");
+		boolean data_exists = false;
+		age = Integer.parseInt(items[0]);
+		if(age<=0)
+		{
+			result = "Age can not be zero or negative! Please try again with a valid input";
+			return result;
+		}
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
+		stmt.setString(1, userId);
+		ResultSet rs = stmt.executeQuery();
+		if (rs.next()) {
+			data_exists = true;
+		}
+		rs.close();
+		if(data_exists)
+		{
+			PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set age = ? where user_id = ?");
+			stmt2.setInt(1, age);
+			stmt2.setString(2, userId);
+			stmt2.executeUpdate();
+			connection.close();
+			result = "Data updated! Your age has been set to " + age;
 		}
 			return result;
 		
