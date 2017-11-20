@@ -365,7 +365,10 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 						stmt.close();
 						connection.close();
 						}
-						resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)");
+						resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (mg)\nFatty Acids = " + fat_total + " (g)");
+						if(i!=(dishes.length-1)) {
+							resultbuilder.append("\n\n");
+						}
 							
 			}			
 		}catch(Exception e){
@@ -434,7 +437,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					
 					rs.close();
 				}
-				resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n\n");
+				resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (mg)\nFatty Acids = " + fat_total + " (g)\n\n");
 				result_set = resultbuilder.toString();
 				
 			}
@@ -577,13 +580,13 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			}
 			
 			if(total_energy >= energy_requirement) {
-				resultbuilder.append("\nWeekly energy intake has EXCEED LIMIT");
+				resultbuilder.append("\n\nWeekly energy intake has EXCEED LIMIT");
 			}
 			if(fat >= 44) {
-				resultbuilder.append("\nDaily fat intake has EXCEED LIMIT");
+				resultbuilder.append("\n\nDaily fat intake has EXCEED LIMIT");
 			}
-			if(sodium >= 10) {
-				resultbuilder.append("\nDaily sodium intake has EXCEED LIMIT");
+			if(sodium >= 3000) {
+				resultbuilder.append("\n\nDaily sodium intake has EXCEED LIMIT");
 			}
 		}
 		
