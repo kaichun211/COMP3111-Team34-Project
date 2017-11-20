@@ -421,7 +421,7 @@ public class KitchenSinkTester {
 		
 		assertThat(!thrown).isEqualTo(true);
 		assertThat(result).isEqualTo("What type of food do you like to choose?\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care");
-	}*/
+	}
 
 	@Test
 	public void testOrderCorrectOutputWithInvalidDecision3() throws Exception {
