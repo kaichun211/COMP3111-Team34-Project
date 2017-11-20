@@ -358,11 +358,7 @@ public class SQLDatabaseEngine extends DatabaseEngine{
 			result = "Data updated! ";
 			return result;
 		}
-		else
-		{
-			result = "Account not exist!\n Please create an account first.";
-			return result;
-		}
+		return result;
 
 	}
 	
@@ -1036,6 +1032,8 @@ public class SQLDatabaseEngine extends DatabaseEngine{
 		if(rs.next())
 		{
 			result = rs.getInt(1);
+			connection.close();
+			return result;
 		}
 		connection.close();
 		return result;
@@ -1050,314 +1048,346 @@ public class SQLDatabaseEngine extends DatabaseEngine{
 	* @exception IOException If input is invalid.
 	* @exception SQLException If error in database.
 	*/
-	public String order(String userID, String decision) throws Exception {			
-		try {
-		Connection connection = getConnection();
-		//find state
-		PreparedStatement find_state = connection.prepareStatement("SELECT state FROM user_info where user_id = ?");
-		find_state.setString(1, userID);
-		ResultSet find_state1=find_state.executeQuery();
-		find_state1.next();
-		int state=find_state1.getInt(1);
-		find_state1.close();
-		find_state.close();	
-		switch (state) { //change state
-		case 0:
-		{
-			state=1;
-		break;}
-		
-		case 1: //meal menu
-			{if (decision.toLowerCase().equals("exit")) state=1;
-			else if (decision.equals("1")) {
-				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_meal_time= ? where (user_id= ?);");
-			change_choice.setString(1, "breakfast");
-			change_choice.setString(2, userID);
-			change_choice.executeUpdate();
-			change_choice.close();		
-			state=11;}
+	public String order(String userID, String decision) throws Exception {	
+					
+			try {
+			Connection connection = getConnection();
+			//find state
+			PreparedStatement find_state = connection.prepareStatement("SELECT state FROM user_info where user_id = ?");
+			find_state.setString(1, userID);
+			ResultSet find_state1=find_state.executeQuery();
+			find_state1.next();
+			int state=find_state1.getInt(1);
+			find_state1.close();
+			find_state.close();
 			
-			else if (decision.equals("2"))  {
-				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_meal_time= ? where (user_id= ?);");
-			change_choice.setString(1, "lunch");
-			change_choice.setString(2, userID);
-			change_choice.executeUpdate();
-			change_choice.close();		
-			state=11;}
-			else if (decision.equals("3"))  {
-				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_meal_time= ? where (user_id= ?);");
-			change_choice.setString(1, "dinner");
-			change_choice.setString(2, userID);			
-			change_choice.executeUpdate();
-			change_choice.close();		
-			state=11;}
-			else if (decision.equals("4"))  {
-				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_meal_time= ? where (user_id= ?);");
-			change_choice.setString(1, "dessert");
-			change_choice.setString(2, userID);
-			change_choice.executeUpdate();
-			change_choice.close();		
-			state=12;}
-		break;}
-		
-		case 11:
-			{if (decision.toLowerCase().equals("exit")) state=1;
-			else if (decision.equals("1"))  {
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_type= ? where (user_id= ?);");
-			change_choice.setString(1, "vegetarian");
-			change_choice.setString(2, userID);
-			change_choice.executeUpdate();
-			change_choice.close();		
-			state=111;}
 			
-			else if (decision.equals("2")) {
-				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_type= ? where (user_id= ?);");
-			change_choice.setString(1, "chicken");
-			change_choice.setString(2, userID);
-			change_choice.executeUpdate();
-			change_choice.close();		
-			state=111;}
-			else if (decision.equals("3"))  {
-				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_type= ? where (user_id= ?);");
-			change_choice.setString(1, "pork");
-			change_choice.setString(2, userID);
-			change_choice.executeUpdate();
-			change_choice.close();		
-			state=111;}
+			switch (state) { //change state
+			case 0:
+			{
+				state=1;
+			break;}
 			
-			else if (decision.equals("4")) {
+
+			
+			case 1: //meal menu
+				{if (decision.toLowerCase().equals("exit")) state=1;
+				else if (decision.equals("1")) {
+					
+				PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_meal_time= ? where (user_id= ?);");
+				change_choice.setString(1, "breakfast");
+				change_choice.setString(2, userID);
+				change_choice.executeUpdate();
+				change_choice.close();		
+				state=11;}
 				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_type= ? where (user_id= ?);");
-			change_choice.setString(1, "beef");
-			change_choice.setString(2, userID);
-			change_choice.executeUpdate();
-			change_choice.close();		
-			state=111;}
+				else if (decision.equals("2"))  {
+					
+				PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_meal_time= ? where (user_id= ?);");
+				change_choice.setString(1, "lunch");
+				change_choice.setString(2, userID);
+				change_choice.executeUpdate();
+				change_choice.close();		
+				state=11;}
+				else if (decision.equals("3"))  {
+					
+				PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_meal_time= ? where (user_id= ?);");
+				change_choice.setString(1, "dinner");
+				change_choice.setString(2, userID);			
+				change_choice.executeUpdate();
+				change_choice.close();		
+				state=11;}
+				else if (decision.equals("4"))  {
+					
+				PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_meal_time= ? where (user_id= ?);");
+				change_choice.setString(1, "dessert");
+				change_choice.setString(2, userID);
+				change_choice.executeUpdate();
+				change_choice.close();		
+				state=12;}
+			break;}
 			
-			else if (decision.equals("5")) {
-				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_type= ? where (user_id= ?);");
-			change_choice.setString(1, "nothing");
-			change_choice.setString(2, userID);
-			change_choice.executeUpdate();
-			change_choice.close();		
-			state=111;}
-			
-			break;	}
-			
-		case 12:
-			{if (decision.toLowerCase().equals("exit")) state=1;
-			else if (decision.equals("1"))  {
+			case 11:
+				{if (decision.toLowerCase().equals("exit")) state=1;
+				else if (decision.equals("1"))  {
 				PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_type= ? where (user_id= ?);");
 				change_choice.setString(1, "vegetarian");
 				change_choice.setString(2, userID);
 				change_choice.executeUpdate();
 				change_choice.close();		
-				state=112;}
+				state=111;}
 				
-			else if (decision.equals("2")) {
+				else if (decision.equals("2")) {
+					
+				PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_type= ? where (user_id= ?);");
+				change_choice.setString(1, "chicken");
+				change_choice.setString(2, userID);
+				change_choice.executeUpdate();
+				change_choice.close();		
+				state=111;}
+				else if (decision.equals("3"))  {
+					
+				PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_type= ? where (user_id= ?);");
+				change_choice.setString(1, "pork");
+				change_choice.setString(2, userID);
+				change_choice.executeUpdate();
+				change_choice.close();		
+				state=111;}
+				
+				else if (decision.equals("4")) {
+					
+				PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_type= ? where (user_id= ?);");
+				change_choice.setString(1, "beef");
+				change_choice.setString(2, userID);
+				change_choice.executeUpdate();
+				change_choice.close();		
+				state=111;}
+				
+				else if (decision.equals("5")) {
+					
 				PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_type= ? where (user_id= ?);");
 				change_choice.setString(1, "nothing");
 				change_choice.setString(2, userID);
 				change_choice.executeUpdate();
 				change_choice.close();		
-				state=112;}
-			break;
+				state=111;}
+				
+				break;	}
+				
+			case 12:
+				{if (decision.toLowerCase().equals("exit")) state=1;
+				else if (decision.equals("1"))  {
+					PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_type= ? where (user_id= ?);");
+					change_choice.setString(1, "vegetarian");
+					change_choice.setString(2, userID);
+					change_choice.executeUpdate();
+					change_choice.close();		
+					state=112;}
+					
+				else if (decision.equals("2")) {
+					PreparedStatement change_choice = connection.prepareStatement("UPDATE user_info SET choose_type= ? where (user_id= ?);");
+					change_choice.setString(1, "nothing");
+					change_choice.setString(2, userID);
+					change_choice.executeUpdate();
+					change_choice.close();		
+					state=112;}
+				break;
+				}
+				
+			case 111: //choose dishes function	
+				{state=1;
+				break;}
+			case 112: //choose dessert function
+				{state=1;
+				break;}
+				
+
+
+			default:{
+				if (decision.toLowerCase().equals("exit")) state=1;
+				break;
+			}
 			}
 			
-		case 111: //choose dishes function	
-			{if (decision.toLowerCase().equals("exit")) state=1;
-			break;}
-		case 112: //choose dessert function
-			{if (decision.toLowerCase().equals("exit")) state=1;
-			break;}
 			
-		default:{
-			if (decision.toLowerCase().equals("exit")) state=1;
+
+			
+			
+			//update state to user_info
+			String change_state_statement="UPDATE user_info SET state="+Integer.toString(state)+" where user_id= '"+userID+"';";
+			PreparedStatement change_state = connection.prepareStatement(change_state_statement);
+			change_state.executeUpdate();
+			change_state.close();
+
+
+			
+			String print_message="";
+			
+			switch (state) { //ouput message
+	        //features menu
+			case 1: //meal menu, feature 1,4,8,9,10
+			{print_message= "Meal menu"
+					+ "\n1.Breakfast \n2.Lunch \n3.Dinner \n4. Dessert\n"; break;}
+			
+			case 11:{print_message= "What type of food do you like to choose?\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care";	break;}	
+			case 12: {print_message= "Are you vegetarian?\n1.yes\n2.no"; break;}
+				
+			case 111:{ //print dishes
+				PreparedStatement get_users_final_choice = connection.prepareStatement("SELECT * FROM user_info where (user_id= ?);");
+				get_users_final_choice.setString(1, userID);
+
+
+				ResultSet get_users_final_choice1=get_users_final_choice.executeQuery();
+
+				if (get_users_final_choice1.next()){
+				String users_final_time=get_users_final_choice1.getString(15);		
+				String users_final_type=get_users_final_choice1.getString(16);
+
+				get_users_final_choice1.close();
+				get_users_final_choice.close();
+				String statement="";
+				List<Integer> price = new ArrayList<Integer>();
+				List<String> menu_name = new ArrayList<String>();
+				
+				PreparedStatement  get_dishes=null;
+				if (users_final_type.equals("nothing")){
+					
+					get_dishes = connection.prepareStatement("SELECT * FROM meal_menu where (meal_time= ? ) ;");
+					get_dishes.setString(1,users_final_time);
+					//statement="SELECT * FROM meal_menu where ((choose_meal_time='"+users_final_time+"') and (username='test'));";
+				}
+				
+				else {
+					get_dishes = connection.prepareStatement("SELECT * FROM meal_menu where ((meal_time= ? ) and (type= ? ));");
+					get_dishes.setString(1,users_final_time);
+					get_dishes.setString(2,users_final_type);
+					//statement="SELECT * FROM meal_menu where ((choose_meal_time='"+users_final_time+"') and (choose_type='"+users_final_type+"') and (username='test'));";
+				}
+
+				
+		//		PreparedStatement get_dishes = connection.prepareStatement(statement);
+				ResultSet get_dishes1=get_dishes.executeQuery();
+				int count_dishes=0;
+				
+				
+//				System.out.println("HELLO");
+				while (get_dishes1.next()){
+					price.add(get_dishes1.getInt(3));
+					menu_name.add(get_dishes1.getString(1));				
+//					print_message=print_message+count_dishes+"."+get_dishes1.getString(1)+" "+get_dishes1.getInt(3)+"\n";	
+					count_dishes++;
+				}
+				
+				
+				int second_choice_index=0;
+				int third_choice_index=0;
+				int first_choice_index=0;
+				
+				while (true){
+					first_choice_index=new Random().nextInt(count_dishes);
+					if(menu_name.get(first_choice_index).startsWith("*"))
+					{
+					break;
+					}
+				}
+				
+
+
+				while (true){
+					second_choice_index=new Random().nextInt(count_dishes);
+					if (second_choice_index!=first_choice_index)
+					{
+						break;	
+					}
+				}
+
+
+				while (true){
+					third_choice_index=new Random().nextInt(count_dishes);
+					if ((third_choice_index!=first_choice_index) && third_choice_index!=second_choice_index)
+					{
+						break;	
+					}
+				}
+				System.out.println(third_choice_index);
+				
+				print_message="1."+menu_name.get(first_choice_index)+" "+price.get(first_choice_index)+"\n";
+				print_message=print_message+"2."+menu_name.get(second_choice_index)+" "+price.get(second_choice_index)+"\n";
+				print_message=print_message+"3."+menu_name.get(third_choice_index)+" "+price.get(third_choice_index)+"\n";
+				print_message=print_message+"* means that the meal is commonly eaten at restaurants\n";
+				
+				
+				break;
+			}
 			break;
+			} 
+			case 112: { //print dishes
+				PreparedStatement get_users_final_choice = connection.prepareStatement("SELECT * FROM user_info where (user_id= ?);");
+				get_users_final_choice.setString(1, userID);
+
+
+				ResultSet get_users_final_choice1=get_users_final_choice.executeQuery();
+
+				if (get_users_final_choice1.next()){
+				String users_final_time=get_users_final_choice1.getString(15);		
+				String users_final_type=get_users_final_choice1.getString(16);
+
+				get_users_final_choice1.close();
+				get_users_final_choice.close();
+				String statement="";
+				List<Integer> price = new ArrayList<Integer>();
+				List<String> menu_name = new ArrayList<String>();
+				
+
+				if (users_final_type.equals("nothing")){
+					
+					statement="SELECT * FROM meal_menu where ((meal_time='dessert'));";			}
+				
+				else {
+					statement="SELECT * FROM meal_menu where ((meal_time='dessert') and (type='vegetarian'));";	
+				}
+
+				
+				PreparedStatement get_dishes = connection.prepareStatement(statement);
+				ResultSet get_dishes1=get_dishes.executeQuery();
+				int count_dishes=0;
+				
+				
+//				System.out.println("HELLO");
+				while (get_dishes1.next()){
+					price.add(get_dishes1.getInt(3));
+					menu_name.add(get_dishes1.getString(1));				
+//					print_message=print_message+count_dishes+"."+get_dishes1.getString(1)+" "+get_dishes1.getInt(3)+"\n";	
+					count_dishes++;
+				}
+				
+				
+				int second_choice_index=0;
+				int third_choice_index=0;
+				int first_choice_index=0;
+				
+				while (true){
+					first_choice_index=new Random().nextInt(count_dishes);
+					if(menu_name.get(first_choice_index).startsWith("*")) {
+					break;
+					}
+				}
+				while (true){
+					second_choice_index=new Random().nextInt(count_dishes);
+
+					if (second_choice_index!=first_choice_index)
+						break;	
+				}
+				System.out.println(second_choice_index);
+
+				while (true){
+					third_choice_index=new Random().nextInt(count_dishes);
+					if ((third_choice_index!=first_choice_index) && third_choice_index!=second_choice_index)
+						break;	
+				}
+				System.out.println(third_choice_index);
+				
+				print_message="1."+menu_name.get(first_choice_index)+" "+price.get(first_choice_index)+"\n";
+				print_message=print_message+"2."+menu_name.get(second_choice_index)+" "+price.get(second_choice_index)+"\n";
+				print_message=print_message+"3."+menu_name.get(third_choice_index)+" "+price.get(third_choice_index)+"\n";
+				print_message=print_message+"* means that the meal is commonly eaten at restaurants\n";
+				
+				
+				break;
+			}
+			break;
+			}
+			default:
+				break;
+			}	
+			connection.close();
+			return print_message;
+			}catch(Exception e){
+				System.out.println(e);
+			}	
+			return null;
 		}
-		}	
-		//update state to user_info
-		String change_state_statement="UPDATE user_info SET state="+Integer.toString(state)+" where user_id= '"+userID+"';";
-		PreparedStatement change_state = connection.prepareStatement(change_state_statement);
-		change_state.executeUpdate();
-		change_state.close();	
-		String print_message="";		
-		switch (state) { //ouput message
-        //features menu
-		case 1: //meal menu, feature 1,4,8,9,10
-		{print_message= "Meal menu"
-				+ "\n\n1.Breakfast \n2.Lunch \n3.Dinner \n4.Dessert"; break;}
 		
-		case 11:{print_message= "What type of food do you like to choose?\n\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care";	break;}	
-		case 12: {print_message= "Are you vegetarian?\n\n1.Yes\n2.No"; break;}
-			
-		case 111:{ //print dishes
-			PreparedStatement get_users_final_choice = connection.prepareStatement("SELECT * FROM user_info where (user_id= ?);");
-			get_users_final_choice.setString(1, userID);
-
-
-			ResultSet get_users_final_choice1=get_users_final_choice.executeQuery();
-
-			if (get_users_final_choice1.next()){
-			String users_final_time=get_users_final_choice1.getString(15);		
-			String users_final_type=get_users_final_choice1.getString(16);
-
-			get_users_final_choice1.close();
-			get_users_final_choice.close();
-			String statement="";
-			List<Integer> price = new ArrayList<Integer>();
-			List<String> menu_name = new ArrayList<String>();
-			
-			PreparedStatement  get_dishes=null;
-			if (users_final_type.equals("nothing")){
-				
-				get_dishes = connection.prepareStatement("SELECT * FROM meal_menu where (meal_time= ? ) ;");
-				get_dishes.setString(1,users_final_time);
-				//statement="SELECT * FROM meal_menu where ((choose_meal_time='"+users_final_time+"') and (username='test'));";
-			}
-			
-			else {
-				get_dishes = connection.prepareStatement("SELECT * FROM meal_menu where ((meal_time= ? ) and (type= ? ));");
-				get_dishes.setString(1,users_final_time);
-				get_dishes.setString(2,users_final_type);
-				//statement="SELECT * FROM meal_menu where ((choose_meal_time='"+users_final_time+"') and (choose_type='"+users_final_type+"') and (username='test'));";
-			}
-
-			
-	//		PreparedStatement get_dishes = connection.prepareStatement(statement);
-			ResultSet get_dishes1=get_dishes.executeQuery();
-			int count_dishes=0;
-			
-			
-//			System.out.println("HELLO");
-			while (get_dishes1.next()){
-				price.add(get_dishes1.getInt(3));
-				menu_name.add(get_dishes1.getString(1));				
-//				print_message=print_message+count_dishes+"."+get_dishes1.getString(1)+" "+get_dishes1.getInt(3)+"\n";	
-				count_dishes++;
-			}
-			
-			
-			int second_choice_index=0;
-			int third_choice_index=0;
-			int first_choice_index=new Random().nextInt(count_dishes);
-			System.out.println(first_choice_index);
-
-			while (true){
-				second_choice_index=new Random().nextInt(count_dishes);
-				System.out.println(second_choice_index);
-
-				if (second_choice_index!=first_choice_index)
-					break;	
-			}
-			System.out.println(second_choice_index);
-
-			while (true){
-				third_choice_index=new Random().nextInt(count_dishes);
-				System.out.println(third_choice_index);
-				if ((third_choice_index!=first_choice_index) && third_choice_index!=second_choice_index)
-					break;	
-			}
-			System.out.println(third_choice_index);
-			
-			print_message="1."+menu_name.get(first_choice_index)+" "+price.get(first_choice_index)+"\n";
-			print_message=print_message+"2."+menu_name.get(second_choice_index)+" "+price.get(second_choice_index)+"\n";
-			print_message=print_message+"3."+menu_name.get(third_choice_index)+" "+price.get(third_choice_index)+"\n";
-			
-			
-			break;
-		}
-		break;
-		} 
-		case 112: { //print dishes
-			PreparedStatement get_users_final_choice = connection.prepareStatement("SELECT * FROM user_info where (user_id= ?);");
-			get_users_final_choice.setString(1, userID);
-
-
-			ResultSet get_users_final_choice1=get_users_final_choice.executeQuery();
-
-			if (get_users_final_choice1.next()){
-			String users_final_time=get_users_final_choice1.getString(15);		
-			String users_final_type=get_users_final_choice1.getString(16);
-
-			get_users_final_choice1.close();
-			get_users_final_choice.close();
-			String statement="";
-			List<Integer> price = new ArrayList<Integer>();
-			List<String> menu_name = new ArrayList<String>();
-			
-
-			if (users_final_type.equals("nothing")){
-				
-				statement="SELECT * FROM meal_menu where ((meal_time='dessert'));";			}
-			
-			else {
-				statement="SELECT * FROM meal_menu where ((meal_time='dessert') and (type='vegetarian'));";	
-			}
-
-			
-			PreparedStatement get_dishes = connection.prepareStatement(statement);
-			ResultSet get_dishes1=get_dishes.executeQuery();
-			int count_dishes=0;
-			
-			
-//			System.out.println("HELLO");
-			while (get_dishes1.next()){
-				price.add(get_dishes1.getInt(3));
-				menu_name.add(get_dishes1.getString(1));				
-//				print_message=print_message+count_dishes+"."+get_dishes1.getString(1)+" "+get_dishes1.getInt(3)+"\n";	
-				count_dishes++;
-			}
-			
-			
-			int second_choice_index=0;
-			int third_choice_index=0;
-			int first_choice_index=new Random().nextInt(count_dishes);
-			System.out.println(first_choice_index);
-
-			while (true){
-				second_choice_index=new Random().nextInt(count_dishes);
-				System.out.println(second_choice_index);
-
-				if (second_choice_index!=first_choice_index)
-					break;	
-			}
-			System.out.println(second_choice_index);
-
-			while (true){
-				third_choice_index=new Random().nextInt(count_dishes);
-				System.out.println(third_choice_index);
-				if ((third_choice_index!=first_choice_index) && third_choice_index!=second_choice_index)
-					break;	
-			}
-			System.out.println(third_choice_index);
-			
-			print_message="1."+menu_name.get(first_choice_index)+" "+price.get(first_choice_index)+"\n";
-			print_message=print_message+"2."+menu_name.get(second_choice_index)+" "+price.get(second_choice_index)+"\n";
-			print_message=print_message+"3."+menu_name.get(third_choice_index)+" "+price.get(third_choice_index)+"\n";
-			
-			
-			break;
-		}
-		break;
-		}
-		default:
-			break;
-		}	
-		connection.close();
-		return print_message;
-		}catch(Exception e){
-			System.out.println(e);
-		}	
-		return null;
-	}
 	
 	
 	private Connection getConnection() throws URISyntaxException, SQLException {

@@ -24,3 +24,14 @@ dependencies {
 test {
     environment "DATABASE_URL", "postgres://sghxbdfcagiomq:de69cec1490049bc4b79e702a2725a6498ba1bc24e69ec450dbe61c67759374c@ec2-184-73-189-221.compute-1.amazonaws.com:5432/d1dll3g1k0382s" 
 }
+
+
+apply plugin: "jacoco"
+jacocoTestReport {
+	reports {
+		xml.enabled false
+		csv.enabled false
+		html.destination file("${buildDir}/jacocoHtml")
+		}
+	}
+

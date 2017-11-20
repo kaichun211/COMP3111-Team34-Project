@@ -53,7 +53,7 @@ public class KitchenSinkTester {
 	//private DatabaseEngine databaseEngine;
 	private SQLDatabaseEngine sqldatabaseEngine;
 	
-	
+
 	//Water------------------------------
 	@Test
 	public void testWaterInvalidInput() throws Exception {
@@ -67,6 +67,20 @@ public class KitchenSinkTester {
 		
 		assertThat(!thrown).isEqualTo(false);
 	}
+	@Test
+	public void testWaterUserNotExist() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.waterInterval("water\n50", "not_exist_user");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo(null);
+	}
+	
 	
 	
 	@Test
@@ -121,6 +135,18 @@ public class KitchenSinkTester {
 
 //-------------Friend
 	@Test
+	public void testFriendUserExistsShorterThan6() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.friend("small_id");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("000005");
+	}
 	public void testFriendUserExists() throws Exception {
 		boolean thrown = false;
 		String result = null;
@@ -237,6 +263,19 @@ public class KitchenSinkTester {
 	}
 	
 	@Test
+	public void testGetCouponCountFunctionWrongSQL() throws Exception {
+		boolean thrown = false;
+		int result = 0;
+		try {
+		result = this.sqldatabaseEngine.GetCouponCount("select coupon_count from coupontable where user_id = 'notexist'");
+		}catch (Exception e)
+		{
+			thrown = true;
+		}
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result==0).isEqualTo(true);
+	}
+	@Test
 	public void testCodePromotionEnds() throws Exception {
 		boolean thrown = false;
 		String result = null;
@@ -262,6 +301,20 @@ public class KitchenSinkTester {
 		String result = null;
 		try {
 			result = this.sqldatabaseEngine.redeem("no_coupon_user");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("You currently have no coupon");
+	}
+	
+	@Test
+	public void testRedeemNoUser() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.redeem("not_exist_user");
 		} catch (Exception e) {
 			thrown = true;
 		}
@@ -298,6 +351,20 @@ public class KitchenSinkTester {
 			
 			assertThat(!thrown).isEqualTo(true);
 			assertThat(result.contains("Total energy intake(for the last 7 days) is")).isEqualTo(true);
+		}  
+		
+		@Test
+		public void testSportsWeightUserNotExist() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.sports_amount("user_not_exist");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Your Weight is invalid! Please set your weight first");
 		}  
 		
 		@Test
@@ -356,6 +423,20 @@ public class KitchenSinkTester {
 			assertThat(!thrown).isEqualTo(true);
 			assertThat(result).isEqualTo("Your Sex is invalid! Please try again using the info function.");
 		} 
+		
+		@Test
+		public void testSexTypeInvalidUser() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.sex("M", "user_not_exist");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo(null);
+		} 
 		//-----------Age
 		@Test
 		public void testAgeInputZero() throws Exception {
@@ -395,6 +476,20 @@ public class KitchenSinkTester {
 			
 			assertThat(!thrown).isEqualTo(true);
 			assertThat(result).isEqualTo("Data updated! Your age has been set to 50");
+		}
+		
+		@Test
+		public void testAgeValidInputNotExistingUser() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.age("50", "not_exist_user");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo(null);
 		}
 		
 		@Test
@@ -468,6 +563,20 @@ public class KitchenSinkTester {
 		}
 		
 		@Test
+		public void testHeightValidInputNotExistingUser() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.height("50", "not_exist_user");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo(null);
+		}
+		
+		@Test
 		public void testHeightInputBoundary() throws Exception {
 			boolean thrown = false;
 			String result = null;
@@ -536,6 +645,20 @@ public class KitchenSinkTester {
 			
 			assertThat(!thrown).isEqualTo(true);
 			assertThat(result).isEqualTo("Data updated! Your weight has been set to 50kg");
+		}
+		
+		@Test
+		public void testWeightValidInputNotExistingUser() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.weight("50", "not_exist_user");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo(null);
 		}
 		
 		@Test
@@ -748,6 +871,6 @@ public class KitchenSinkTester {
 		}
 		
 		assertThat(!thrown).isEqualTo(false);
-	} */	
-
+	} 	
+*/
 }
