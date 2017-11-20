@@ -103,7 +103,7 @@ public class KitchenSinkController {
 		handleTextContent(event.getReplyToken(), event, message);
 	}
 
-	@EventMapping
+/*	@EventMapping
 	public void handleStickerMessageEvent(MessageEvent<StickerMessageContent> event) {
 		handleSticker(event.getReplyToken(), event.getMessage());
 	}
@@ -145,7 +145,7 @@ public class KitchenSinkController {
 		DownloadedContent mp4 = saveContent("mp4", response);
 		reply(event.getReplyToken(), new AudioMessage(mp4.getUri(), 100));
 	}
-
+*/
 	@EventMapping
 	public void handleUnfollowEvent(UnfollowEvent event) {
 		log.info("unfollowed this bot: {}", event);
@@ -175,7 +175,7 @@ public class KitchenSinkController {
 		String replyToken = event.getReplyToken();
 		this.replyText(replyToken, "Joined " + event.getSource());
 	}
-
+/*
 	@EventMapping
 	public void handlePostbackEvent(PostbackEvent event) {
 		String replyToken = event.getReplyToken();
@@ -192,7 +192,7 @@ public class KitchenSinkController {
 	public void handleOtherEvent(Event event) {
 		log.info("Received message(Ignored): {}", event);
 	}
-
+*/
 	private void reply(@NonNull String replyToken, @NonNull Message message) {
 		reply(replyToken, Collections.singletonList(message));
 	}
@@ -216,11 +216,11 @@ public class KitchenSinkController {
 		this.reply(replyToken, new TextMessage(message));
 	}
 
-
+/*
 	private void handleSticker(String replyToken, StickerMessageContent content) {
 		reply(replyToken, new StickerMessage(content.getPackageId(), content.getStickerId()));
 	}
-	
+	*/
 	private void appendText(List<Message> lst, String str) throws Exception {
 		if (str.length() > 0) {
 			lst.add(new TextMessage(str));
@@ -242,7 +242,8 @@ public class KitchenSinkController {
         				"1. Info Function\nYou can set info such as Gender, Age, Weight and Height.\nTo use this function, simply type 'info'." +
         				"\n\n2. Sports Function\nYou can calculate how much do you need to workout to burn those calories!\nTo use the function, simply type in 'sports'." +
         				"\n\n3. Water Function\nYou can enable this function and our bot will remind you to drink water once in a while!\nTo use this function, type 'water<go to next line>60' if you want us to remind you every 60 minutes.";
-        		
+        		String result2 = "You can record what you eat using 'eat<go to next line><meals you eat>'\nOur system will calculate intakes such as energy, sodium, and fat.\n\nIf your intake is too high, a warning message will be generated and displayed.\n\nYou can also check the nutrient info of the menu first before you eat.\nTo do so, use 'menu<go to next line><menu>'"
+        				+ "\n\n You can also directly enter your energy intake using 'energy<go to next line><mon/tue/ etc..>'";
         		String result3 = "We are also having a promotional event now for new users!\n\nYou can check your unique 6-digit id using 'friend', and tells your friend about this code when you recommend them to use this bot." +
         				"\n\nOnce they joined, they can use 'code<go to next line>XXXXXX' where XXXXXX is your ID.Both of you will get a coupon when this were done!" +
         				"\n\nYou can redeem a coupon and check how many coupons do you still have using 'redeem'. Enjoy~" +
@@ -503,7 +504,7 @@ public class KitchenSinkController {
         // Final
         this.reply(replyToken, messageList);
     }
-
+/*
 	static String createUri(String path) {
 		return ServletUriComponentsBuilder.fromCurrentContextPath().path(path).build().toUriString();
 	}
@@ -542,7 +543,7 @@ public class KitchenSinkController {
 		return new DownloadedContent(tempFile, createUri("/downloaded/" + tempFile.getFileName()));
 	}
 
-
+*/
 	
 
 
@@ -551,8 +552,8 @@ public class KitchenSinkController {
 	}
 
 	private SQLDatabaseEngine database;
-	
-
+}
+/*
 	//The annontation @Value is from the package lombok.Value
 	//Basically what it does is to generate constructor and getter for the class below
 	//See https://projectlombok.org/features/Value
@@ -587,7 +588,7 @@ public class KitchenSinkController {
         	);
     	}
     }
-	
+	*/
 	
 
-}
+

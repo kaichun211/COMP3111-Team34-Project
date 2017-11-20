@@ -706,7 +706,10 @@ public class SQLDatabaseEngine extends DatabaseEngine{
 				resultbuilder.append("\n\nDaily Sodium intake has EXCEED LIMIT!");
 			}
 		}
-		
+		else
+		{
+			resultbuilder.append("Error");
+		}
 		
 		result = resultbuilder.toString();
 		return result;
@@ -766,8 +769,8 @@ public class SQLDatabaseEngine extends DatabaseEngine{
 		int energy = Integer.parseInt(items[1]);
 		System.out.println("Test:Set energy");
 		System.out.println(items[2]);
-		
-		switch(items[2].toLowerCase()) {
+		String week_day = items[2].toLowerCase();
+		switch(week_day) {
 			case "sun":{
 				weekday_time = 1;
 				break;
@@ -832,15 +835,6 @@ public class SQLDatabaseEngine extends DatabaseEngine{
 		}
 		else
 		{
-			String sql = "INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_" + weekday_time + " = ? where user_id = ?";
-			PreparedStatement stmt3;
-			stmt3 = connection.prepareStatement(sql);
-			stmt3.setString(1, userId);
-			stmt3.setInt(2, energy);
-			stmt3.setString(3, userId);
-			stmt3.executeUpdate();
-			connection.close();
-			result = "Data added to our database!";
 			return result;
 		}
 
@@ -1207,7 +1201,7 @@ public class SQLDatabaseEngine extends DatabaseEngine{
 	        //features menu
 			case 1: //meal menu, feature 1,4,8,9,10
 			{print_message= "Meal menu"
-					+ "\n1.Breakfast \n2.Lunch \n3.Dinner \n4. Dessert\n"; break;}
+					+ "\n1.Breakfast \n2.Lunch \n3.Dinner \n4.Dessert\n"; break;}
 			
 			case 11:{print_message= "What type of food do you like to choose?\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care";	break;}	
 			case 12: {print_message= "Are you vegetarian?\n1.yes\n2.no"; break;}
