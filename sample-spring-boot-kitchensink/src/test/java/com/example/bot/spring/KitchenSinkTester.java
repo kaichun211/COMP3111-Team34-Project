@@ -192,6 +192,20 @@ public class KitchenSinkTester {
 		assertThat(result).isEqualTo("Invalid input! Please try again using the correct format.");
 	}
 	
+	@Test
+	public void testCodeInvalidCode() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.code("code"+"\n"+"789789","U250bca48655aa67f697c1b99b5d2828b");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Invalid input! Please try again using the correct format.");
+	}
+	
 	
 	@Test
 	public void testCodeInputOwnCode() throws Exception {
@@ -233,7 +247,7 @@ public class KitchenSinkTester {
 		}
 		
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Coupon Get!");
+		assertThat(result).isEqualTo("Both you and your friend has got a coupon! You may redeem it using 'redeem'.");
 	}
 	
 	@Test
