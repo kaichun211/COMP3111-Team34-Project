@@ -53,7 +53,7 @@ public class KitchenSinkTester {
 	//private DatabaseEngine databaseEngine;
 	private SQLDatabaseEngine sqldatabaseEngine;
 	
-/*	
+	
 	//Water------------------------------
 	@Test
 	public void testWaterInvalidInput() throws Exception {
@@ -68,6 +68,7 @@ public class KitchenSinkTester {
 		assertThat(!thrown).isEqualTo(false);
 	}
 	
+/*	
 	@Test
 	public void testWaterValidInputBoundary() throws Exception {
 		boolean thrown = false;
@@ -103,62 +104,34 @@ public class KitchenSinkTester {
 		assertThat(!thrown).isEqualTo(true);
 		assertThat(result).isEqualTo("Interval can't be negative!");
 	}
-	//@Test
-	//public void testWaterValidInputBoundary() throws Exception {
-	//	boolean thrown = false;
-	//	String result = null;
-	//	try {
-	//		result = this.sqldatabaseEngine.waterInterval("water" + "\n" + "50", "test2");
-	//	} catch (Exception e) {
-	//		thrown = true;
-	//	}
-	//	
-	//	assertThat(!thrown).isEqualTo(true);
-	//	assertThat(result).isEqualTo("Data updated! ");
-	//
-	//}
-	//--------------Menu
 	@Test
-	public void testMenuValidInput1() throws Exception {
+	public void testWaterValidInput50() throws Exception {
 		boolean thrown = false;
 		String result = null;
 		try {
-			result = this.sqldatabaseEngine.menu_search("menu\nBean\nRice");
+			result = this.sqldatabaseEngine.waterInterval("water" + "\n" + "50", "test2");
 		} catch (Exception e) {
 			thrown = true;
 		}
 		
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Bean:\nWeight = 185 (g)\nEnergy = 254 (kcal)\nSodium = 301 (g)\nFatty Acids = 0 (g)\n\n"+"Rice:\nWeight = 155 (g)\nEnergy = 358 (kcal)\nSodium = 205 (g)\nFatty Acids = 0 (g)\n\n");
-	}
+		assertThat(result).isEqualTo("Data updated! ");
 	
-	
-	@Test
-	public void testMenuValidInput2() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.menu_search("menu\nBean Rice");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Bean Rice:\nWeight = 340 (g)\nEnergy = 612 (kcal)\nSodium = 506 (g)\nFatty Acids = 0 (g)\n\n");
 	}
+
 //-------------Friend
 	@Test
 	public void testFriendUserExists() throws Exception {
 		boolean thrown = false;
 		String result = null;
 		try {
-			result = this.sqldatabaseEngine.friend("U250bca48655aa67f697c1b99b5d2828b");
+			result = this.sqldatabaseEngine.friend("testID");
 		} catch (Exception e) {
 			thrown = true;
 		}
 		
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("000003");
+		assertThat(result).isEqualTo("123456");
 	}
 	
 	@Test
@@ -177,9 +150,22 @@ public class KitchenSinkTester {
 	
 //-------------Code	
 	
+		@Test
+	public void testCodeInvalidLengthNumber() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.code("code"+"\n"+"12345","U250bca48655aa67f697c1b99b5d2828b");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Don't miss the zero(s)! Please try again.");
+	}
 	
 	@Test
-	public void testCodeInvalidLengthInput() throws Exception {
+	public void testCodeInvalidLengthString() throws Exception {
 		boolean thrown = false;
 		String result = null;
 		try {
@@ -188,8 +174,8 @@ public class KitchenSinkTester {
 			thrown = true;
 		}
 		
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Invalid input! Please try again using the correct format.");
+		assertThat(!thrown).isEqualTo(false);
+		
 	}
 	
 	@Test
@@ -203,7 +189,7 @@ public class KitchenSinkTester {
 		}
 		
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Invalid input! Please try again using the correct format.");
+		assertThat(result).isEqualTo("There is no user associated with the code! Please ask your friend and get the correct one.");
 	}
 	
 	
@@ -212,7 +198,7 @@ public class KitchenSinkTester {
 		boolean thrown = false;
 		String result = null;
 		try {
-			result = this.sqldatabaseEngine.code("code"+"\n"+"000003","U250bca48655aa67f697c1b99b5d2828b");
+			result = this.sqldatabaseEngine.code("code"+"\n"+"123456","testID");
 		} catch (Exception e) {
 			thrown = true;
 		}
@@ -254,7 +240,7 @@ public class KitchenSinkTester {
 	public void testCodePromotionEnds() throws Exception {
 		boolean thrown = false;
 		String result = null;
-		String current_coupon_count = this.sqldatabaseEngine.GetCouponCount("select coupon_count from coupontable where user_id = 'master'");
+		int current_coupon_count = this.sqldatabaseEngine.GetCouponCount("select coupon_count from coupontable where user_id = 'master'");
 		
 		//set user can use code function and total coupon count = 5000
 		this.sqldatabaseEngine.InitiallizeTestData("update coupontable set code = false where user_id = 'testID'");
@@ -299,10 +285,308 @@ public class KitchenSinkTester {
 		assertThat(!thrown).isEqualTo(true);
 		assertThat(result.contains("You redeemed one coupon")).isEqualTo(true);
 	}
+	//------------------Weight		
+		@Test
+		public void testSportsWeightNonZero() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.sports_amount("testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result.contains("Total energy intake(for the last 7 days) is")).isEqualTo(true);
+		}  
+		
+		@Test
+		public void testSportsWeightInvalidWeight() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.sports_amount("NegativeWeightUser");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Your Weight is invalid! Please set your weight first");
+		}  
+	//-------------------Info
+		//-----------Sex
+		@Test
+		public void testSexClickButton() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.sex("M", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Data updated! Your sex has been set to M");
+		}  
+		
+		@Test
+		public void testSexTypeGender() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.sex("F", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Data updated! Your sex has been set to F");
+		} 
+		
+		@Test
+		public void testSexTypeInvalidInput() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.sex("NotM/F", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Your Sex is invalid! Please try again using the info function.");
+		} 
+		//-----------Age
+		@Test
+		public void testAgeInputZero() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.age("0", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Age can not be zero or negative! Please use the info function again and enter a valid input");
+		}
+		
+		@Test
+		public void testAgeInputNegative() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.age("-20", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Age can not be zero or negative! Please use the info function again and enter a valid input");
+		}
+		
+		@Test
+		public void testAgeValidInputExistingUser() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.age("50", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Data updated! Your age has been set to 50");
+		}
+		
+		@Test
+		public void testAgeInputBoundary() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.age("1", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Data updated! Your age has been set to 1");
+
+		}
+		
+		@Test
+		public void testAgeInputNotInteger() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.age("ABC", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(false);
+
+		} 
+		
+		//-----------Height
+		@Test
+		public void testHeightInputZero() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.height("0", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Height can not be zero or negative! Please use the info function again and enter a valid input");
+		}
+		
+		@Test
+		public void testHeightInputNegative() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.height("-20", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Height can not be zero or negative! Please use the info function again and enter a valid input");
+		}
+		
+		@Test
+		public void testHeightValidInputExistingUser() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.height("50", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Data updated! Your height has been set to 50cm");
+		}
+		
+		@Test
+		public void testHeightInputBoundary() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.height("1", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Data updated! Your height has been set to 1cm");
+
+		}
+		
+		@Test
+		public void testHeightInputNotInteger() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.height("ABC", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(false);
+
+		} 
+		
+		//-----------Weight
+		@Test
+		public void testWeightInputZero() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.weight("0", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Weight can not be zero or negative! Please use the info function again and enter a valid input");
+		}
+		
+		@Test
+		public void testWeightInputNegative() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.weight("-30", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Weight can not be zero or negative! Please use the info function again and enter a valid input");
+		}
+		
+		
+		@Test
+		public void testWeightValidInputExistingUser() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.weight("50", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Data updated! Your weight has been set to 50kg");
+		}
+		
+		@Test
+		public void testWeightInputBoundary() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.weight("1", "testID");
+			} catch (Exception e) {
+				thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(true);
+			assertThat(result).isEqualTo("Data updated! Your weight has been set to 1kg");
+
+		}
+		
+		@Test
+		public void testWeightInputNotInteger() throws Exception {
+			boolean thrown = false;
+			String result = null;
+			try {
+				result = this.sqldatabaseEngine.weight("ABC", "testID");
+			} catch (Exception e) {
+					thrown = true;
+			}
+			
+			assertThat(!thrown).isEqualTo(false);
+			}
 	
-	
+*/		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 //--------------------Energy	
-	/*@Test
+	/*
+	@Test
 	public void testEnergyInvalidInput1() throws Exception {
 		boolean thrown = false;
 		String result = null;
@@ -465,286 +749,5 @@ public class KitchenSinkTester {
 		
 		assertThat(!thrown).isEqualTo(false);
 	} */	
-//------------------Weight		
-	@Test
-	public void testSportsWeightNonZero() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.sports_amount("testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result.contains("Total energy intake(for the last 7 days) is")).isEqualTo(true);
-	}  
-	
-	@Test
-	public void testSportsWeightInvalidWeight() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.sports_amount("NegativeWeightUser");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Your Weight is invalid! Please set your weight first");
-	}  
-//-------------------Info
-	//-----------Sex
-	@Test
-	public void testSexClickButton() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.sex("M", "testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Data updated! Your sex has been set to M");
-	}  
-	
-	@Test
-	public void testSexTypeGender() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.sex("F", "testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Data updated! Your sex has been set to F");
-	} 
-	
-	@Test
-	public void testSexTypeInvalidInput() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.sex("NotM/F", "testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Your Sex is invalid! Please try again using the info function.");
-	} 
-	//-----------Age
-	@Test
-	public void testAgeInputZero() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.age("0", "testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Age can not be zero or negative! Please use the info function again and enter a valid input");
-	}
-	
-	@Test
-	public void testAgeInputNegative() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.age("-20", "testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Age can not be zero or negative! Please use the info function again and enter a valid input");
-	}
-	
-	@Test
-	public void testAgeValidInputExistingUser() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.age("50", "testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Data updated! Your age has been set to 50");
-	}
-	
-	@Test
-	public void testAgeInputBoundary() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.age("1", "testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Data updated! Your age has been set to 1");
-
-	}
-	
-	@Test
-	public void testAgeInputNotInteger() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.age("ABC", "testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		
-		assertThat(!thrown).isEqualTo(false);
-
-	} 
-	
-	//-----------Height
-	@Test
-	public void testHeightInputZero() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.height("0", "testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Height can not be zero or negative! Please use the info function again and enter a valid input");
-	}
-	
-	@Test
-	public void testHeightInputNegative() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.height("-20", "testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Height can not be zero or negative! Please use the info function again and enter a valid input");
-	}
-	
-	@Test
-	public void testHeightValidInputExistingUser() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.height("50", "testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Data updated! Your height has been set to 50cm");
-	}
-	
-	@Test
-	public void testHeightInputBoundary() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.height("1", "testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Data updated! Your height has been set to 1cm");
-
-	}
-	
-	@Test
-	public void testHeightInputNotInteger() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.height("ABC", "testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		
-		assertThat(!thrown).isEqualTo(false);
-
-	} 
-	
-	//-----------Weight
-		@Test
-		public void testWeightInputZero() throws Exception {
-			boolean thrown = false;
-			String result = null;
-			try {
-				result = this.sqldatabaseEngine.weight("0", "testID");
-			} catch (Exception e) {
-				thrown = true;
-			}
-			assertThat(!thrown).isEqualTo(true);
-			assertThat(result).isEqualTo("Weight can not be zero or negative! Please use the info function again and enter a valid input");
-		}
-		
-		@Test
-		public void testWeightInputNegative() throws Exception {
-			boolean thrown = false;
-			String result = null;
-			try {
-				result = this.sqldatabaseEngine.weight("-30", "testID");
-			} catch (Exception e) {
-				thrown = true;
-			}
-			assertThat(!thrown).isEqualTo(true);
-			assertThat(result).isEqualTo("Weight can not be zero or negative! Please use the info function again and enter a valid input");
-		}
-		
-		
-		@Test
-		public void testWeightValidInputExistingUser() throws Exception {
-			boolean thrown = false;
-			String result = null;
-			try {
-				result = this.sqldatabaseEngine.weight("50", "testID");
-			} catch (Exception e) {
-				thrown = true;
-			}
-			
-			assertThat(!thrown).isEqualTo(true);
-			assertThat(result).isEqualTo("Data updated! Your weight has been set to 50kg");
-		}
-		
-		@Test
-		public void testWeightInputBoundary() throws Exception {
-			boolean thrown = false;
-			String result = null;
-			try {
-				result = this.sqldatabaseEngine.weight("1", "testID");
-			} catch (Exception e) {
-				thrown = true;
-			}
-			
-			assertThat(!thrown).isEqualTo(true);
-			assertThat(result).isEqualTo("Data updated! Your weight has been set to 1kg");
-
-		}
-		
-		@Test
-		public void testWeightInputNotInteger() throws Exception {
-			boolean thrown = false;
-			String result = null;
-			try {
-				result = this.sqldatabaseEngine.weight("ABC", "testID");
-			} catch (Exception e) {
-				thrown = true;
-			}
-			
-			assertThat(!thrown).isEqualTo(false);
-
-		}
 
 }
