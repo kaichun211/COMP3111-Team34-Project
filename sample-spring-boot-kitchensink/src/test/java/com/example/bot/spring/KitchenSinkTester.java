@@ -736,7 +736,36 @@ public class KitchenSinkTester {
 		assertThat(result).isEqualTo("Data updated!");
 	}
 	
-
+		@Test
+	public void testEnergyInvalidInput2() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.energy("energy"+"\n"+"1"+"a","testID");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(false);
+	} 	
+	
+	*/
+//-------------------Order
+	@Test
+	public void testOrderNewUser() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			this.sqldatabaseEngine.InitiallizeTestData("update user_info set state = 0 where user_id = 'newuser'");
+			result = this.sqldatabaseEngine.order("newuser","1");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result.contains("Meal menu")).isEqualTo(true);
+	}
+	
 	@Test
 	public void testOrderCorrectOutput1() throws Exception {
 		boolean thrown = false;
@@ -748,9 +777,9 @@ public class KitchenSinkTester {
 		}
 		
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Meal menu"
-				+ "\n1.Breakfast \n2.Lunch \n3.Dinner \n4. Dessert\n");
+		assertThat(result.contains("Meal menu")).isEqualTo(true);
 	}
+	
 	
 	@Test
 	public void testOrderCorrectOutput2() throws Exception {
@@ -764,7 +793,7 @@ public class KitchenSinkTester {
 		}
 		
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("What type of food do you like to choose?\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care");
+		assertThat(result.contains("What type of food do you like to choose")).isEqualTo(true);
 	}
 	
 	@Test
@@ -779,7 +808,7 @@ public class KitchenSinkTester {
 		}
 		
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("What type of food do you like to choose?\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care");
+		assertThat(result.contains("What type of food do you like to choose")).isEqualTo(true);
 	}
 	
 	@Test
@@ -794,7 +823,7 @@ public class KitchenSinkTester {
 		}
 		
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("What type of food do you like to choose?\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care");
+		assertThat(result.contains("What type of food do you like to choose")).isEqualTo(true);
 	}
 	
 	@Test
@@ -809,7 +838,7 @@ public class KitchenSinkTester {
 		}
 		
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Are you vegetarian?\n1.yes\n2.no");
+		assertThat(result.contains("Are you vegetarian")).isEqualTo(true);
 	}
 	
 	@Test
@@ -824,8 +853,7 @@ public class KitchenSinkTester {
 		}
 		
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Meal menu"
-				+ "\n1.Breakfast \n2.Lunch \n3.Dinner \n4. Dessert\n");
+		assertThat(result.contains("Meal menu")).isEqualTo(true);
 	}
 
 	@Test
@@ -841,7 +869,7 @@ public class KitchenSinkTester {
 		}
 		
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("What type of food do you like to choose?\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care");
+		assertThat(result.contains("What type of food do you like to choose")).isEqualTo(true);
 	}
 
 	@Test
@@ -857,20 +885,9 @@ public class KitchenSinkTester {
 		}
 		
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("Are you vegetarian?\n1.yes\n2.no");
+		assertThat(result.contains("Are you vegetarian")).isEqualTo(true);
 	}
 	
-	@Test
-	public void testEnergyInvalidInput2() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.energy("energy"+"\n"+"1"+"a","testID");
-		} catch (Exception e) {
-			thrown = true;
-		}
-		
-		assertThat(!thrown).isEqualTo(false);
-	} 	
-*/
+
+
 }
