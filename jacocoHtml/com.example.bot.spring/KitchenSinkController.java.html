@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>KitchenSinkController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sample-spring-boot-kitchensink</a> &gt; <a href="index.source.html" class="el_package">com.example.bot.spring</a> &gt; <span class="el_source">KitchenSinkController.java</span></div><h1>KitchenSinkController.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2016 LINE Corporation
+ *
+ * LINE Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the &quot;License&quot;); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+
+package com.example.bot.spring;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
+import com.linecorp.bot.model.profile.UserProfileResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.google.common.io.ByteStreams;
+
+import com.linecorp.bot.client.LineMessagingClient;
+import com.linecorp.bot.client.MessageContentResponse;
+import com.linecorp.bot.model.ReplyMessage;
+import com.linecorp.bot.model.action.MessageAction;
+import com.linecorp.bot.model.action.PostbackAction;
+import com.linecorp.bot.model.action.URIAction;
+import com.linecorp.bot.model.event.BeaconEvent;
+import com.linecorp.bot.model.event.Event;
+import com.linecorp.bot.model.event.FollowEvent;
+import com.linecorp.bot.model.event.JoinEvent;
+import com.linecorp.bot.model.event.MessageEvent;
+import com.linecorp.bot.model.event.PostbackEvent;
+import com.linecorp.bot.model.event.UnfollowEvent;
+import com.linecorp.bot.model.event.message.AudioMessageContent;
+import com.linecorp.bot.model.event.message.ImageMessageContent;
+import com.linecorp.bot.model.event.message.LocationMessageContent;
+import com.linecorp.bot.model.event.message.StickerMessageContent;
+import com.linecorp.bot.model.event.message.TextMessageContent;
+import com.linecorp.bot.model.event.source.GroupSource;
+import com.linecorp.bot.model.event.source.RoomSource;
+import com.linecorp.bot.model.event.source.Source;
+import com.linecorp.bot.model.message.AudioMessage;
+import com.linecorp.bot.model.message.ImageMessage;
+import com.linecorp.bot.model.message.ImagemapMessage;
+import com.linecorp.bot.model.message.LocationMessage;
+import com.linecorp.bot.model.message.Message;
+import com.linecorp.bot.model.message.StickerMessage;
+import com.linecorp.bot.model.message.TemplateMessage;
+import com.linecorp.bot.model.message.TextMessage;
+import com.linecorp.bot.model.message.imagemap.ImagemapArea;
+import com.linecorp.bot.model.message.imagemap.ImagemapBaseSize;
+import com.linecorp.bot.model.message.imagemap.MessageImagemapAction;
+import com.linecorp.bot.model.message.imagemap.URIImagemapAction;
+import com.linecorp.bot.model.message.template.ButtonsTemplate;
+import com.linecorp.bot.model.message.template.CarouselColumn;
+import com.linecorp.bot.model.message.template.CarouselTemplate;
+import com.linecorp.bot.model.message.template.ConfirmTemplate;
+import com.linecorp.bot.model.response.BotApiResponse;
+import com.linecorp.bot.spring.boot.annotation.EventMapping;
+import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+
+import lombok.NonNull;
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
+
+import java.net.URI;
+
+<span class="nc" id="L88">@Slf4j</span>
+@LineMessageHandler
+public class KitchenSinkController {
+	
+
+
+	@Autowired
+	private LineMessagingClient lineMessagingClient;
+
+	@EventMapping
+	public void handleTextMessageEvent(MessageEvent&lt;TextMessageContent&gt; event) throws Exception {
+<span class="nc" id="L99">		log.info(&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot;);</span>
+<span class="nc" id="L100">		log.info(&quot;This is your entry point:&quot;);</span>
+<span class="nc" id="L101">		log.info(&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot;);</span>
+<span class="nc" id="L102">		TextMessageContent message = event.getMessage();</span>
+<span class="nc" id="L103">		handleTextContent(event.getReplyToken(), event, message);</span>
+<span class="nc" id="L104">	}</span>
+
+/*	@EventMapping
+	public void handleStickerMessageEvent(MessageEvent&lt;StickerMessageContent&gt; event) {
+		handleSticker(event.getReplyToken(), event.getMessage());
+	}
+
+	@EventMapping
+	public void handleLocationMessageEvent(MessageEvent&lt;LocationMessageContent&gt; event) {
+		LocationMessageContent locationMessage = event.getMessage();
+		reply(event.getReplyToken(), new LocationMessage(locationMessage.getTitle(), locationMessage.getAddress(),
+				locationMessage.getLatitude(), locationMessage.getLongitude()));
+	}
+
+	@EventMapping
+	public void handleImageMessageEvent(MessageEvent&lt;ImageMessageContent&gt; event) throws IOException {
+		final MessageContentResponse response;
+		String replyToken = event.getReplyToken();
+		String messageId = event.getMessage().getId();
+		try {
+			response = lineMessagingClient.getMessageContent(messageId).get();
+		} catch (InterruptedException | ExecutionException e) {
+			reply(replyToken, new TextMessage(&quot;Cannot get image: &quot; + e.getMessage()));
+			throw new RuntimeException(e);
+		}
+		DownloadedContent jpg = saveContent(&quot;jpg&quot;, response);
+		reply(((MessageEvent) event).getReplyToken(), new ImageMessage(jpg.getUri(), jpg.getUri()));
+
+	}
+
+	@EventMapping
+	public void handleAudioMessageEvent(MessageEvent&lt;AudioMessageContent&gt; event) throws IOException {
+		final MessageContentResponse response;
+		String replyToken = event.getReplyToken();
+		String messageId = event.getMessage().getId();
+		try {
+			response = lineMessagingClient.getMessageContent(messageId).get();
+		} catch (InterruptedException | ExecutionException e) {
+			reply(replyToken, new TextMessage(&quot;Cannot get image: &quot; + e.getMessage()));
+			throw new RuntimeException(e);
+		}
+		DownloadedContent mp4 = saveContent(&quot;mp4&quot;, response);
+		reply(event.getReplyToken(), new AudioMessage(mp4.getUri(), 100));
+	}
+*/
+	@EventMapping
+	public void handleUnfollowEvent(UnfollowEvent event) {
+<span class="nc" id="L151">		log.info(&quot;unfollowed this bot: {}&quot;, event);</span>
+<span class="nc" id="L152">		String userId = event.getSource().getUserId();</span>
+		try{
+<span class="nc" id="L154">			database.RemoveUser(userId);</span>
+<span class="nc" id="L155">		}catch (Exception e){</span>
+<span class="nc" id="L156">    	};</span>
+<span class="nc" id="L157">	}</span>
+
+	@EventMapping
+	public void handleFollowEvent(FollowEvent event) {
+<span class="nc" id="L161">		String reply = null;</span>
+<span class="nc" id="L162">		String replyToken = event.getReplyToken();</span>
+<span class="nc" id="L163">		String userId = event.getSource().getUserId();</span>
+<span class="nc" id="L164">		log.info(userId);</span>
+		try {
+<span class="nc" id="L166">		reply = database.InitializeNewUser(userId);</span>
+<span class="nc" id="L167">		}catch (Exception e){</span>
+<span class="nc" id="L168">    		this.replyText(replyToken, &quot;Sorry, Unknown error occured, Please try to reinstall the bot and try again. &quot;);</span>
+<span class="nc" id="L169">    	};</span>
+<span class="nc" id="L170">		this.replyText(replyToken, reply);</span>
+<span class="nc" id="L171">	}</span>
+
+	@EventMapping
+	public void handleJoinEvent(JoinEvent event) {
+<span class="nc" id="L175">		String replyToken = event.getReplyToken();</span>
+<span class="nc" id="L176">		this.replyText(replyToken, &quot;Joined &quot; + event.getSource());</span>
+<span class="nc" id="L177">	}</span>
+/*
+	@EventMapping
+	public void handlePostbackEvent(PostbackEvent event) {
+		String replyToken = event.getReplyToken();
+		this.replyText(replyToken, &quot;Got postback &quot; + event.getPostbackContent().getData());
+	}
+
+	@EventMapping
+	public void handleBeaconEvent(BeaconEvent event) {
+		String replyToken = event.getReplyToken();
+		this.replyText(replyToken, &quot;Got beacon message &quot; + event.getBeacon().getHwid());
+	}
+
+	@EventMapping
+	public void handleOtherEvent(Event event) {
+		log.info(&quot;Received message(Ignored): {}&quot;, event);
+	}
+*/
+<span class="nc bnc" id="L196" title="All 4 branches missed.">	private void reply(@NonNull String replyToken, @NonNull Message message) {</span>
+<span class="nc" id="L197">		reply(replyToken, Collections.singletonList(message));</span>
+<span class="nc" id="L198">	}</span>
+
+<span class="nc bnc" id="L200" title="All 4 branches missed.">	private void reply(@NonNull String replyToken, @NonNull List&lt;Message&gt; messages) {</span>
+		try {
+<span class="nc" id="L202">			BotApiResponse apiResponse = lineMessagingClient.replyMessage(new ReplyMessage(replyToken, messages)).get();</span>
+<span class="nc" id="L203">			log.info(&quot;Sent messages: {}&quot;, apiResponse);</span>
+<span class="nc" id="L204">		} catch (InterruptedException | ExecutionException e) {</span>
+<span class="nc" id="L205">			throw new RuntimeException(e);</span>
+<span class="nc" id="L206">		}</span>
+<span class="nc" id="L207">	}</span>
+
+<span class="nc bnc" id="L209" title="All 4 branches missed.">	private void replyText(@NonNull String replyToken, @NonNull String message) {</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">		if (replyToken.isEmpty()) {</span>
+<span class="nc" id="L211">			throw new IllegalArgumentException(&quot;replyToken must not be empty&quot;);</span>
+		}
+<span class="nc bnc" id="L213" title="All 2 branches missed.">		if (message.length() &gt; 1000) {</span>
+<span class="nc" id="L214">			message = message.substring(0, 1000 - 2) + &quot;..&quot;;</span>
+		}
+<span class="nc" id="L216">		this.reply(replyToken, new TextMessage(message));</span>
+<span class="nc" id="L217">	}</span>
+
+/*
+	private void handleSticker(String replyToken, StickerMessageContent content) {
+		reply(replyToken, new StickerMessage(content.getPackageId(), content.getStickerId()));
+	}
+	*/
+	private void appendText(List&lt;Message&gt; lst, String str) throws Exception {
+<span class="nc bnc" id="L225" title="All 2 branches missed.">		if (str.length() &gt; 0) {</span>
+<span class="nc" id="L226">			lst.add(new TextMessage(str));</span>
+		}
+<span class="nc" id="L228">	}</span>
+
+	private void handleTextContent(String replyToken, Event event, TextMessageContent content)
+            throws Exception {
+<span class="nc" id="L232">        String text = content.getText();</span>
+		String[] command;
+<span class="nc" id="L234">		command = text.split(&quot;\\r?\\n&quot;);</span>
+<span class="nc" id="L235">		String userId = event.getSource().getUserId();</span>
+<span class="nc" id="L236">		log.info(&quot;Got text message from {}: {}&quot;, replyToken, text);</span>
+<span class="nc" id="L237">		List&lt;Message&gt; messageList = new ArrayList&lt;Message&gt;();</span>
+<span class="nc bnc" id="L238" title="All 70 branches missed.">        switch (command[0].toLowerCase()) {</span>
+        	case &quot;help&quot;:{
+    		try {
+<span class="nc" id="L241">        		String result1 = &quot;Welcome to this bot! Here are our supported commands, all of them are case-insensitive.\n\n&quot; + </span>
+        				&quot;1. Info Function\nYou can set info such as Gender, Age, Weight and Height.\nTo use this function, simply type 'info'.&quot; +
+        				&quot;\n\n2. Sports Function\nYou can calculate how much do you need to workout to burn those calories!\nTo use the function, simply type in 'sports'.&quot; +
+        				&quot;\n\n3. Water Function\nYou can enable this function and our bot will remind you to drink water once in a while!\nTo use this function, type 'water&lt;go to next line&gt;60' if you want us to remind you every 60 minutes.&quot;;
+<span class="nc" id="L245">        		String result2 = &quot;You can record what you eat using 'eat&lt;go to next line&gt;&lt;meals you eat&gt;'\nOur system will calculate intakes such as energy, sodium, and fat.\n\nIf your intake is too high, a warning message will be generated and displayed.\n\nYou can also check the nutrient info of the menu first before you eat.\nTo do so, use 'menu&lt;go to next line&gt;&lt;menu&gt;'&quot;</span>
+        				+ &quot;\n\n You can also directly enter your energy intake using 'energy&lt;go to next line&gt;&lt;mon/tue/ etc..&gt;'&quot;;
+<span class="nc" id="L247">        		String result3 = &quot;We are also having a promotional event now for new users!\n\nYou can check your unique 6-digit id using 'friend', and tells your friend about this code when you recommend them to use this bot.&quot; +</span>
+        				&quot;\n\nOnce they joined, they can use 'code&lt;go to next line&gt;XXXXXX' where XXXXXX is your ID.Both of you will get a coupon when this were done!&quot; +
+        				&quot;\n\nYou can redeem a coupon and check how many coupons do you still have using 'redeem'. Enjoy~&quot; +
+        				&quot;\n\n*We only have 5000 coupons to giveaway in total, so please act quick!&quot;;
+        		
+<span class="nc" id="L252">        		appendText(messageList, result1);</span>
+<span class="nc" id="L253">        		appendText(messageList, result2);</span>
+<span class="nc" id="L254">        		appendText(messageList, result3);</span>
+<span class="nc" id="L255">        	} catch (Exception e) {</span>
+<span class="nc" id="L256">        		appendText(messageList, &quot;Sorry, please try again.&quot;);</span>
+<span class="nc" id="L257">        	};</span>
+<span class="nc" id="L258">            break;</span>
+}  
+        	case &quot;order&quot;:{
+    		try {
+<span class="nc" id="L262">    			String decision = command[1];</span>
+<span class="nc" id="L263">    			appendText(messageList, database.order(userId, decision));</span>
+<span class="nc" id="L264">        	} catch (Exception e) {</span>
+<span class="nc" id="L265">        		appendText(messageList, database.order(userId, &quot;Sorry, please enter a valid input. order &lt;int&gt; &quot;));</span>
+<span class="nc" id="L266">        	};</span>
+<span class="nc" id="L267">            break;</span>
+}
+            case &quot;profile&quot;: {
+                //String userId = event.getSource().getUserId();
+<span class="nc bnc" id="L271" title="All 2 branches missed.">                if (userId != null) {</span>
+                    /*lineMessagingClient
+                            .getProfile(userId)
+                            .whenComplete(new ProfileGetter (this, replyToken));*/
+<span class="nc" id="L275">                	appendText(messageList, userId);</span>
+                } else {
+<span class="nc" id="L277">                	appendText(messageList, &quot;Bot can't use profile API without user ID&quot;);</span>
+                }
+<span class="nc" id="L279">                break;</span>
+            }
+        /*    case &quot;total&quot;: {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		appendText(messageList, database.search(text, &quot;user_info&quot;, userId));
+            	} catch (Exception e) {
+            		appendText(messageList, &quot;Sorry, please enter a valid input. Input should be in format 'weight &lt;your weight in kg rounded to the nearest integer&gt;'. &quot;);
+            	};
+                break;
+            }*/
+            case &quot;water&quot;:{
+            	try {
+<span class="nc" id="L293">            		appendText(messageList, database.waterInterval(text, userId));</span>
+<span class="nc" id="L294">            	} catch (Exception e) {</span>
+<span class="nc" id="L295">            		appendText(messageList, &quot;Sorry, please enter a valid input. Input should be in format 'water &lt;minutes in integer, 0 as OFF&gt;'. &quot;);</span>
+<span class="nc" id="L296">            	};</span>
+<span class="nc" id="L297">                break;</span>
+            }
+            case &quot;sports&quot;: {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+<span class="nc" id="L303">            		appendText(messageList, database.sports_amount(userId));</span>
+<span class="nc" id="L304">            	} catch (Exception e) {</span>
+<span class="nc" id="L305">            		appendText(messageList, &quot;Sorry, please enter a valid input.&quot;);</span>
+<span class="nc" id="L306">            	};</span>
+<span class="nc" id="L307">                break;</span>
+            }
+            case &quot;weight&quot;: {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+<span class="nc" id="L313">            		appendText(messageList, database.weight(text, userId));</span>
+<span class="nc" id="L314">            	} catch (Exception e) {</span>
+<span class="nc" id="L315">            		appendText(messageList, &quot;Sorry, please enter a valid input. Input should be in format 'weight &lt;your weight in kg rounded to the nearest integer&gt;'. &quot;);</span>
+<span class="nc" id="L316">            	};</span>
+<span class="nc" id="L317">                break;</span>
+            }
+            case &quot;energy&quot;: {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+<span class="nc" id="L323">            		appendText(messageList, database.energy(text, userId));</span>
+<span class="nc" id="L324">            	} catch (Exception e) {</span>
+<span class="nc" id="L325">            		appendText(messageList, &quot;Sorry, please enter a valid input. Input should be in format 'energy &lt;energy in integer&gt; &lt;day of week(e.g. Mon/Tue)&gt;'. &quot;);</span>
+<span class="nc" id="L326">            	};</span>
+<span class="nc" id="L327">                break;</span>
+            }  
+            case &quot;menu&quot;: {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+<span class="nc" id="L333">            		appendText(messageList, database.menu_search(text));</span>
+<span class="nc" id="L334">            	} catch (Exception e) {</span>
+<span class="nc" id="L335">            		appendText(messageList, &quot;Sorry, please enter a valid input.&quot;);</span>
+<span class="nc" id="L336">            	};</span>
+<span class="nc" id="L337">                break;</span>
+            }  
+            case &quot;eat&quot;: {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+<span class="nc" id="L343">            		appendText(messageList, database.eat(text, userId));</span>
+<span class="nc" id="L344">            	} catch (Exception e) {</span>
+<span class="nc" id="L345">            		appendText(messageList, &quot;Sorry, please enter a valid input.&quot;);</span>
+<span class="nc" id="L346">            	};</span>
+<span class="nc" id="L347">                break;</span>
+            }
+ /*           case &quot;calculate&quot;: {
+            	
+            	//String userId = event.getSource().getUserId();
+            	try {
+            		appendText(messageList, database.search(text, &quot;user_info&quot;, userId));
+            	} catch (Exception e) {
+            		appendText(messageList, &quot;Sorry, please enter a valid input. Input should be in format 'weight &lt;your weight in kg rounded to the nearest integer&gt;'. &quot;);
+            	};
+                break;
+            }
+            case &quot;confirm&quot;: {
+                ConfirmTemplate confirmTemplate = new ConfirmTemplate(
+                        &quot;Do it?&quot;,
+                        new MessageAction(&quot;Yes&quot;, &quot;Yes!&quot;),
+                        new MessageAction(&quot;No&quot;, &quot;No!&quot;)
+                );
+                TemplateMessage templateMessage = new TemplateMessage(&quot;Confirm alt text&quot;, confirmTemplate);
+                this.reply(replyToken, templateMessage);
+                break;
+            }*/
+          //Input user info
+            case &quot;info&quot;:{
+<span class="nc" id="L371">            		database.setInfoState(&quot;info&quot;, userId);</span>
+<span class="nc" id="L372">	            ButtonsTemplate buttonsTemplate = new ButtonsTemplate(null,null,</span>
+                        &quot;Which user info you want to input?&quot;,
+<span class="nc" id="L374">                        Arrays.asList(new MessageAction(&quot;Sex&quot;, &quot;Input Sex&quot;), new MessageAction(&quot;Age&quot;, &quot;Input Age&quot;), new MessageAction(&quot;Weight&quot;, &quot;Input Weight&quot;), new MessageAction(&quot;Height&quot;, &quot;Input Height&quot;))</span>
+                );
+<span class="nc" id="L376">                messageList.add(new TemplateMessage(&quot;Confirm alt text&quot;, buttonsTemplate));</span>
+<span class="nc" id="L377">                break;</span>
+            }
+            case &quot;input age&quot;:{
+<span class="nc" id="L380">             	String temp_state = database.getInfoState(userId);</span>
+<span class="nc bnc" id="L381" title="All 2 branches missed.">	        		if(temp_state.equals(&quot;info&quot;)) {</span>
+<span class="nc" id="L382">	        			database.setInfoState(&quot;age&quot;, userId);</span>
+<span class="nc" id="L383">	        			String reply = &quot;Now input your age as integer&quot;;</span>
+<span class="nc" id="L384">	        			appendText(messageList, reply + database.waterNotif(userId) );</span>
+<span class="nc" id="L385">	        		}else {</span>
+<span class="nc" id="L386">	        			database.setInfoState(&quot;default&quot;, userId);</span>
+<span class="nc" id="L387">	        			appendText(messageList, &quot;Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.&quot;);</span>
+	        		}
+<span class="nc" id="L389">	        		break;</span>
+	        }
+            case &quot;input height&quot;:{
+<span class="nc" id="L392">            		String temp_state = database.getInfoState(userId);</span>
+<span class="nc bnc" id="L393" title="All 2 branches missed.">	        		if(temp_state.equals(&quot;info&quot;)) {</span>
+<span class="nc" id="L394">	        			database.setInfoState(&quot;height&quot;, userId);</span>
+<span class="nc" id="L395">	        			String reply = &quot;Now input your height as integer&quot;;</span>
+<span class="nc" id="L396">	        			appendText(messageList, reply + database.waterNotif(userId) );</span>
+<span class="nc" id="L397">	        		}else {</span>
+<span class="nc" id="L398">	        			database.setInfoState(&quot;default&quot;, userId);</span>
+<span class="nc" id="L399">	        			appendText(messageList, &quot;Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.&quot;);</span>
+	        		}
+<span class="nc" id="L401">	        		break;</span>
+	        }
+            case &quot;input weight&quot;:{
+<span class="nc" id="L404">            		String temp_state = database.getInfoState(userId);</span>
+<span class="nc bnc" id="L405" title="All 2 branches missed.">            		if(temp_state.equals(&quot;info&quot;)) {</span>
+<span class="nc" id="L406">            			database.setInfoState(&quot;weight&quot;, userId);</span>
+<span class="nc" id="L407">            			String reply = &quot;Now input your weight as integer&quot;;</span>
+<span class="nc" id="L408">            			appendText(messageList, reply + database.waterNotif(userId) );</span>
+<span class="nc" id="L409">            		}else {</span>
+<span class="nc" id="L410">            			database.setInfoState(&quot;default&quot;, userId);</span>
+<span class="nc" id="L411">            			appendText(messageList, &quot;Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.&quot;);</span>
+            		}
+<span class="nc" id="L413">            		break;</span>
+            }
+            case &quot;input sex&quot;:{
+<span class="nc" id="L416">            		String temp_state = database.getInfoState(userId);</span>
+<span class="nc bnc" id="L417" title="All 2 branches missed.">            		if(temp_state.equals(&quot;info&quot;)) {</span>
+<span class="nc" id="L418">            			database.setInfoState(&quot;sex&quot;, userId);</span>
+<span class="nc" id="L419">            			ConfirmTemplate confirmTemplate = new ConfirmTemplate(</span>
+            					&quot;What is your sex?&quot;,
+                             new MessageAction(&quot;Male&quot;, &quot;M&quot;),
+                             new MessageAction(&quot;Female&quot;, &quot;F&quot;)
+                        );
+<span class="nc" id="L424">            			messageList.add(new TemplateMessage(&quot;Confirm alt text&quot;, confirmTemplate));</span>
+<span class="nc" id="L425">            		}else {</span>
+<span class="nc" id="L426">            			database.setInfoState(&quot;default&quot;, userId);</span>
+<span class="nc" id="L427">            			appendText(messageList, &quot;Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.&quot;);</span>
+            		}
+<span class="nc" id="L429">            		break;</span>
+            }
+            case &quot;friend&quot;:{
+	            	try {
+<span class="nc" id="L433">	            		appendText(messageList, &quot;Your code is: &quot; + database.friend(userId));</span>
+<span class="nc" id="L434">	            	} catch (Exception e) {</span>
+<span class="nc" id="L435">	            		appendText(messageList, &quot;Sorry, please enter a valid input.&quot;);</span>
+<span class="nc" id="L436">	            	};</span>
+<span class="nc" id="L437">	                break;</span>
+            }
+            case &quot;code&quot;:{
+	            	try {
+<span class="nc" id="L441">	            		appendText(messageList, database.code(text, userId));</span>
+<span class="nc" id="L442">	            	} catch (Exception e) {</span>
+<span class="nc" id="L443">	            		appendText(messageList, &quot;Invalid input! You should enter a valid 6-digit number.&quot;);</span>
+<span class="nc" id="L444">	            	};</span>
+<span class="nc" id="L445">	                break;</span>
+            }
+            case &quot;redeem&quot;:{
+	            	try {
+<span class="nc" id="L449">	            		String result = database.redeem(userId);</span>
+<span class="nc bnc" id="L450" title="All 2 branches missed.">	            		if (result!=&quot;You currently have no coupon&quot;) {</span>
+<span class="nc" id="L451">	            			messageList.add(new ImageMessage(&quot;https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif&quot;, &quot;https://help.idevaffiliate.com/wp-content/uploads/2015/04/coupon-graphic.gif&quot;));</span>
+	            		}
+<span class="nc" id="L453">	            		appendText(messageList, result);</span>
+<span class="nc" id="L454">	            	} catch (Exception e) {</span>
+<span class="nc" id="L455">	            		appendText(messageList, &quot;Sorry, Error occured, please try again later.&quot;);</span>
+<span class="nc" id="L456">	            	};</span>
+<span class="nc" id="L457">	                break;</span>
+            }
+
+            default:
+<span class="nc" id="L461">            	String temp_state = database.getInfoState(userId);</span>
+<span class="nc bnc" id="L462" title="All 2 branches missed.">        		if(temp_state.equals(&quot;default&quot;)) {</span>
+<span class="nc" id="L463">        			appendText(messageList, &quot;Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.&quot;);</span>
+<span class="nc bnc" id="L464" title="All 2 branches missed.">        		}else if(temp_state.equals(&quot;height&quot;)){</span>
+<span class="nc" id="L465">        			database.setInfoState(&quot;default&quot;, userId);</span>
+        			try {
+<span class="nc" id="L467">                		String result = database.height(text, userId);</span>
+<span class="nc" id="L468">                		appendText(messageList, result);</span>
+<span class="nc" id="L469">                	} catch (Exception e) {</span>
+<span class="nc" id="L470">                		appendText(messageList, &quot;Sorry, please enter a valid input. Input should be in format 'height &lt;your height in cm rounded to the nearest integer&gt;'. &quot;);</span>
+<span class="nc" id="L471">                	};</span>
+<span class="nc bnc" id="L472" title="All 2 branches missed.">        		}else if(temp_state.equals(&quot;age&quot;)){</span>
+<span class="nc" id="L473">        			database.setInfoState(&quot;default&quot;, userId);</span>
+        			try {
+<span class="nc" id="L475">                		String result = database.age(text, userId);</span>
+<span class="nc" id="L476">                		appendText(messageList, result);</span>
+<span class="nc" id="L477">                	} catch (Exception e) {</span>
+<span class="nc" id="L478">                		appendText(messageList, &quot;Sorry, please enter a valid input. Input should be in format 'age &lt;your age rounded to the nearest integer&gt;'. &quot;);</span>
+<span class="nc" id="L479">                	};</span>
+<span class="nc bnc" id="L480" title="All 2 branches missed.">        		}else if(temp_state.equals(&quot;weight&quot;)){</span>
+<span class="nc" id="L481">        			database.setInfoState(&quot;default&quot;, userId);</span>
+        			try {
+<span class="nc" id="L483">                		String result = database.weight(text, userId);</span>
+<span class="nc" id="L484">                		appendText(messageList, result);</span>
+<span class="nc" id="L485">                	} catch (Exception e) {</span>
+<span class="nc" id="L486">                		appendText(messageList, &quot;Sorry, please enter a valid input. Input should be in format 'weight &lt;your weight in kg rounded to the nearest integer&gt;'. &quot;);</span>
+<span class="nc" id="L487">                	};</span>
+<span class="nc bnc" id="L488" title="All 2 branches missed.">        		}else if(temp_state.equals(&quot;sex&quot;)){</span>
+<span class="nc" id="L489">        			database.setInfoState(&quot;default&quot;, userId);</span>
+        			try {
+<span class="nc" id="L491">                		String result = database.sex(text, userId);</span>
+<span class="nc" id="L492">                		appendText(messageList, result);</span>
+<span class="nc" id="L493">                	} catch (Exception e) {</span>
+<span class="nc" id="L494">                		appendText(messageList, &quot;Sorry, please enter a valid input.&quot;);</span>
+<span class="nc" id="L495">                	};</span>
+        		}else { 
+<span class="nc" id="L497">        			appendText(messageList, &quot;Sorry! Your command is not recognized. You may type 'help' to check the list of commands available for this bot.&quot;);</span>
+        		}
+            break;
+        }
+        
+        // Append Notification
+<span class="nc" id="L503">        appendText(messageList, database.waterNotif(userId));</span>
+        
+        // Final
+<span class="nc" id="L506">        this.reply(replyToken, messageList);</span>
+<span class="nc" id="L507">    }</span>
+/*
+	static String createUri(String path) {
+		return ServletUriComponentsBuilder.fromCurrentContextPath().path(path).build().toUriString();
+	}
+
+	private void system(String... args) {
+		ProcessBuilder processBuilder = new ProcessBuilder(args);
+		try {
+			Process start = processBuilder.start();
+			int i = start.waitFor();
+			log.info(&quot;result: {} =&gt;  {}&quot;, Arrays.toString(args), i);
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		} catch (InterruptedException e) {
+			log.info(&quot;Interrupted&quot;, e);
+			Thread.currentThread().interrupt();
+		}
+	}
+
+	private static DownloadedContent saveContent(String ext, MessageContentResponse responseBody) {
+		log.info(&quot;Got content-type: {}&quot;, responseBody);
+
+		DownloadedContent tempFile = createTempFile(ext);
+		try (OutputStream outputStream = Files.newOutputStream(tempFile.path)) {
+			ByteStreams.copy(responseBody.getStream(), outputStream);
+			log.info(&quot;Saved {}: {}&quot;, ext, tempFile);
+			return tempFile;
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+
+	private static DownloadedContent createTempFile(String ext) {
+		String fileName = LocalDateTime.now().toString() + '-' + UUID.randomUUID().toString() + '.' + ext;
+		Path tempFile = KitchenSinkApplication.downloadedContentDir.resolve(fileName);
+		tempFile.toFile().deleteOnExit();
+		return new DownloadedContent(tempFile, createUri(&quot;/downloaded/&quot; + tempFile.getFileName()));
+	}
+
+*/
+	
+
+
+<span class="nc" id="L551">	public KitchenSinkController() {</span>
+<span class="nc" id="L552">		database = new SQLDatabaseEngine();</span>
+<span class="nc" id="L553">	}</span>
+
+	private SQLDatabaseEngine database;
+}
+/*
+	//The annontation @Value is from the package lombok.Value
+	//Basically what it does is to generate constructor and getter for the class below
+	//See https://projectlombok.org/features/Value
+	@Value
+	public static class DownloadedContent {
+		Path path;
+		String uri;
+	}
+
+
+	//an inner class that gets the user profile and status message
+	class ProfileGetter implements BiConsumer&lt;UserProfileResponse, Throwable&gt; {
+		private KitchenSinkController ksc;
+		private String replyToken;
+		
+		public ProfileGetter(KitchenSinkController ksc, String replyToken) {
+			this.ksc = ksc;
+			this.replyToken = replyToken;
+		}
+		@Override
+    	public void accept(UserProfileResponse profile, Throwable throwable) {
+    		if (throwable != null) {
+            	ksc.replyText(replyToken, throwable.getMessage());
+            	return;
+        	}
+        	ksc.reply(
+                	replyToken,
+                	Arrays.asList(new TextMessage(
+                		&quot;Display name: &quot; + profile.getDisplayName()),
+                              	new TextMessage(&quot;Status message: &quot;
+                            		  + profile.getStatusMessage()))
+        	);
+    	}
+    }
+	*/
+	
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.8.201612092310</span></div></body></html>
