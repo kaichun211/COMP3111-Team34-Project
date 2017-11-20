@@ -13,7 +13,19 @@ import java.net.URI;
 import java.util.Date;
 import java.util.Calendar;
 
+
+
 @Slf4j
+
+/**
+* The SQLDatabaseEngine implements functions that
+* communicate with the database and get/update the related data.
+*
+* @author  COMP3111_Group34
+* @version 1.0
+* @since   2017-11-01
+*/
+
 public class SQLDatabaseEngine extends DatabaseEngine {
 	String InitializeNewUser(String userId) throws Exception {
 		String result = null;
@@ -513,7 +525,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			
 				
 				connection.close();
-				resultbuilder.append("\nData is recorded!");
+				resultbuilder.append("Data is recorded!");
 			}
 		}catch(Exception e){
 			System.out.println(e);
@@ -576,17 +588,17 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				energy_requirement = ((66 + (13.7 * weight) + (5 * height) - (6.8 * age)) * 10.85);
 				System.out.println(energy_requirement);
 			}else {
-				return "\nUser info is invalid";
+				return "\nUser info is invalid. Please use 'info' function again and ensure that all your info is properly set";
 			}
 			
 			if(total_energy >= energy_requirement) {
-				resultbuilder.append("\n\nWeekly energy intake has EXCEED LIMIT");
+				resultbuilder.append("\n\nWeekly Energy intake has EXCEED LIMIT!");
 			}
 			if(fat >= 44) {
-				resultbuilder.append("\n\nDaily fat intake has EXCEED LIMIT");
+				resultbuilder.append("\n\nDaily Fat intake has EXCEED LIMIT!");
 			}
 			if(sodium >= 3000) {
-				resultbuilder.append("\n\nDaily sodium intake has EXCEED LIMIT");
+				resultbuilder.append("\n\nDaily Sodium intake has EXCEED LIMIT!");
 			}
 		}
 		
