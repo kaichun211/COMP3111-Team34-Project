@@ -88,6 +88,7 @@ public class KitchenSinkTester {
 		boolean thrown = false;
 		String result = null;
 		try {
+			this.sqldatabaseEngine.InitiallizeTestData("update user_info set water_int = 0 where user_id = 'testID'");
 			result = this.sqldatabaseEngine.waterInterval("water" + "\n" + "1", "testID");
 		} catch (Exception e) {
 			thrown = true;
@@ -141,6 +142,21 @@ public class KitchenSinkTester {
 		assertThat(result).isEqualTo("Data updated! ");
 	
 	}
+	
+	@Test
+	public void testWaterUserNotexist() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.sqldatabaseEngine.waterNotif("not_exist_user");
+			
+		} catch (Exception e) {
+			thrown = true;
+		}
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("");
+	}
+
 
 //-------------Friend
 	@Test
@@ -332,6 +348,7 @@ public class KitchenSinkTester {
 		assertThat(result).isEqualTo("You currently have no coupon");
 	}
 	
+	
 	@Test
 	public void testRedeemCanRedeem() throws Exception {
 		boolean thrown = false;
@@ -347,6 +364,7 @@ public class KitchenSinkTester {
 		assertThat(!thrown).isEqualTo(true);
 		assertThat(result.contains("You redeemed one coupon")).isEqualTo(true);
 	}
+	
 	//------------------Weight		
 		@Test
 		public void testSportsWeightNonZero() throws Exception {
@@ -699,6 +717,7 @@ public class KitchenSinkTester {
 			}
 
 //-------------------Order
+	
 	@Test
 	public void testOrderNewUser() throws Exception {
 		boolean thrown = false;
@@ -720,13 +739,13 @@ public class KitchenSinkTester {
 		String result = null;
 		try {
 			this.sqldatabaseEngine.InitiallizeTestData("update user_info set state = -1 where user_id = 'randomID'");
-			result = this.sqldatabaseEngine.order("random","1");
+			result = this.sqldatabaseEngine.order("randomID","1");
 		} catch (Exception e) {
 			thrown = true;
 		}
 		
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result.contains("Meal menu")).isEqualTo(true);
+		assertThat(result).isEqualTo("");
 	}
 	
 	@Test
@@ -1004,6 +1023,7 @@ public class KitchenSinkTester {
 		boolean thrown = false;
 		String result = null;
 		try {
+			this.sqldatabaseEngine.InitiallizeTestData("delete from coupontable where user_id = 'new_user'");
 			result = this.sqldatabaseEngine.InitializeNewUser("new_user");
 			
 		} catch (Exception e) {
@@ -1013,19 +1033,6 @@ public class KitchenSinkTester {
 		assertThat(result).isEqualTo("Data initiallized! Welcome~");
 	}
 
-	@Test
-	public void testWaterUserNotexist() throws Exception {
-		boolean thrown = false;
-		String result = null;
-		try {
-			result = this.sqldatabaseEngine.waterNotif("not_exist_user");
-			
-		} catch (Exception e) {
-			thrown = true;
-		}
-		assertThat(!thrown).isEqualTo(true);
-		assertThat(result).isEqualTo("");
-	}
 	
 	@Test
 	public void testWarningUserNotExist() throws Exception {
@@ -1040,7 +1047,7 @@ public class KitchenSinkTester {
 		assertThat(!thrown).isEqualTo(true);
 		assertThat(result.contains("Error")).isEqualTo(true);
 	}
-	
+	*/
 	@Test
 	public void testWarningUserWrongGender() throws Exception {
 		boolean thrown = false;
@@ -1311,7 +1318,7 @@ public class KitchenSinkTester {
 			thrown = true;
 		}
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result.contains("155 (g)")).isEqualTo(true);
+		assertThat(result.contains("155")).isEqualTo(true);
 	}
 	
 	@Test
@@ -1353,7 +1360,7 @@ public class KitchenSinkTester {
 			thrown = true;
 		}
 		assertThat(!thrown).isEqualTo(true);
-		assertThat(result.contains("0 (g)")).isEqualTo(true);
+		assertThat(result.contains("Weight = 0")).isEqualTo(true);
 	}
 	
 	@Test
@@ -1426,7 +1433,7 @@ public class KitchenSinkTester {
 		assertThat(!thrown).isEqualTo(true);
 		assertThat(result.contains("What type of food do you like to choose")).isEqualTo(true);
 	}
-*/
+
 	@Test
 	public void testOrderCorrectOutputWithInvalidDecision6() throws Exception {
 		boolean thrown = false;

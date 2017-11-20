@@ -250,6 +250,7 @@ public class KitchenSinkController {
         				"\n\n*We only have 5000 coupons to giveaway in total, so please act quick!";
         		
         		appendText(messageList, result1);
+        		appendText(messageList, result2);
         		appendText(messageList, result3);
         	} catch (Exception e) {
         		appendText(messageList, "Sorry, please try again.");
