@@ -1193,10 +1193,10 @@ public class SQLDatabaseEngine extends DatabaseEngine{
         //features menu
 		case 1: //meal menu, feature 1,4,8,9,10
 		{print_message= "Meal menu"
-				+ "\n1.Breakfast \n2.Lunch \n3.Dinner \n4. Dessert\n"; break;}
+				+ "\n\n1.Breakfast \n2.Lunch \n3.Dinner \n4.Dessert"; break;}
 		
-		case 11:{print_message= "What type of food do you like to choose?\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care";	break;}	
-		case 12: {print_message= "Are you vegetarian?\n1.yes\n2.no"; break;}
+		case 11:{print_message= "What type of food do you like to choose?\n\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care";	break;}	
+		case 12: {print_message= "Are you vegetarian?\n\n1.Yes\n2.No"; break;}
 			
 		case 111:{ //print dishes
 			PreparedStatement get_users_final_choice = connection.prepareStatement("SELECT * FROM user_info where (user_id= ?);");

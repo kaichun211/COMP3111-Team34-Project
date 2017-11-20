@@ -68,7 +68,7 @@ public class KitchenSinkTester {
 		assertThat(!thrown).isEqualTo(false);
 	}
 	
-/*	
+	
 	@Test
 	public void testWaterValidInputBoundary() throws Exception {
 		boolean thrown = false;
@@ -566,7 +566,7 @@ public class KitchenSinkTester {
 			assertThat(!thrown).isEqualTo(false);
 			}
 	
-*/		
+		
 		
 		
 		
